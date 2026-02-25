@@ -78,26 +78,6 @@ const KatunHome = () => {
     }
   ];
 
-  const stats = [
-    {
-      value: '5',
-      label: 'Dimensiones del Plan',
-      description: 'Áreas estratégicas de desarrollo',
-      icon: BarChart3
-    },
-    {
-      value: '2052',
-      label: 'Horizonte de Planificación',
-      description: 'Visión de largo plazo',
-      icon: TrendingUp
-    },
-    {
-      value: 'Abierto',
-      label: 'Proceso Participativo',
-      description: 'Tu voz cuenta',
-      icon: Users
-    }
-  ];
 
   return (
     <div className="space-y-0">
@@ -118,21 +98,19 @@ const KatunHome = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <AnimatedSection key={index} delay={index * 100}>
-                <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                  <stat.icon className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                    {stat.value}
-                  </h3>
-                  <p className="text-lg font-semibold text-gray-700 mb-1">
-                    {stat.label}
-                  </p>
-                  <p className="text-sm text-gray-500">{stat.description}</p>
-                </div>
-              </AnimatedSection>
-            ))}
+          <div className="max-w-4xl mx-auto">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative pb-[56.25%]">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  title="K'atun: Nuestra Guatemala 2052"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </AnimatedSection>
