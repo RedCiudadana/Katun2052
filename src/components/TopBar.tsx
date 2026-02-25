@@ -29,19 +29,19 @@ const TopBar = () => {
   ];
 
   return (
-    <div id="topbar" className="bg-gray-900 text-white py-2 text-sm">
+    <div id="topbar" className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-3 text-sm shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Left side - Organization info */}
           <div className="flex items-center space-x-4">
-            <span className="text-gray-300">
+            <span className="text-gray-200 font-medium">
               K'atun: Nuestra Guatemala 2052 | SEGEPLAN
             </span>
           </div>
 
           {/* Right side - Social media */}
           <div className="flex items-center space-x-3">
-            <span className="text-gray-300 hidden sm:inline">
+            <span className="text-gray-200 hidden sm:inline font-medium">
               Síguenos:
             </span>
             <div className="flex items-center space-x-2">
@@ -51,11 +51,11 @@ const TopBar = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-opacity"
+                  className="hover:opacity-80 transition-all duration-200 transform hover:scale-110"
                   title={`Síguenos en ${social.name}`}
                 >
-                  <img 
-                    src={social.icon} 
+                  <img
+                    src={social.icon}
                     alt={social.name}
                     className="h-7 w-7"
                   />

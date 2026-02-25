@@ -63,18 +63,18 @@ const Header = () => {
     <header
       style={{ top: isScrolled ? 0 : topOffset }}
       className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200' 
-        : 'bg-white/80 backdrop-blur-sm border-b border-gray-200/50'
+      isScrolled
+        ? 'bg-white/98 backdrop-blur-md shadow-lg border-b border-gray-200'
+        : 'bg-white/90 backdrop-blur-sm border-b border-gray-200/50'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3 group my-4">
+            <Link to="/" className="flex items-center space-x-3 group my-4 transition-transform duration-200 hover:scale-105">
               <img className="h-16 w-auto my-4" src={SegeplanLogo} alt="SEGEPLAN Logo"/>
               <div className="hidden lg:block">
-                <div className="text-sm font-bold text-gray-900">SEGEPLAN</div>
-                <div className="text-xs text-gray-600">K'atun 2052</div>
+                <div className="text-sm font-bold text-gray-900 group-hover:text-cyan-700 transition-colors">SEGEPLAN</div>
+                <div className="text-xs text-gray-600 group-hover:text-cyan-600 transition-colors">K'atun 2052</div>
               </div>
             </Link>
           </div>
@@ -85,10 +85,10 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   isActive(item.href)
-                    ? 'text-blue-600 bg-blue-50 shadow-sm'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'text-cyan-700 bg-cyan-50 shadow-sm'
+                    : 'text-gray-700 hover:text-cyan-700 hover:bg-cyan-50'
                 }`}
               >
                 {item.name}
@@ -99,27 +99,27 @@ const Header = () => {
               <button
                 onMouseEnter={() => setIsDimensionsOpen(true)}
                 onMouseLeave={() => setIsDimensionsOpen(false)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-1 ${
                   isDimensionActive()
-                    ? 'text-blue-600 bg-blue-50 shadow-sm'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'text-cyan-700 bg-cyan-50 shadow-sm'
+                    : 'text-gray-700 hover:text-cyan-700 hover:bg-cyan-50'
                 }`}
               >
                 Dimensiones
-                <ChevronDown className={`h-4 w-4 transition-transform ${isDimensionsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isDimensionsOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isDimensionsOpen && (
                 <div
                   onMouseEnter={() => setIsDimensionsOpen(true)}
                   onMouseLeave={() => setIsDimensionsOpen(false)}
-                  className="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+                  className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 animate-scale-in"
                 >
                   {dimensions.map((dimension) => (
                     <Link
                       key={dimension.slug}
                       to={`/dimension-articulos/${dimension.slug}`}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-cyan-50 hover:text-cyan-700 transition-colors"
                     >
                       {dimension.name}
                     </Link>
@@ -133,7 +133,7 @@ const Header = () => {
           <div className="md:hidden flex items-center space-x-2">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-blue-600 p-2 rounded-lg hover:bg-blue-50 transition-colors"
+              className="text-gray-700 hover:text-cyan-700 p-2 rounded-lg hover:bg-cyan-50 transition-all duration-200"
               aria-label="Abrir menú"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -152,10 +152,10 @@ const Header = () => {
                   key={item.name}
                   to={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                     isActive(item.href)
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                      ? 'text-cyan-700 bg-cyan-50'
+                      : 'text-gray-700 hover:text-cyan-700 hover:bg-cyan-50'
                   }`}
                 >
                   {item.name}
@@ -165,14 +165,14 @@ const Header = () => {
               <div className="px-4 py-2">
                 <button
                   onClick={() => setIsDimensionsOpen(!isDimensionsOpen)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                     isDimensionActive()
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                      ? 'text-cyan-700 bg-cyan-50'
+                      : 'text-gray-700 hover:text-cyan-700 hover:bg-cyan-50'
                   }`}
                 >
                   Dimensiones
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isDimensionsOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isDimensionsOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 <div className={`transition-all duration-300 overflow-hidden ${
@@ -184,7 +184,7 @@ const Header = () => {
                         key={dimension.slug}
                         to={`/dimension-articulos/${dimension.slug}`}
                         onClick={() => setIsMenuOpen(false)}
-                        className="block px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-cyan-700 hover:bg-cyan-50 transition-all duration-200"
                       >
                         {dimension.name}
                       </Link>
