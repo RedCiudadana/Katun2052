@@ -9,6 +9,7 @@ const KatunHome = () => {
   const dimensions = [
     {
       code: 'dimension-1',
+      slug: 'bienestar',
       name: 'Bienestar para la Gente',
       description: 'Desarrollo humano, salud, educación y reducción de la pobreza',
       icon: Heart,
@@ -17,6 +18,7 @@ const KatunHome = () => {
     },
     {
       code: 'dimension-2',
+      slug: 'riqueza',
       name: 'Riqueza para Todos y Todas',
       description: 'Desarrollo económico sostenible y empleo digno',
       icon: TrendingUp,
@@ -25,6 +27,7 @@ const KatunHome = () => {
     },
     {
       code: 'dimension-3',
+      slug: 'recursos',
       name: 'Recursos Naturales para Hoy y para el Futuro',
       description: 'Gestión sostenible y protección ambiental',
       icon: Leaf,
@@ -33,6 +36,7 @@ const KatunHome = () => {
     },
     {
       code: 'dimension-4',
+      slug: 'territorial',
       name: 'Guatemala Urbana y Rural',
       description: 'Desarrollo territorial equilibrado e infraestructura',
       icon: Map,
@@ -41,6 +45,7 @@ const KatunHome = () => {
     },
     {
       code: 'dimension-5',
+      slug: 'estado',
       name: 'Estado como Garante de los Derechos',
       description: 'Gobernabilidad, institucionalidad y transparencia',
       icon: Shield,
@@ -152,26 +157,32 @@ const KatunHome = () => {
               const IconComponent = dimension.icon;
               return (
                 <AnimatedSection key={dimension.code} delay={index * 100}>
-                  <Link
-                    to={`/dimension/${dimension.code}`}
-                    className="block group"
-                  >
-                    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 h-full">
-                      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${dimension.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                        <IconComponent className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                        {dimension.name}
-                      </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {dimension.description}
-                      </p>
-                      <div className="mt-4 flex items-center text-blue-600 font-semibold text-sm group-hover:translate-x-2 transition-transform">
+                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 h-full">
+                    <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${dimension.gradient} flex items-center justify-center mb-4`}>
+                      <IconComponent className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {dimension.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                      {dimension.description}
+                    </p>
+                    <div className="space-y-2">
+                      <Link
+                        to={`/dimension-articulos/${dimension.slug}`}
+                        className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 text-center"
+                      >
+                        Ver Artículos y Comentar
+                      </Link>
+                      <Link
+                        to={`/dimension/${dimension.code}`}
+                        className="flex items-center justify-center text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors"
+                      >
                         Explorar documentos
                         <ArrowRight className="ml-2 h-4 w-4" />
-                      </div>
+                      </Link>
                     </div>
-                  </Link>
+                  </div>
                 </AnimatedSection>
               );
             })}
