@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import MinfinLogo from '../assets/minfin-logo.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDimensionsOpen, setIsDimensionsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [topOffset, setTopOffset] = useState(0);
   const topOffsetRef = useRef(0);
@@ -16,7 +17,16 @@ const Header = () => {
     { name: 'Cronograma', href: '/calendario' },
   ];
 
+  const dimensions = [
+    { name: 'Bienestar para la Gente', slug: 'bienestar' },
+    { name: 'Riqueza para Todos y Todas', slug: 'riqueza' },
+    { name: 'Recursos Naturales', slug: 'recursos' },
+    { name: 'Guatemala Urbana y Rural', slug: 'territorial' },
+    { name: 'Estado Garante', slug: 'estado' },
+  ];
+
   const isActive = (path: string) => location.pathname === path;
+  const isDimensionActive = () => location.pathname.startsWith('/dimension-articulos/');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +94,39 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+
+            <div className="relative">
+              <button
+                onMouseEnter={() => setIsDimensionsOpen(true)}
+                onMouseLeave={() => setIsDimensionsOpen(false)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                  isDimensionActive()
+                    ? 'text-blue-600 bg-blue-50 shadow-sm'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                Dimensiones
+                <ChevronDown className={`h-4 w-4 transition-transform ${isDimensionsOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isDimensionsOpen && (
+                <div
+                  onMouseEnter={() => setIsDimensionsOpen(true)}
+                  onMouseLeave={() => setIsDimensionsOpen(false)}
+                  className="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+                >
+                  {dimensions.map((dimension) => (
+                    <Link
+                      key={dimension.slug}
+                      to={`/dimension-articulos/${dimension.slug}`}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    >
+                      {dimension.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Mobile menu button */}
@@ -100,7 +143,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         <div className={`md:hidden transition-all duration-300 overflow-hidden ${
-          isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="py-4 border-t border-gray-200/50">
             <nav className="flex flex-col space-y-1">
@@ -118,6 +161,37 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
+
+              <div className="px-4 py-2">
+                <button
+                  onClick={() => setIsDimensionsOpen(!isDimensionsOpen)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    isDimensionActive()
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
+                >
+                  Dimensiones
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isDimensionsOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                <div className={`transition-all duration-300 overflow-hidden ${
+                  isDimensionsOpen ? 'max-h-96 mt-2' : 'max-h-0'
+                }`}>
+                  <div className="pl-4 space-y-1">
+                    {dimensions.map((dimension) => (
+                      <Link
+                        key={dimension.slug}
+                        to={`/dimension-articulos/${dimension.slug}`}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="block px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                      >
+                        {dimension.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </nav>
           </div>
         </div>
