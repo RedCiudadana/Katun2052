@@ -1,13 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
+const hasValidConfig = supabaseUrl && supabaseAnonKey;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = hasValidConfig
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 // Types for our database
 export interface Comment {
@@ -78,6 +78,8 @@ export const generateCaptcha = (): { question: string; answer: string } => {
 export const commentService = {
   // Get comments for a specific law and article
   async getComments(lawId: string, articleId?: string) {
+    if (!supabase) return [];
+
     let query = supabase
       .from('comments_with_stats')
       .select('*')
@@ -95,6 +97,8 @@ export const commentService = {
 
   // Get general comments for a law
   async getGeneralComments(lawId: string) {
+    if (!supabase) return [];
+
     const { data, error } = await supabase
       .from('comments_with_stats')
       .select('*')
@@ -118,6 +122,8 @@ export const commentService = {
     is_expert?: boolean;
     tags?: string[];
   }) {
+    if (!supabase) throw new Error('Database not available');
+
     const { data, error } = await supabase
       .from('comments')
       .insert([comment])
@@ -130,6 +136,8 @@ export const commentService = {
 
   // Like a comment
   async likeComment(commentId: string, userIdentifier: string) {
+    if (!supabase) throw new Error('Database not available');
+
     const { data, error } = await supabase
       .from('comment_likes')
       .insert([{ comment_id: commentId, user_identifier: userIdentifier }])
@@ -142,6 +150,8 @@ export const commentService = {
 
   // Unlike a comment
   async unlikeComment(commentId: string, userIdentifier: string) {
+    if (!supabase) throw new Error('Database not available');
+
     const { error } = await supabase
       .from('comment_likes')
       .delete()
@@ -153,6 +163,8 @@ export const commentService = {
 
   // Check if user has liked a comment
   async hasUserLiked(commentId: string, userIdentifier: string) {
+    if (!supabase) return false;
+
     const { data, error } = await supabase
       .from('comment_likes')
       .select('id')
@@ -166,6 +178,8 @@ export const commentService = {
 
   // Get user's liked comments
   async getUserLikes(userIdentifier: string) {
+    if (!supabase) return [];
+
     const { data, error } = await supabase
       .from('comment_likes')
       .select('comment_id')
@@ -183,6 +197,8 @@ export const commentService = {
     content: string;
     is_moderator?: boolean;
   }) {
+    if (!supabase) throw new Error('Database not available');
+
     const { data, error } = await supabase
       .from('comment_replies')
       .insert([reply])
@@ -195,6 +211,8 @@ export const commentService = {
 
   // Get replies for a comment
   async getReplies(commentId: string) {
+    if (!supabase) return [];
+
     const { data, error } = await supabase
       .from('comment_replies')
       .select('*')
@@ -207,6 +225,15 @@ export const commentService = {
 
   // Get comment statistics
   async getCommentStats(lawId: string, articleId?: string) {
+    if (!supabase) {
+      return {
+        totalComments: 0,
+        uniqueParticipants: 0,
+        expertComments: 0,
+        highlightedComments: 0
+      };
+    }
+
     let query = supabase
       .from('comments')
       .select('id, author_name, is_expert, is_highlighted')
