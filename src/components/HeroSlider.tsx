@@ -29,15 +29,15 @@ const HeroSlider = () => {
   const slides: Slide[] = [
     {
       id: 'main',
-      title: 'Conoce el Proceso de Modernización de las',
-      subtitle: 'Contrataciones Públicas',
-      description1: 'El Ministerio de Finanzas Públicas, te invita a conocer y dar seguimiento a la transformación del Sistema Nacional de Contrataciones Públicas del Estado guatemalteco.',
-      description2: 'Los comentarios y sugerencias que recibimos a través de esta herramienta (durante el tiempo que estuvo disponible), nos ayudaron a crear una propuesta de marco legal más transparente, eficiente y moderno.',
-      description3: '',
+      title: 'K\'atun: Nuestra Guatemala 2052',
+      subtitle: 'Plan Nacional de Desarrollo',
+      description1: 'SEGEPLAN te invita a participar en la actualización del Plan Nacional de Desarrollo de Guatemala.',
+      description2: 'Tu retroalimentación es fundamental para construir una visión compartida del país que queremos para el 2052.',
+      description3: 'Revisa los documentos oficiales y comparte tus aportes por cada una de las 5 dimensiones estratégicas.',
       image: Slider1,
-      ctaText: 'Ver Documentos',
-      ctaLink: '/ley/contrataciones-estado',
-      secondaryCtaText: 'Ver Video Explicativo',
+      ctaText: 'Explorar Dimensiones',
+      ctaLink: '/documentos',
+      secondaryCtaText: 'Ver Cronograma',
       secondaryCtaLink: '/calendario'
     }
   ];
@@ -88,7 +88,7 @@ const HeroSlider = () => {
               alt={slide.title}
               className="w-full h-full object-cover"
             />
-            {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-800/80 to-transparent"></div> */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/85 via-blue-800/75 to-transparent"></div>
           </div>
         ))}
       </div>
@@ -124,12 +124,39 @@ const HeroSlider = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   to={currentSlideData.ctaLink}
-                  className="group bg-blue-800 hover:bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105 hover:shadow-xl"
+                  className="group bg-white hover:bg-blue-50 text-blue-800 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105 hover:shadow-xl"
                 >
                   {currentSlideData.ctaText}
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                
+
+                {currentSlideData.secondaryCtaLink && (
+                  <Link
+                    to={currentSlideData.secondaryCtaLink}
+                    className="group bg-blue-800/50 backdrop-blur-sm hover:bg-blue-700 border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105"
+                  >
+                    {currentSlideData.secondaryCtaText}
+                    <Calendar className="ml-2 h-5 w-5" />
+                  </Link>
+                )}
+              </div>
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-white mb-1">5</div>
+                  <div className="text-sm text-blue-100">Dimensiones</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-white mb-1">2052</div>
+                  <div className="text-sm text-blue-100">Horizonte</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-white mb-1">
+                    <Users className="h-8 w-8 inline" />
+                  </div>
+                  <div className="text-sm text-blue-100">Participativo</div>
+                </div>
               </div>
             </div>
 
