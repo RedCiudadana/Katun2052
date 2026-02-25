@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import MinfinLogo from '../assets/minfin-logo.png';
+import SegeplanLogo from '/images/segeplan-logo.jpg';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,7 +71,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 group my-4">
-              <img className="h-16 w-auto my-4" src={MinfinLogo} alt="SEGEPLAN Logo"/>
+              <img className="h-16 w-auto my-4" src={SegeplanLogo} alt="SEGEPLAN Logo"/>
               <div className="hidden lg:block">
                 <div className="text-sm font-bold text-gray-900">SEGEPLAN</div>
                 <div className="text-xs text-gray-600">K'atun 2052</div>

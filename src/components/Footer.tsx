@@ -6,7 +6,7 @@ import Redes2 from '../assets/footer/REDES-02.png';
 import Redes3 from '../assets/footer/REDES-03.png';
 import Redes4 from '../assets/footer/REDES-04.png';
 import Linea from '../assets/footer/LINEA.png';
-import MinfinLogo from '../assets/minfin-logo.png';
+import SegeplanLogo from '/images/segeplan-logo.jpg';
 
 const Footer = () => {
   return (
@@ -17,7 +17,7 @@ const Footer = () => {
 
             {/* Logo */}
             <div>
-              <img src={MinfinLogo} alt="SEGEPLAN Logo" className="h-16 w-auto filter-white"/>
+              <img src={SegeplanLogo} alt="SEGEPLAN Logo" className="h-16 w-auto"/>
               <h3 className="text-lg font-semibold mt-4 mb-2">K'atun 2052</h3>
               <p className="text-sm text-gray-300">
                 Plan Nacional de Desarrollo: Nuestra Guatemala 2052
