@@ -3,9 +3,11 @@ import { HashRouter  as Router, Routes, Route, useLocation } from 'react-router-
 import TopBar from './components/TopBar';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import LawDetail from './pages/LawDetail';
-import Calendar from './pages/Calendar';
+import KatunHome from './pages/KatunHome';
+import Documents from './pages/Documents';
+import DimensionDetail from './pages/DimensionDetail';
+import KatunCalendar from './pages/KatunCalendar';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import NotFound from './pages/NotFound';
 import Loader from './components/loader';
 
@@ -39,10 +41,11 @@ function App() {
             <Header />
             <main className="flex-1 pt-16">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/ley/:lawId" element={<LawDetail />} />
-                <Route path="/calendario" element={<Calendar />} />
-                {/* Catch all other routes */}
+                <Route path="/" element={<KatunHome />} />
+                <Route path="/documentos" element={<Documents />} />
+                <Route path="/dimension/:dimensionCode" element={<DimensionDetail />} />
+                <Route path="/calendario" element={<KatunCalendar />} />
+                <Route path="/privacidad" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

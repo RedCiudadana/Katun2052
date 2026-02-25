@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, ExternalLink, Facebook, Twitter, Youtube } from 'lucide-react';
 import Redes1 from '../assets/footer/REDES-01.png';
 import Redes2 from '../assets/footer/REDES-02.png';
@@ -16,27 +17,31 @@ const Footer = () => {
 
             {/* Logo */}
             <div>
-              <img src={MinfinLogo} alt="MINFIN Logo" className="h-16 w-auto filter-white"/>
-              <p className='mt-8'>Esta es una herramienta facilitada por:</p>
-              <img className="h-8 w-auto filter-white " src="https://www.redciudadana.org/assets/img/red/LOGO-RED_NEGRO.png" alt="Red Ciudadana Logo"/>
+              <img src={MinfinLogo} alt="SEGEPLAN Logo" className="h-16 w-auto filter-white"/>
+              <h3 className="text-lg font-semibold mt-4 mb-2">K'atun 2052</h3>
+              <p className="text-sm text-gray-300">
+                Plan Nacional de Desarrollo: Nuestra Guatemala 2052
+              </p>
+              <p className='mt-4 text-xs text-gray-400'>Plataforma desarrollada con tecnología de:</p>
+              <img className="h-8 w-auto filter-white mt-2" src="https://www.redciudadana.org/assets/img/red/LOGO-RED_NEGRO.png" alt="Red Ciudadana Logo"/>
             </div>
 
             {/* Información de Contacto */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">Contacto</h3>
+              <h3 className="text-lg font-semibold mb-4">Contacto SEGEPLAN</h3>
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4 text-white" />
-                  <span className="text-sm">PBX: 2374-3000</span>
+                  <span className="text-sm">PBX: 2326-0000</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <ExternalLink className="h-4 w-4 text-white" />
-                  <a href="https://www.minfin.gob.gt" className="text-sm hover:text-blue-300 transition-colors">
-                    www.minfin.gob.gt
+                  <a href="https://www.segeplan.gob.gt" className="text-sm hover:text-blue-300 transition-colors">
+                    www.segeplan.gob.gt
                   </a>
                 </div>
                 <div className="text-sm text-white">
-                  8a. Avenida 20-59 Zona 1, Centro Cívico, Guatemala - 01001
+                  9a. calle 10-44 Zona 1, Guatemala
                 </div>
               </div>
             </div>
@@ -70,16 +75,16 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Síguenos</h3>
               <div className="flex space-x-4">
-                <a href="https://www.facebook.com/MinfinGT/" target='_blank' className="text-white hover:text-blue-400 transition-colors">
+                <a href="https://www.facebook.com/segeplan/" target='_blank' className="text-white hover:text-blue-400 transition-colors">
                   <img src={Redes1} className="h-12 w-12" />
                 </a>
-                <a href="https://x.com/MinFinGT" target='_blank' className="text-white hover:text-blue-400 transition-colors">
+                <a href="https://x.com/segeplan" target='_blank' className="text-white hover:text-blue-400 transition-colors">
                   <img src={Redes2} className="h-12 w-12" />
                 </a>
-                <a href="https://www.instagram.com/minfingt/" target='_blank' className="text-white hover:text-red-400 transition-colors">
+                <a href="https://www.instagram.com/segeplan/" target='_blank' className="text-white hover:text-red-400 transition-colors">
                   <img src={Redes3} className="h-12 w-12" />
                 </a>
-                <a href="https://www.youtube.com/user/minfingt" target='_blank' className="text-white hover:text-red-400 transition-colors">
+                <a href="https://www.youtube.com/@segeplan" target='_blank' className="text-white hover:text-red-400 transition-colors">
                   <img src={Redes4} className="h-12 w-12" />
                 </a>
               </div>
@@ -92,10 +97,22 @@ const Footer = () => {
 
           <div className="mt-4 pt-4 text-center">
             <p className="text-sm text-white">
-              2025 MINFIN - Ministerio de Finanzas Públicas de Guatemala.
+              2025 SEGEPLAN - Secretaría de Planificación y Programación de la Presidencia
             </p>
             <p className="text-xs text-white mt-2">
-              Desarrollado con Participa! (software de código abierto) de <a href="https://www.redciudadana.org/" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-200 underline">Red Ciudadana</a>
+              Plataforma de Participación Ciudadana K'atun 2052
+            </p>
+            <div className="flex items-center justify-center gap-4 mt-3">
+              <Link to="/privacidad" className="text-xs text-blue-300 hover:text-blue-200 underline">
+                Aviso de Privacidad
+              </Link>
+              <span className="text-gray-500">•</span>
+              <a href="https://www.segeplan.gob.gt" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-300 hover:text-blue-200 underline">
+                Sitio Oficial SEGEPLAN
+              </a>
+            </div>
+            <p className="text-xs text-gray-400 mt-3">
+              Desarrollado con Participa! de <a href="https://www.redciudadana.org/" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-200 underline">Red Ciudadana</a>
             </p>
           </div>
         </div>

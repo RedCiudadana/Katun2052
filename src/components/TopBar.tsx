@@ -8,22 +8,22 @@ const TopBar = () => {
   const socialLinks = [
     {
       name: 'Facebook',
-      url: 'https://www.facebook.com/MinfinGT/',
+      url: 'https://www.facebook.com/segeplan/',
       icon: Redes1
     },
     {
       name: 'Twitter',
-      url: 'https://x.com/MinFinGT',
+      url: 'https://x.com/segeplan',
       icon: Redes2
     },
     {
       name: 'Instagram',
-      url: 'https://www.instagram.com/minfingt/',
+      url: 'https://www.instagram.com/segeplan/',
       icon: Redes3
     },
     {
       name: 'YouTube',
-      url: 'https://www.youtube.com/user/minfingt',
+      url: 'https://www.youtube.com/@segeplan',
       icon: Redes4
     }
   ];
@@ -35,7 +35,7 @@ const TopBar = () => {
           {/* Left side - Organization info */}
           <div className="flex items-center space-x-4">
             <span className="text-gray-300">
-              Participa! Una herramienta de <a href='https://www.redciudadana.org/' className='hover' target="_blank">Red Ciudadana</a>
+              K'atun: Nuestra Guatemala 2052 | SEGEPLAN
             </span>
           </div>
 

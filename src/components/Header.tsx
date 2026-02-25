@@ -12,8 +12,8 @@ const Header = () => {
 
   const navigation = [
     { name: 'Inicio', href: '/' },
-    { name: 'El Proyecto', href: '/ley/contrataciones-estado' },
-    { name: 'Proceso', href: '/calendario' },
+    { name: 'Documentos', href: '/documentos' },
+    { name: 'Cronograma', href: '/calendario' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -61,7 +61,11 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 group my-4">
-              <img className="h-16 w-auto my-4" src={MinfinLogo} alt="MINFIN Logo"/>
+              <img className="h-16 w-auto my-4" src={MinfinLogo} alt="SEGEPLAN Logo"/>
+              <div className="hidden lg:block">
+                <div className="text-sm font-bold text-gray-900">SEGEPLAN</div>
+                <div className="text-xs text-gray-600">K'atun 2052</div>
+              </div>
             </Link>
           </div>
 
