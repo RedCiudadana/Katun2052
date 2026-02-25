@@ -1,213 +1,124 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, ArrowRight, Play, Users, MessageSquare, Calendar } from 'lucide-react';
+import { ArrowRight, Users, Calendar, FileText, Heart, TrendingUp, Leaf, Map, Shield } from 'lucide-react';
 import Slider1 from '../assets/slider/Banner.png';
 
-interface Slide {
-  id: string;
-  title: string;
-  subtitle: string;
-  description1: string;
-  description2: string;
-  description3?: string;
-  image: string;
-  ctaText: string;
-  ctaLink: string;
-  secondaryCtaText?: string;
-  secondaryCtaLink?: string;
-  stats?: {
-    label: string;
-    value: string;
-    icon: React.ComponentType<any>;
-  }[];
-}
-
 const HeroSlider = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-
-  const slides: Slide[] = [
-    {
-      id: 'main',
-      title: 'K\'atun: Nuestra Guatemala 2052',
-      subtitle: 'Plan Nacional de Desarrollo',
-      description1: 'SEGEPLAN te invita a participar en la actualización del Plan Nacional de Desarrollo de Guatemala.',
-      description2: 'Tu retroalimentación es fundamental para construir una visión compartida del país que queremos para el 2052.',
-      description3: 'Revisa los documentos oficiales y comparte tus aportes por cada una de las 5 dimensiones estratégicas.',
-      image: Slider1,
-      ctaText: 'Explorar Dimensiones',
-      ctaLink: '/documentos',
-      secondaryCtaText: 'Ver Cronograma',
-      secondaryCtaLink: '/calendario'
-    }
+  const dimensions = [
+    { icon: Heart, name: 'Bienestar', color: 'bg-blue-500' },
+    { icon: TrendingUp, name: 'Riqueza', color: 'bg-green-500' },
+    { icon: Leaf, name: 'Recursos', color: 'bg-emerald-500' },
+    { icon: Map, name: 'Territorial', color: 'bg-orange-500' },
+    { icon: Shield, name: 'Estado', color: 'bg-red-500' }
   ];
 
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, slides.length]);
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const currentSlideData = slides[currentSlide];
-
   return (
-    <div className="relative h-screen overflow-hidden">
-      {/* Background Images */}
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image */}
       <div className="absolute inset-0">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/85 via-blue-800/75 to-transparent"></div>
-          </div>
-        ))}
+        <img
+          src={Slider1}
+          alt="K'atun: Nuestra Guatemala 2052"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-800/85 to-blue-900/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-blue-900/40"></div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex items-center">
+      <div className="relative z-10 min-h-screen flex items-center py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
-            <div className="text-white space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-4xl sm:text-5xl lg:text-5xl font-bold leading-tight">
-                  <span className="block">{currentSlideData.title}</span>
-                  <span className="block text-white mt-2">
-                    {currentSlideData.subtitle}
-                  </span>
-                </h1>
-                
-                <p className="text-xl sm:text-2xl text-blue-100 leading-relaxed max-w-2xl">
-                  {currentSlideData.description1}
-                </p>
-
-                <p className="text-xl sm:text-2xl text-blue-100 leading-relaxed max-w-2xl">
-                  {currentSlideData.description2}
-                </p>
-
-                <p className="text-xl sm:text-2xl text-blue-100 leading-relaxed max-w-2xl">
-                  {currentSlideData.description3}
-                </p>
+          <div className="text-center text-white space-y-12">
+            {/* Main Heading */}
+            <div className="space-y-6 animate-fade-in">
+              <div className="inline-block">
+                <span className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-semibold text-white">
+                  Plan Nacional de Desarrollo
+                </span>
               </div>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to={currentSlideData.ctaLink}
-                  className="group bg-white hover:bg-blue-50 text-blue-800 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105 hover:shadow-xl"
-                >
-                  {currentSlideData.ctaText}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
+                <span className="block">K'atun:</span>
+                <span className="block bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                  Nuestra Guatemala 2052
+                </span>
+              </h1>
 
-                {currentSlideData.secondaryCtaLink && (
-                  <Link
-                    to={currentSlideData.secondaryCtaLink}
-                    className="group bg-blue-800/50 backdrop-blur-sm hover:bg-blue-700 border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105"
+              <p className="text-xl sm:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+                SEGEPLAN te invita a participar en la actualización del Plan Nacional de Desarrollo.
+                <span className="block mt-4 text-white font-semibold">
+                  Tu voz construye el futuro de Guatemala.
+                </span>
+              </p>
+            </div>
+
+            {/* Dimension Pills */}
+            <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+              {dimensions.map((dim, index) => {
+                const IconComponent = dim.icon;
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-white/20 transition-all duration-300"
                   >
-                    {currentSlideData.secondaryCtaText}
-                    <Calendar className="ml-2 h-5 w-5" />
-                  </Link>
-                )}
+                    <IconComponent className="h-4 w-4 text-white" />
+                    <span className="text-sm font-medium text-white">{dim.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                to="/documentos"
+                className="group bg-white hover:bg-blue-50 text-blue-900 px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105 hover:shadow-2xl"
+              >
+                <FileText className="mr-3 h-6 w-6" />
+                Explorar Documentos
+                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <Link
+                to="/calendario"
+                className="group bg-blue-800/50 backdrop-blur-sm hover:bg-blue-700 border-2 border-white text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105"
+              >
+                <Calendar className="mr-3 h-6 w-6" />
+                Ver Cronograma
+              </Link>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto pt-12">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
+                <div className="text-5xl font-bold text-white mb-2">5</div>
+                <div className="text-lg text-blue-100 font-semibold mb-1">Dimensiones</div>
+                <div className="text-sm text-blue-200">Estratégicas</div>
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">5</div>
-                  <div className="text-sm text-blue-100">Dimensiones</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">2052</div>
-                  <div className="text-sm text-blue-100">Horizonte</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-1">
-                    <Users className="h-8 w-8 inline" />
-                  </div>
-                  <div className="text-sm text-blue-100">Participativo</div>
-                </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
+                <div className="text-5xl font-bold text-white mb-2">2052</div>
+                <div className="text-lg text-blue-100 font-semibold mb-1">Horizonte</div>
+                <div className="text-sm text-blue-200">Visión de largo plazo</div>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
+                <Users className="h-12 w-12 text-white mx-auto mb-3" />
+                <div className="text-lg text-blue-100 font-semibold mb-1">Participativo</div>
+                <div className="text-sm text-blue-200">Tu voz cuenta</div>
               </div>
             </div>
 
+            {/* Scroll Indicator */}
+            <div className="pt-12 animate-bounce">
+              <div className="inline-flex flex-col items-center">
+                <div className="text-sm text-blue-100 mb-2">Descubre más</div>
+                <svg className="w-6 h-6 text-white" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* Navigation Controls */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center space-x-4">
-          {/* Dots */}
-          <div className="flex space-x-2">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide
-                    ? 'bg-blue-800 w-8'
-                    : 'bg-white/50 hover:bg-white/70'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Arrow Controls */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 border border-white/20"
-      >
-        <ChevronLeft className="h-6 w-6" />
-      </button>
-      
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 border border-white/20"
-      >
-        <ChevronRight className="h-6 w-6" />
-      </button>
-
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-20">
-        <div className="bg-white/20 h-1">
-          <div
-            className="bg-blue-800 h-full transition-all duration-300"
-            style={{
-              width: `${((currentSlide + 1) / slides.length) * 100}%`
-            }}
-          />
         </div>
       </div>
     </div>
