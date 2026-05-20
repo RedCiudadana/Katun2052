@@ -42,14 +42,14 @@ const Footer = () => (
             Plan Nacional de Desarrollo K'atun: Nuestra Guatemala 2032.
           </p>
           <div className="pt-2">
-            <p className="text-xs text-slate-500 mb-2">Desarrollado por</p>
+            <p className="text-xs text-slate-500 mb-2">Implementado con la Asistencia Técnica de:</p>
             <a
               href="https://www.redciudadana.org/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-brand-300 hover:text-brand-200 underline underline-offset-2 transition-colors"
             >
-              Red Ciudadana
+              Asociación Civil Red Ciudadana
             </a>
           </div>
         </div>
