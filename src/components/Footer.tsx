@@ -8,10 +8,10 @@ import Linea from '../assets/footer/LINEA.png';
 import SegeplanLogo from '/images/segeplan-logo.jpg';
 
 const social = [
-  { name: 'Facebook',  url: 'https://www.facebook.com/segeplan/',  icon: Redes1 },
-  { name: 'Twitter',   url: 'https://x.com/segeplan',              icon: Redes2 },
-  { name: 'Instagram', url: 'https://www.instagram.com/segeplan/', icon: Redes3 },
-  { name: 'YouTube',   url: 'https://www.youtube.com/@segeplan',   icon: Redes4 },
+  { name: 'Facebook',  url: 'https://www.facebook.com/SegeplanGT/',                         icon: Redes1 },
+  { name: 'Twitter',   url: 'https://x.com/segeplan',                                       icon: Redes2 },
+  { name: 'Instagram', url: 'https://www.instagram.com/segeplan',                           icon: Redes3 },
+  { name: 'YouTube',   url: 'https://www.youtube.com/channel/UC6_LyaH6aAYzDydSezE5LDw',    icon: Redes4 },
 ];
 
 const quickLinks = [

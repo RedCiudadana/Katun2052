@@ -4,10 +4,10 @@ import Redes3 from '../assets/footer/REDES-03.png';
 import Redes4 from '../assets/footer/REDES-04.png';
 
 const socialLinks = [
-  { name: 'Facebook',  url: 'https://www.facebook.com/segeplan/', icon: Redes1 },
-  { name: 'Twitter',   url: 'https://x.com/segeplan',             icon: Redes2 },
-  { name: 'Instagram', url: 'https://www.instagram.com/segeplan/', icon: Redes3 },
-  { name: 'YouTube',   url: 'https://www.youtube.com/@segeplan',   icon: Redes4 },
+  { name: 'Facebook',  url: 'https://www.facebook.com/SegeplanGT/',                         icon: Redes1 },
+  { name: 'Twitter',   url: 'https://x.com/segeplan',                                       icon: Redes2 },
+  { name: 'Instagram', url: 'https://www.instagram.com/segeplan',                           icon: Redes3 },
+  { name: 'YouTube',   url: 'https://www.youtube.com/channel/UC6_LyaH6aAYzDydSezE5LDw',    icon: Redes4 },
 ];
 
 const TopBar = () => (
