@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield } from 'lucide-react';
 import { dimensionService, Dimension, DimensionArticle, DimensionComment } from '../services/dimensionService';
@@ -108,142 +108,117 @@ const DimensionArticles = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-10 h-10 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
 
-  if (!dimension) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Dimensión no encontrada</h2>
-          <Link to="/" className="text-blue-600 hover:underline">Volver al inicio</Link>
-        </div>
+  if (!dimension) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="text-center space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900">Dimensión no encontrada</h2>
+        <Link to="/" className="btn-primary btn-sm">Volver al inicio</Link>
       </div>
-    );
-  }
+    </div>
+  );
 
   const IconComponent = iconMap[dimension.icon] || FileText;
   const colors = colorMap[dimension.color] || colorMap.blue;
-
-  const currentComments = activeTab === 'general'
-    ? generalComments
-    : articleComments[activeTab] || [];
-
+  const currentComments = activeTab === 'general' ? generalComments : articleComments[activeTab] || [];
   const currentArticle = articles.find(a => a.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className={`${colors.bg} border-b`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <Link
-            to="/"
-            className={`inline-flex items-center ${colors.text} hover:underline mb-6`}
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero */}
+      <section className="page-hero">
+        <div className="container-wide">
+          <Link to="/" className="inline-flex items-center gap-2 text-brand-200 hover:text-white text-sm font-medium mb-6 transition-colors">
+            <ArrowLeft className="h-4 w-4" />
             Volver al inicio
           </Link>
-
-          <div className="flex items-start gap-6">
-            <div className={`${colors.accent} p-4 rounded-2xl`}>
-              <IconComponent className="h-12 w-12 text-white" />
+          <div className="flex items-start gap-5">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl flex items-center justify-center shrink-0">
+              <IconComponent className="h-8 w-8 text-white" />
             </div>
-
-            <div className="flex-1">
-              <h1 className={`text-4xl font-bold ${colors.text} mb-4`}>
-                {dimension.name}
-              </h1>
-              <p className="text-xl text-gray-700 mb-4">{dimension.description}</p>
-              <p className="text-lg text-gray-600">{dimension.full_description}</p>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">{dimension.name}</h1>
+              <p className="text-brand-100 text-base max-w-2xl">{dimension.description}</p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
-              <h3 className="font-bold text-gray-900 mb-4">Contenido</h3>
-
+      <div className="container-wide py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sidebar */}
+          <aside className="lg:col-span-1">
+            <div className="card-flat border border-slate-200 bg-white p-4 sticky top-24">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-1">
+                Contenido
+              </h3>
               <button
                 onClick={() => setActiveTab('general')}
-                className={`w-full text-left px-4 py-3 rounded-lg mb-2 transition-colors ${
+                className={`w-full text-left px-3 py-3 rounded-xl mb-1 transition-colors text-sm ${
                   activeTab === 'general'
-                    ? `${colors.accent} text-white`
-                    : 'hover:bg-gray-100 text-gray-700'
+                    ? 'bg-brand-700 text-white shadow-soft'
+                    : 'text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">Vista General</span>
-                  <MessageSquare className="h-4 w-4" />
+                  <span className="font-semibold">Vista General</span>
+                  <MessageSquare className="h-3.5 w-3.5 opacity-70" />
                 </div>
-                <div className="text-xs mt-1 opacity-80">
-                  {commentCounts.general || 0} comentarios
-                </div>
+                <div className="text-xs mt-0.5 opacity-70">{commentCounts.general || 0} comentarios</div>
               </button>
-
-              <div className="space-y-2">
-                {articles.map((article) => (
-                  <button
-                    key={article.id}
-                    onClick={() => setActiveTab(article.id)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                      activeTab === article.id
-                        ? `${colors.accent} text-white`
-                        : 'hover:bg-gray-100 text-gray-700'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="text-sm font-medium">
-                        {article.title}
-                      </span>
-                      <FileText className="h-4 w-4 flex-shrink-0" />
-                    </div>
-                    <div className="text-xs mt-1 opacity-80">
-                      {commentCounts[article.id] || 0} comentarios
-                    </div>
-                  </button>
-                ))}
-              </div>
+              {articles.map(article => (
+                <button
+                  key={article.id}
+                  onClick={() => setActiveTab(article.id)}
+                  className={`w-full text-left px-3 py-3 rounded-xl mb-1 transition-colors text-sm ${
+                    activeTab === article.id
+                      ? 'bg-brand-700 text-white shadow-soft'
+                      : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="font-medium leading-snug">{article.title}</span>
+                    <FileText className="h-3.5 w-3.5 shrink-0 opacity-70 mt-0.5" />
+                  </div>
+                  <div className="text-xs mt-0.5 opacity-70">{commentCounts[article.id] || 0} comentarios</div>
+                </button>
+              ))}
             </div>
-          </div>
+          </aside>
 
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-sm p-8 mb-6">
+          {/* Main content */}
+          <main className="lg:col-span-3 space-y-5">
+            <div className="card bg-white p-6 sm:p-8">
               {activeTab === 'general' ? (
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    Comentarios Generales
-                  </h2>
-                  <p className="text-gray-600 mb-6">
+                <>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-2">Comentarios Generales</h2>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-0">
                     Comparte tu opinión general sobre esta dimensión del K'atun 2032.
-                    Tus aportes son fundamentales para la construcción participativa del Plan Nacional de Desarrollo.
+                    Tus aportes son fundamentales para el Plan Nacional de Desarrollo.
                   </p>
-                </div>
+                </>
               ) : currentArticle ? (
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    {currentArticle.title}
-                  </h2>
-                  <div className="prose max-w-none text-gray-700 whitespace-pre-line mb-8">
+                <>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-4">{currentArticle.title}</h2>
+                  <div className="article-content text-slate-700 whitespace-pre-line mb-0">
                     {currentArticle.content}
                   </div>
-                </div>
+                </>
               ) : null}
 
-              <div className="border-t pt-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-gray-900">
-                    Comentarios ({currentComments.length})
+              <div className="border-t border-slate-100 mt-6 pt-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-lg font-bold text-slate-900">
+                    Comentarios <span className="text-slate-400 font-normal text-base">({currentComments.length})</span>
                   </h3>
                   <button
                     onClick={() => setShowCommentForm(showCommentForm === activeTab ? null : activeTab)}
-                    className={`${colors.accent} text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2`}
+                    className="btn-primary btn-sm"
                   >
                     <MessageSquare className="h-4 w-4" />
                     Agregar Comentario
@@ -251,75 +226,58 @@ const DimensionArticles = () => {
                 </div>
 
                 {showCommentForm === activeTab && (
-                  <div className={`${colors.bg} rounded-xl p-6 mb-6`}>
+                  <div className="bg-brand-50 border border-brand-200 rounded-2xl p-5 sm:p-6 mb-5">
                     {submitSuccess ? (
                       <div className="text-center py-8">
-                        <CheckCircle className={`h-16 w-16 ${colors.text} mx-auto mb-4`} />
-                        <h3 className={`text-xl font-bold ${colors.text} mb-2`}>
-                          ¡Comentario enviado!
-                        </h3>
-                        <p className="text-gray-600">
-                          Tu comentario está pendiente de aprobación y será visible pronto.
-                        </p>
+                        <CheckCircle className="h-14 w-14 text-green-500 mx-auto mb-3" />
+                        <h3 className="text-lg font-bold text-slate-900 mb-1">¡Comentario enviado!</h3>
+                        <p className="text-slate-500 text-sm">Tu comentario está pendiente de aprobación.</p>
                       </div>
                     ) : (
-                      <form onSubmit={(e) => handleSubmitComment(e, activeTab === 'general' ? undefined : activeTab)}>
+                      <form onSubmit={e => handleSubmitComment(e, activeTab === 'general' ? undefined : activeTab)}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Nombre completo *
-                            </label>
+                            <label className="form-label">Nombre completo *</label>
                             <input
-                              type="text"
-                              required
+                              type="text" required
                               value={formData.name}
-                              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              onChange={e => setFormData({ ...formData, name: e.target.value })}
+                              className="form-input"
                               placeholder="Tu nombre"
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Correo electrónico *
-                            </label>
+                            <label className="form-label">Correo electrónico *</label>
                             <input
-                              type="email"
-                              required
+                              type="email" required
                               value={formData.email}
-                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              onChange={e => setFormData({ ...formData, email: e.target.value })}
+                              className="form-input"
                               placeholder="tu@email.com"
                             />
                           </div>
                         </div>
                         <div className="mb-4">
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Tu comentario *
-                          </label>
+                          <label className="form-label">Tu comentario *</label>
                           <textarea
                             required
                             value={formData.comment}
-                            onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-                            rows={4}
-                            minLength={10}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Comparte tu opinión, sugerencia o aporte..."
+                            onChange={e => setFormData({ ...formData, comment: e.target.value })}
+                            rows={4} minLength={10}
+                            className="form-input resize-none"
+                            placeholder="Comparte tu opinión, sugerencia o aporte…"
                           />
-                          <p className="text-xs text-gray-500 mt-1">Mínimo 10 caracteres</p>
+                          <p className="text-xs text-slate-400 mt-1">Mínimo 10 caracteres</p>
                         </div>
                         <div className="flex gap-3">
-                          <button
-                            type="submit"
-                            disabled={submitting}
-                            className={`${colors.accent} text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50`}
-                          >
+                          <button type="submit" disabled={submitting} className="btn-primary btn-sm">
                             <Send className="h-4 w-4" />
-                            {submitting ? 'Enviando...' : 'Enviar Comentario'}
+                            {submitting ? 'Enviando…' : 'Enviar Comentario'}
                           </button>
                           <button
                             type="button"
                             onClick={() => setShowCommentForm(null)}
-                            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                            className="btn-ghost btn-sm"
                           >
                             Cancelar
                           </button>
@@ -329,44 +287,38 @@ const DimensionArticles = () => {
                   </div>
                 )}
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {currentComments.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500">
-                      <MessageSquare className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                      <p>Aún no hay comentarios. ¡Sé el primero en participar!</p>
+                    <div className="text-center py-14 text-slate-400">
+                      <MessageSquare className="h-12 w-12 mx-auto mb-3 opacity-25" />
+                      <p className="text-sm">Aún no hay comentarios. ¡Sé el primero en participar!</p>
                     </div>
-                  ) : (
-                    currentComments.map((comment) => (
-                      <div key={comment.id} className="border border-gray-200 rounded-lg p-6">
-                        <div className="flex items-start gap-4">
-                          <div className={`${colors.accent} w-10 h-10 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0`}>
-                            {comment.author_name.charAt(0).toUpperCase()}
+                  ) : currentComments.map(comment => (
+                    <div key={comment.id} className="card-flat border border-slate-200 p-5 bg-white rounded-2xl">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-brand-700 text-white font-bold flex items-center justify-center shrink-0 text-sm">
+                          {comment.author_name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-semibold text-slate-900 text-sm">{comment.author_name}</span>
+                            <span className="text-xs text-slate-400">
+                              {new Date(comment.created_at).toLocaleDateString('es-GT', {
+                                year: 'numeric', month: 'long', day: 'numeric',
+                              })}
+                            </span>
                           </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="font-semibold text-gray-900">
-                                {comment.author_name}
-                              </span>
-                              <span className="text-sm text-gray-500">
-                                {new Date(comment.created_at).toLocaleDateString('es-GT', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric'
-                                })}
-                              </span>
-                            </div>
-                            <p className="text-gray-700 whitespace-pre-line">
-                              {comment.comment}
-                            </p>
-                          </div>
+                          <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                            {comment.comment}
+                          </p>
                         </div>
                       </div>
-                    ))
-                  )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>

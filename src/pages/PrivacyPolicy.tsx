@@ -1,4 +1,3 @@
-import React from 'react';
 import { Shield, Lock, Eye, UserCheck, FileText, AlertCircle } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import Linea from '../assets/LINEA.png';
@@ -68,62 +67,58 @@ const PrivacyPolicy = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection>
-          <div className="text-center mb-12">
-            <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Shield className="h-8 w-8 text-blue-600" />
+    <div className="min-h-screen bg-slate-50">
+      <section className="page-hero">
+        <div className="container-wide">
+          <AnimatedSection>
+            <div className="flex items-center gap-3 mb-3">
+              <Shield className="h-6 w-6 text-brand-200" />
+              <span className="badge bg-white/15 text-white/90 text-xs uppercase tracking-wider">
+                Protección de datos
+              </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Aviso de Privacidad
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              SEGEPLAN se compromete a proteger tu privacidad y manejar tus datos personales
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-3">Aviso de Privacidad</h1>
+            <p className="text-lg text-brand-100 max-w-2xl">
+              SEGEPLAN se compromete a proteger tu privacidad y manejar tus datos
               de manera responsable y transparente.
             </p>
-            <div className="flex justify-center my-6">
-              <img src={Linea} alt="Separador" />
-            </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
+        </div>
+      </section>
 
-        <AnimatedSection delay={200}>
-          <div className="bg-blue-50 rounded-xl p-6 mb-8 border border-blue-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">
+      <div className="container-narrow py-10">
+        <AnimatedSection>
+          <div className="bg-brand-50 border border-brand-200 rounded-2xl p-6 mb-8">
+            <h2 className="text-base font-bold text-slate-900 mb-2">
               Responsable del Tratamiento de Datos
             </h2>
-            <p className="text-gray-700 mb-2">
-              <strong>Secretaría de Planificación y Programación de la Presidencia (SEGEPLAN)</strong>
+            <p className="text-sm font-semibold text-slate-800 mb-1">
+              Secretaría de Planificación y Programación de la Presidencia (SEGEPLAN)
             </p>
-            <p className="text-gray-600 text-sm">
-              9a. calle 10-44 Zona 1, Guatemala<br />
-              PBX: 2326-0000<br />
-              Correo: privacidad@segeplan.gob.gt<br />
-              Sitio web: www.segeplan.gob.gt
+            <p className="text-sm text-slate-600 leading-relaxed">
+              9a. calle 10-44 Zona 1, Guatemala · PBX: 2326-0000<br />
+              privacidad@segeplan.gob.gt · www.segeplan.gob.gt
             </p>
           </div>
         </AnimatedSection>
 
-        <div className="space-y-6">
-          {sections.map((section, index) => {
-            const IconComponent = section.icon;
+        <div className="space-y-4">
+          {sections.map((section, i) => {
+            const Icon = section.icon;
             return (
-              <AnimatedSection key={index} delay={300 + index * 100}>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <AnimatedSection key={i} delay={i * 80}>
+                <div className="card bg-white p-5 sm:p-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <IconComponent className="h-6 w-6 text-blue-600" />
+                    <div className="w-11 h-11 bg-brand-100 text-brand-700 rounded-xl flex items-center justify-center shrink-0">
+                      <Icon className="h-5 w-5" />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">
-                        {section.title}
-                      </h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-bold text-slate-900 mb-3">{section.title}</h3>
                       <ul className="space-y-2">
-                        {section.content.map((item, itemIndex) => (
-                          <li key={itemIndex} className="text-gray-700 leading-relaxed flex items-start">
-                            <span className="text-blue-600 mr-2 flex-shrink-0">•</span>
-                            <span>{item}</span>
+                        {section.content.map((item, j) => (
+                          <li key={j} className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed">
+                            <span className="text-brand-500 mt-0.5 shrink-0">•</span>
+                            {item}
                           </li>
                         ))}
                       </ul>
@@ -135,39 +130,35 @@ const PrivacyPolicy = () => {
           })}
         </div>
 
-        <AnimatedSection delay={900}>
-          <div className="mt-8 bg-gray-100 rounded-xl p-6 border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-3">
-              Cambios a esta Política
-            </h3>
-            <p className="text-gray-700 leading-relaxed">
-              Nos reservamos el derecho de actualizar esta política de privacidad en cualquier momento.
-              Los cambios serán publicados en esta página con la fecha de última actualización.
-              Te recomendamos revisar esta política periódicamente.
+        <AnimatedSection delay={700}>
+          <div className="mt-6 card-flat border border-slate-200 bg-slate-100 p-5 rounded-2xl">
+            <h3 className="text-sm font-bold text-slate-900 mb-2">Cambios a esta Política</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Nos reservamos el derecho de actualizar esta política en cualquier momento.
+              Los cambios serán publicados con la fecha de última actualización.
             </p>
-            <p className="text-sm text-gray-600 mt-4">
-              <strong>Última actualización:</strong> Febrero 2026
-            </p>
+            <p className="text-xs text-slate-400 mt-3 font-medium">Última actualización: Febrero 2026</p>
           </div>
         </AnimatedSection>
 
-        <AnimatedSection delay={1000}>
-          <div className="mt-8 bg-blue-600 text-white rounded-xl p-6 text-center">
-            <h3 className="text-xl font-bold mb-3">
-              ¿Tienes Preguntas?
-            </h3>
-            <p className="mb-4">
-              Si tienes dudas sobre cómo manejamos tu información o deseas ejercer tus derechos,
-              contáctanos.
+        <AnimatedSection delay={800}>
+          <div className="mt-6 bg-gradient-brand rounded-2xl p-7 text-white text-center">
+            <h3 className="text-xl font-bold mb-2">¿Tienes Preguntas?</h3>
+            <p className="text-white/75 text-sm mb-5">
+              Si tienes dudas sobre cómo manejamos tu información, contáctanos.
             </p>
             <a
               href="mailto:privacidad@segeplan.gob.gt"
-              className="inline-block bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="btn bg-white text-brand-800 px-6 py-3 rounded-xl font-semibold hover:bg-brand-50 transition-colors"
             >
-              Contactar a Privacidad
+              privacidad@segeplan.gob.gt
             </a>
           </div>
         </AnimatedSection>
+
+        <div className="mt-10">
+          <img src={Linea} alt="" className="linea" />
+        </div>
       </div>
     </div>
   );

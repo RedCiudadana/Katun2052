@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, ExternalLink, Facebook, Twitter, Youtube } from 'lucide-react';
+import { Phone, ExternalLink, MapPin } from 'lucide-react';
 import Redes1 from '../assets/footer/REDES-01.png';
 import Redes2 from '../assets/footer/REDES-02.png';
 import Redes3 from '../assets/footer/REDES-03.png';
@@ -8,117 +7,151 @@ import Redes4 from '../assets/footer/REDES-04.png';
 import Linea from '../assets/footer/LINEA.png';
 import SegeplanLogo from '/images/segeplan-logo.jpg';
 
-const Footer = () => {
-  return (
-    <>
-      <footer className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+const social = [
+  { name: 'Facebook',  url: 'https://www.facebook.com/segeplan/',  icon: Redes1 },
+  { name: 'Twitter',   url: 'https://x.com/segeplan',              icon: Redes2 },
+  { name: 'Instagram', url: 'https://www.instagram.com/segeplan/', icon: Redes3 },
+  { name: 'YouTube',   url: 'https://www.youtube.com/@segeplan',   icon: Redes4 },
+];
 
-            {/* Logo */}
+const quickLinks = [
+  { label: 'Inicio',      to: '/' },
+  { label: 'Documentos',  to: '/documentos' },
+  { label: 'Cronograma',  to: '/calendario' },
+  { label: 'Encuesta',    to: '/encuesta' },
+  { label: 'Privacidad',  to: '/privacidad' },
+];
+
+const Footer = () => (
+  <footer className="bg-slate-900 text-slate-300">
+    {/* Main content */}
+    <div className="container-wide py-14">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        {/* Brand */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <img src={SegeplanLogo} alt="SEGEPLAN" className="h-12 w-auto rounded-lg" />
             <div>
-              <img src={SegeplanLogo} alt="SEGEPLAN Logo" className="h-16 w-auto"/>
-              <h3 className="text-lg font-semibold mt-4 mb-2">K'atun 2032</h3>
-              <p className="text-sm text-gray-300">
-                Plan Nacional de Desarrollo: Nuestra Guatemala 2032
-              </p>
-              <p className='mt-4 text-xs text-gray-400'>Plataforma desarrollada con tecnología de:</p>
-              <img className="h-8 w-auto filter-white mt-2" src="https://www.redciudadana.org/assets/img/red/LOGO-RED_NEGRO.png" alt="Red Ciudadana Logo"/>
-            </div>
-
-            {/* Información de Contacto */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Contacto SEGEPLAN</h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Phone className="h-4 w-4 text-white" />
-                  <span className="text-sm">PBX: 2326-0000</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <ExternalLink className="h-4 w-4 text-white" />
-                  <a href="https://www.segeplan.gob.gt" className="text-sm hover:text-blue-300 transition-colors">
-                    www.segeplan.gob.gt
-                  </a>
-                </div>
-                <div className="text-sm text-white">
-                  9a. calle 10-44 Zona 1, Guatemala
-                </div>
-              </div>
-            </div>
-
-            {/* Enlaces Útiles */}
-            {/* <div>
-              <h3 className="text-lg font-semibold mb-4">Enlaces Útiles</h3>
-              <ul className="space-y-2">
-                <li>
-                  <a href="https://www.oj.gob.gt" target="_blank" rel="noopener noreferrer" className="text-sm text-white hover:text-blue-300 transition-colors flex items-center space-x-1">
-                    <span>Organismo Judicial</span>
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.guatemala.gob.gt" target="_blank" rel="noopener noreferrer" className="text-sm text-white hover:text-blue-300 transition-colors flex items-center space-x-1">
-                    <span>Organismo Ejecutivo</span>
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.congreso.gob.gt" target="_blank" rel="noopener noreferrer" className="text-sm text-white hover:text-blue-300 transition-colors flex items-center space-x-1">
-                    <span>Organismo Legislativo</span>
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-              </ul>
-            </div> */}
-
-            {/* Redes Sociales */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Síguenos</h3>
-              <div className="flex space-x-4">
-                <a href="https://www.facebook.com/segeplan/" target='_blank' className="text-white hover:text-blue-400 transition-colors">
-                  <img src={Redes1} className="h-12 w-12" />
-                </a>
-                <a href="https://x.com/segeplan" target='_blank' className="text-white hover:text-blue-400 transition-colors">
-                  <img src={Redes2} className="h-12 w-12" />
-                </a>
-                <a href="https://www.instagram.com/segeplan/" target='_blank' className="text-white hover:text-red-400 transition-colors">
-                  <img src={Redes3} className="h-12 w-12" />
-                </a>
-                <a href="https://www.youtube.com/@segeplan" target='_blank' className="text-white hover:text-red-400 transition-colors">
-                  <img src={Redes4} className="h-12 w-12" />
-                </a>
-              </div>
+              <div className="text-white font-bold text-sm">SEGEPLAN</div>
+              <div className="text-slate-400 text-xs">Secretaría de Planificación</div>
             </div>
           </div>
-
-            <div className="w-full my-8">
-            <img src={Linea} alt="Separador" className="h-5 w-full" />
-            </div>
-
-          <div className="mt-4 pt-4 text-center">
-            <p className="text-sm text-white">
-              2025 SEGEPLAN - Secretaría de Planificación y Programación de la Presidencia
-            </p>
-            <p className="text-xs text-white mt-2">
-              Plataforma de Participación Ciudadana K'atun 2032
-            </p>
-            <div className="flex items-center justify-center gap-4 mt-3">
-              <Link to="/privacidad" className="text-xs text-blue-300 hover:text-blue-200 underline">
-                Aviso de Privacidad
-              </Link>
-              <span className="text-gray-500">•</span>
-              <a href="https://www.segeplan.gob.gt" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-300 hover:text-blue-200 underline">
-                Sitio Oficial SEGEPLAN
-              </a>
-            </div>
-            <p className="text-xs text-gray-400 mt-3">
-              Desarrollado con Participa! de <a href="https://www.redciudadana.org/" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:text-blue-200 underline">Red Ciudadana</a>
-            </p>
+          <p className="text-sm text-slate-400 leading-relaxed">
+            Plataforma de participación ciudadana para la actualización del
+            Plan Nacional de Desarrollo K'atun: Nuestra Guatemala 2032.
+          </p>
+          <div className="pt-2">
+            <p className="text-xs text-slate-500 mb-2">Desarrollado por</p>
+            <a
+              href="https://www.redciudadana.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-brand-300 hover:text-brand-200 underline underline-offset-2 transition-colors"
+            >
+              Red Ciudadana
+            </a>
           </div>
         </div>
-      </footer>
-    </>
-  );
-};
+
+        {/* Quick links + Contact */}
+        <div className="grid grid-cols-2 gap-8">
+          <div>
+            <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
+              Navegación
+            </h4>
+            <ul className="space-y-2">
+              {quickLinks.map(l => (
+                <li key={l.to}>
+                  <Link
+                    to={l.to}
+                    className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
+              Contacto
+            </h4>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2 text-sm text-slate-400">
+                <Phone className="h-3.5 w-3.5 shrink-0 text-slate-500" />
+                PBX: 2326-0000
+              </li>
+              <li className="flex items-center gap-2 text-sm">
+                <ExternalLink className="h-3.5 w-3.5 shrink-0 text-slate-500" />
+                <a
+                  href="https://www.segeplan.gob.gt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-300 hover:text-brand-200 transition-colors"
+                >
+                  segeplan.gob.gt
+                </a>
+              </li>
+              <li className="flex items-start gap-2 text-sm text-slate-400">
+                <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0 text-slate-500" />
+                9a. calle 10-44 Zona 1, Guatemala
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Social */}
+        <div>
+          <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
+            Síguenos
+          </h4>
+          <div className="flex gap-3">
+            {social.map(s => (
+              <a
+                key={s.name}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={s.name}
+                className="opacity-70 hover:opacity-100 transition-all duration-200 hover:scale-110 transform"
+              >
+                <img src={s.icon} alt={s.name} className="h-10 w-10" />
+              </a>
+            ))}
+          </div>
+          <p className="mt-6 text-xs text-slate-500 leading-relaxed">
+            Mantente informado sobre el proceso de actualización del Plan
+            Nacional de Desarrollo.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Divider */}
+    <img src={Linea} alt="" className="linea" />
+
+    {/* Bottom bar */}
+    <div className="container-wide py-5">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <p>© 2025 SEGEPLAN — Secretaría de Planificación y Programación de la Presidencia</p>
+        <div className="flex items-center gap-4">
+          <Link to="/privacidad" className="hover:text-slate-300 transition-colors">
+            Aviso de Privacidad
+          </Link>
+          <span>·</span>
+          <a
+            href="https://www.segeplan.gob.gt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-slate-300 transition-colors"
+          >
+            Sitio Oficial
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;

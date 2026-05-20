@@ -1,72 +1,48 @@
-// TopBar is a presentational component, no React import required with the new JSX transform
 import Redes1 from '../assets/footer/REDES-01.png';
 import Redes2 from '../assets/footer/REDES-02.png';
 import Redes3 from '../assets/footer/REDES-03.png';
 import Redes4 from '../assets/footer/REDES-04.png';
 
-const TopBar = () => {
-  const socialLinks = [
-    {
-      name: 'Facebook',
-      url: 'https://www.facebook.com/segeplan/',
-      icon: Redes1
-    },
-    {
-      name: 'Twitter',
-      url: 'https://x.com/segeplan',
-      icon: Redes2
-    },
-    {
-      name: 'Instagram',
-      url: 'https://www.instagram.com/segeplan/',
-      icon: Redes3
-    },
-    {
-      name: 'YouTube',
-      url: 'https://www.youtube.com/@segeplan',
-      icon: Redes4
-    }
-  ];
+const socialLinks = [
+  { name: 'Facebook',  url: 'https://www.facebook.com/segeplan/', icon: Redes1 },
+  { name: 'Twitter',   url: 'https://x.com/segeplan',             icon: Redes2 },
+  { name: 'Instagram', url: 'https://www.instagram.com/segeplan/', icon: Redes3 },
+  { name: 'YouTube',   url: 'https://www.youtube.com/@segeplan',   icon: Redes4 },
+];
 
-  return (
-    <div id="topbar" className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-3 text-sm shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Left side - Organization info */}
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-200 font-medium">
-              K'atun: Nuestra Guatemala 2032 | SEGEPLAN
-            </span>
-          </div>
+const TopBar = () => (
+  <div
+    id="topbar"
+    className="bg-brand-900 text-white text-xs"
+    style={{ height: 'var(--topbar-h)' }}
+  >
+    <div className="container-wide h-full flex items-center justify-between">
+      <span className="text-brand-200 font-medium tracking-wide hidden sm:block">
+        K'atun: Nuestra Guatemala 2032 &nbsp;|&nbsp; SEGEPLAN
+      </span>
+      <span className="text-brand-200 font-medium tracking-wide sm:hidden">
+        SEGEPLAN
+      </span>
 
-          {/* Right side - Social media */}
-          <div className="flex items-center space-x-3">
-            <span className="text-gray-200 hidden sm:inline font-medium">
-              Síguenos:
-            </span>
-            <div className="flex items-center space-x-2">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-all duration-200 transform hover:scale-110"
-                  title={`Síguenos en ${social.name}`}
-                >
-                  <img
-                    src={social.icon}
-                    alt={social.name}
-                    className="h-7 w-7"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
+      <div className="flex items-center gap-3">
+        <span className="text-brand-300 hidden sm:block">Síguenos:</span>
+        <div className="flex items-center gap-1.5">
+          {socialLinks.map(s => (
+            <a
+              key={s.name}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={s.name}
+              className="opacity-80 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"
+            >
+              <img src={s.icon} alt={s.name} className="h-6 w-6" />
+            </a>
+          ))}
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default TopBar;

@@ -1,10 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
 
 @font-face {
   font-family: 'Euclid Circular A';
-  src: url('./assets/fonts/EuclidCircularA-Regular.woff2') format('woff2'),
-       url('./assets/fonts/EuclidCircularA-Regular.woff') format('woff');
+  src: url('./assets/fonts/EuclidCircularA-Regular.ttf') format('truetype');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: url('./assets/fonts/EuclidCircularA-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: url('./assets/fonts/EuclidCircularA-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: url('./assets/fonts/EuclidCircularA-Bold.ttf') format('truetype');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -15,172 +35,162 @@
 
 @layer base {
   :root {
-    --color-primary: 22 78 99;
-    --color-primary-light: 103 232 249;
-    --color-primary-dark: 8 47 73;
-    --color-accent: 234 88 12;
-    --color-success: 34 197 94;
-    --color-warning: 251 146 60;
-    --color-error: 239 68 68;
-    --spacing-unit: 8px;
+    --topbar-h: 44px;
+    --header-h: 64px;
   }
 
-  * {
-    @apply antialiased;
+  * { @apply antialiased box-border; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Euclid Circular A', Arial, sans-serif;
+    @apply text-slate-800 bg-slate-50;
+    line-height: 1.65;
   }
 
-  html {
-    scroll-behavior: smooth;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    @apply text-slate-900;
+  }
+
+  a { @apply transition-colors duration-200; }
+
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
   }
 }
 
-.font-sora-bold {
-  font-family: 'Sora', sans-serif;
-  font-weight: 700;
+@layer components {
+  /* ── Buttons ── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-xl
+           transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed select-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand-700 text-white px-6 py-3
+           hover:bg-brand-800 hover:shadow-card-hover
+           focus:ring-brand-500 active:scale-[0.98];
+  }
+  .btn-secondary {
+    @apply btn bg-white text-brand-700 border-2 border-brand-600 px-6 py-3
+           hover:bg-brand-50 hover:border-brand-700
+           focus:ring-brand-500 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn text-slate-600 px-4 py-2
+           hover:bg-slate-100 hover:text-slate-900
+           focus:ring-slate-400;
+  }
+  .btn-sm {
+    @apply px-4 py-2 text-sm rounded-lg;
+  }
+  .btn-lg {
+    @apply px-8 py-4 text-lg rounded-2xl;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white rounded-2xl border border-slate-200 shadow-card
+           transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+  .card-flat {
+    @apply bg-white rounded-2xl border border-slate-200;
+  }
+
+  /* ── Form elements ── */
+  .form-input {
+    @apply w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-800
+           bg-white placeholder-slate-400
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+           transition-all duration-200;
+  }
+  .form-label {
+    @apply block text-sm font-semibold text-slate-700 mb-1.5;
+  }
+
+  /* ── Section layouts ── */
+  .section {
+    @apply py-16 sm:py-20;
+  }
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Tags & badges ── */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+  .badge-brand { @apply badge bg-brand-100 text-brand-800; }
+  .badge-teal  { @apply badge bg-teal-100 text-teal-800; }
+  .badge-amber { @apply badge bg-amber-100 text-amber-800; }
+  .badge-slate { @apply badge bg-slate-100 text-slate-700; }
+  .badge-green { @apply badge bg-green-100 text-green-800; }
+  .badge-red   { @apply badge bg-red-100 text-red-800; }
+
+  /* ── Divider image ── */
+  .linea { @apply h-4 w-full object-fill; }
+
+  /* ── Status dot ── */
+  .status-completed { @apply bg-green-500; }
+  .status-in_progress { @apply bg-brand-500 animate-pulse-slow; }
+  .status-upcoming  { @apply bg-slate-300; }
+
+  /* ── Page hero ── */
+  .page-hero {
+    @apply bg-gradient-brand text-white py-16;
+  }
+
+  /* ── Utility ── */
+  .filter-white { filter: brightness(0) invert(1); }
+  .focus-ring { @apply focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2; }
 }
 
-.font-euclid {
-  font-family: 'Euclid Circular A', Arial, sans-serif;
-  font-weight: 400;
-}
-
-body {
-  @apply font-euclid text-gray-900 bg-gray-50;
-  line-height: 1.6;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  @apply font-sora font-bold;
-  line-height: 1.2;
-}
-
-.filter-white{
-  filter: brightness(0) invert(1);
-}
-
-/* Estilos para el contenido de artículos */
+/* ── Article prose ── */
 .article-content {
-  text-align: justify;
   hyphens: auto;
 }
-
 .article-content p {
   margin-bottom: 1rem;
   line-height: 1.8;
   font-size: 0.95rem;
+  color: #334155;
 }
-
-.article-content p:last-child {
-  margin-bottom: 0;
-}
-
-.article-content strong {
-  font-weight: 600;
-  color: #1f2937;
-}
-
+.article-content p:last-child { margin-bottom: 0; }
+.article-content strong { font-weight: 600; color: #1e293b; }
 .article-content ul,
 .article-content ol {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
   padding-left: 1.5rem;
 }
-
 .article-content li {
   margin-bottom: 0.5rem;
   line-height: 1.7;
+  color: #475569;
 }
-
-.article-content li p {
-  margin-bottom: 0.5rem;
-}
-
-.article-content h1,
-.article-content h2,
-.article-content h3,
-.article-content h4 {
-  margin-top: 1.25rem;
+.article-content h2, .article-content h3, .article-content h4 {
+  margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  font-weight: 600;
+  color: #0f172a;
 }
-
 .article-content blockquote {
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid #2a7fbd;
   padding-left: 1rem;
-  margin: 1rem 0;
+  margin: 1.25rem 0;
   font-style: italic;
-  color: #4b5563;
+  color: #64748b;
+  background: #f8fafc;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.75rem 1rem;
 }
 
-/* Animaciones suaves */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.6s ease-out;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.4s ease-out;
-}
-
-/* Transiciones suaves globales */
-@layer components {
-  .transition-smooth {
-    @apply transition-all duration-300 ease-in-out;
-  }
-
-  .hover-lift {
-    @apply transition-smooth hover:-translate-y-1 hover:shadow-lg;
-  }
-
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2;
-  }
-
-  .btn-primary {
-    @apply bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-smooth hover:bg-cyan-800 hover:shadow-lg focus-ring;
-  }
-
-  .btn-secondary {
-    @apply bg-white text-cyan-700 border-2 border-cyan-700 px-6 py-3 rounded-lg font-semibold transition-smooth hover:bg-cyan-50 focus-ring;
-  }
-
-  .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 hover-lift;
-  }
-}
+/* ── Legacy animation classes ── */
+.animate-fade-in  { animation: fadeUp 0.6s ease-out both; }
+.animate-scale-in { animation: scaleIn 0.4s ease-out both; }

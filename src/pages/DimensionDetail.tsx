@@ -1,131 +1,120 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FileText, Download, Calendar, CheckCircle, Filter, Heart, TrendingUp, Leaf, Map, Shield } from 'lucide-react';
+import { FileText, Download, Calendar, CheckCircle, Filter, Heart, TrendingUp, Leaf, Map, Shield, ArrowLeft, MessageSquare } from 'lucide-react';
 import { katunService } from '../services/katunService';
 import type { Dimension, Document } from '../types/katun';
 import AnimatedSection from '../components/AnimatedSection';
 import Linea from '../assets/LINEA.png';
 
+const getDimIcon = (code: string): React.ElementType => {
+  const m: Record<string, React.ElementType> = {
+    'dimension-1': Heart, 'dimension-2': TrendingUp,
+    'dimension-3': Leaf,  'dimension-4': Map, 'dimension-5': Shield,
+  };
+  return m[code] ?? FileText;
+};
+
+const getDimSlug = (code: string) => {
+  const m: Record<string, string> = {
+    'dimension-1': 'bienestar', 'dimension-2': 'riqueza',
+    'dimension-3': 'recursos',  'dimension-4': 'territorial', 'dimension-5': 'estado',
+  };
+  return m[code] ?? 'bienestar';
+};
+
 const DimensionDetail = () => {
   const { dimensionCode } = useParams<{ dimensionCode: string }>();
   const [dimension, setDimension] = useState<Dimension | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('all');
+  const [loading, setLoading]     = useState(true);
+  const [filter, setFilter]       = useState('all');
 
   useEffect(() => {
-    const loadData = async () => {
-      if (!dimensionCode) return;
-
+    if (!dimensionCode) return;
+    const load = async () => {
       try {
         setLoading(true);
         const dim = await katunService.getDimensionByCode(dimensionCode);
         setDimension(dim);
-
-        if (dim) {
-          const docs = await katunService.getDocuments({ dimensionId: dim.id });
-          setDocuments(docs);
-        }
-      } catch (error) {
-        console.error('Error loading dimension:', error);
+        if (dim) setDocuments(await katunService.getDocuments({ dimensionId: dim.id }));
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
-
-    loadData();
+    load();
   }, [dimensionCode]);
 
-  const getDimensionIcon = (code: string) => {
-    switch (code) {
-      case 'dimension-1': return Heart;
-      case 'dimension-2': return TrendingUp;
-      case 'dimension-3': return Leaf;
-      case 'dimension-4': return Map;
-      case 'dimension-5': return Shield;
-      default: return FileText;
-    }
-  };
-
-  const filteredDocuments = filter === 'all'
-    ? documents
-    : documents.filter(doc => doc.document_type === filter);
-
-  const documentTypes = Array.from(new Set(documents.map(doc => doc.document_type)));
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando...</p>
-        </div>
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="text-center space-y-3">
+        <div className="w-10 h-10 border-3 border-brand-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-slate-500 text-sm">Cargando…</p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (!dimension) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Dimensión no encontrada</h2>
-          <Link to="/" className="text-blue-600 hover:underline">
-            Volver al inicio
-          </Link>
-        </div>
+  if (!dimension) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="text-center space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900">Dimensión no encontrada</h2>
+        <Link to="/" className="btn-primary btn-sm">Volver al inicio</Link>
       </div>
-    );
-  }
+    </div>
+  );
 
-  const IconComponent = getDimensionIcon(dimension.code);
+  const Icon = getDimIcon(dimension.code);
+  const slug = getDimSlug(dimension.code);
+  const documentTypes = Array.from(new Set(documents.map(d => d.document_type)));
+  const filtered = filter === 'all' ? documents : documents.filter(d => d.document_type === filter);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero */}
+      <section className="page-hero">
+        <div className="container-wide">
           <AnimatedSection>
-            <div className="flex items-center mb-6">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-6">
-                <IconComponent className="h-8 w-8 text-blue-600" />
+            <Link to="/documentos" className="inline-flex items-center gap-2 text-brand-200 hover:text-white text-sm font-medium mb-6 transition-colors">
+              <ArrowLeft className="h-4 w-4" />
+              Todos los documentos
+            </Link>
+            <div className="flex items-center gap-5">
+              <div className="w-16 h-16 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl flex items-center justify-center shrink-0">
+                <Icon className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white mb-1">
                   {dimension.name}
                 </h1>
-                <p className="text-blue-100 text-lg">
-                  {dimension.description}
-                </p>
+                <p className="text-brand-100 text-base">{dimension.description}</p>
               </div>
             </div>
           </AnimatedSection>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="container-wide py-10">
+        {/* Toolbar */}
         <AnimatedSection>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Documentos Oficiales
-              </h2>
-              <p className="text-gray-600">
+              <h2 className="text-xl font-bold text-slate-900">Documentos Oficiales</h2>
+              <p className="text-sm text-slate-500 mt-0.5">
                 {documents.length} documento{documents.length !== 1 ? 's' : ''} disponible{documents.length !== 1 ? 's' : ''}
               </p>
             </div>
-
             {documentTypes.length > 1 && (
               <div className="flex items-center gap-2">
-                <Filter className="h-5 w-5 text-gray-400" />
+                <Filter className="h-4 w-4 text-slate-400" />
                 <select
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={e => setFilter(e.target.value)}
+                  className="form-input w-auto text-sm"
                 >
-                  <option value="all">Todos los documentos</option>
-                  {documentTypes.map(type => (
-                    <option key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </option>
+                  <option value="all">Todos los tipos</option>
+                  {documentTypes.map(t => (
+                    <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
                   ))}
                 </select>
               </div>
@@ -133,74 +122,65 @@ const DimensionDetail = () => {
           </div>
         </AnimatedSection>
 
-        {filteredDocuments.length === 0 ? (
+        {filtered.length === 0 ? (
           <AnimatedSection>
-            <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-200">
-              <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                No hay documentos disponibles
-              </h3>
-              <p className="text-gray-600">
-                Los documentos oficiales se publicarán próximamente.
-              </p>
+            <div className="card flex flex-col items-center py-20 text-center">
+              <FileText className="h-14 w-14 text-slate-200 mb-4" />
+              <h3 className="text-lg font-semibold text-slate-600 mb-1">Sin documentos</h3>
+              <p className="text-sm text-slate-400">Los documentos se publicarán próximamente.</p>
             </div>
           </AnimatedSection>
         ) : (
-          <div className="space-y-6">
-            {filteredDocuments.map((document, index) => (
-              <AnimatedSection key={document.id} delay={index * 100}>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300">
-                  <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-                    <div className="flex-1">
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <FileText className="h-6 w-6 text-blue-600" />
+          <div className="space-y-4">
+            {filtered.map((doc, i) => (
+              <AnimatedSection key={doc.id} delay={i * 60}>
+                <div className="card bg-white p-5 sm:p-6">
+                  <div className="flex flex-col lg:flex-row gap-5">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start gap-4">
+                        <div className="w-11 h-11 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center shrink-0">
+                          <FileText className="h-5 w-5" />
                         </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-2">
-                            {document.title}
+                        <div className="min-w-0">
+                          <h3 className="text-lg font-bold text-slate-900 mb-1 leading-snug">
+                            {doc.title}
                           </h3>
-                          <p className="text-gray-600 leading-relaxed">
-                            {document.description}
+                          <p className="text-sm text-slate-600 leading-relaxed line-clamp-2 mb-3">
+                            {doc.description}
                           </p>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-600 ml-16">
-                        <div className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-2" />
-                          {new Date(document.publication_date).toLocaleDateString('es-GT', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </div>
-                        <div className="flex items-center">
-                          <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
-                          Versión {document.version}
-                        </div>
-                        <div className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                          {document.status}
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="flex items-center gap-1 text-xs text-slate-400">
+                              <Calendar className="h-3.5 w-3.5" />
+                              {new Date(doc.publication_date).toLocaleDateString('es-GT', {
+                                year: 'numeric', month: 'long', day: 'numeric',
+                              })}
+                            </span>
+                            <span className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                              <CheckCircle className="h-3 w-3" />
+                              v{doc.version}
+                            </span>
+                            <span className="badge-brand text-xs">{doc.document_type}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-3 w-full lg:w-auto">
+                    <div className="flex flex-row lg:flex-col gap-2 lg:w-44 shrink-0">
                       <Link
-                        to={`/documento/${document.id}`}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center transition-colors duration-200 flex items-center justify-center"
+                        to={`/documento/${doc.id}`}
+                        className="btn-primary btn-sm flex-1 lg:flex-none justify-center"
                       >
-                        <FileText className="h-5 w-5 mr-2" />
+                        <FileText className="h-4 w-4" />
                         Ver y Comentar
                       </Link>
-                      {document.pdf_url && (
+                      {doc.pdf_url && (
                         <a
-                          href={document.pdf_url}
+                          href={doc.pdf_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-semibold text-center transition-colors duration-200 flex items-center justify-center"
+                          className="btn-secondary btn-sm flex-1 lg:flex-none justify-center"
                         >
-                          <Download className="h-5 w-5 mr-2" />
+                          <Download className="h-4 w-4" />
                           Descargar PDF
                         </a>
                       )}
@@ -212,28 +192,27 @@ const DimensionDetail = () => {
           </div>
         )}
 
+        {/* CTA */}
         <AnimatedSection delay={400}>
-          <div className="mt-12 bg-blue-50 rounded-xl p-8 border border-blue-100">
-            <div className="flex justify-center mb-4">
-              <img src={Linea} alt="Separador" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              ¿Cómo Participar?
+          <div className="mt-12 bg-brand-50 border border-brand-200 rounded-2xl p-8 text-center">
+            <MessageSquare className="h-10 w-10 text-brand-600 mx-auto mb-3" />
+            <h3 className="text-xl font-bold text-slate-900 mb-2">
+              ¿Tienes una opinión sobre esta dimensión?
             </h3>
-            <p className="text-gray-600 text-center max-w-2xl mx-auto mb-6">
-              Revisa los documentos oficiales y comparte tu retroalimentación.
-              Puedes dejar comentarios generales sobre la dimensión o específicos sobre cada documento.
+            <p className="text-slate-600 text-sm max-w-xl mx-auto mb-5">
+              Comparte tu retroalimentación general o comenta artículos específicos.
+              Tu voz enriquece el Plan Nacional.
             </p>
-            <div className="flex justify-center">
-              <Link
-                to={`/dimension/${dimension.code}/feedback`}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
-              >
-                Dar Retroalimentación General
-              </Link>
-            </div>
+            <Link to={`/dimension-articulos/${slug}`} className="btn-primary">
+              <MessageSquare className="h-4 w-4" />
+              Comentar esta Dimensión
+            </Link>
           </div>
         </AnimatedSection>
+
+        <div className="mt-10">
+          <img src={Linea} alt="" className="linea" />
+        </div>
       </div>
     </div>
   );
