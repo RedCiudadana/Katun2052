@@ -15,6 +15,7 @@ const Header = () => {
     { name: 'Inicio', href: '/' },
     { name: 'Documentos', href: '/documentos' },
     { name: 'Cronograma', href: '/calendario' },
+    { name: 'Encuesta', href: '/encuesta' },
   ];
 
   const dimensions = [

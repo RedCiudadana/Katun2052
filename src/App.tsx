@@ -8,6 +8,7 @@ import Documents from './pages/Documents';
 import DimensionDetail from './pages/DimensionDetail';
 import DimensionArticles from './pages/DimensionArticles';
 import KatunCalendar from './pages/KatunCalendar';
+import Survey from './pages/Survey';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import NotFound from './pages/NotFound';
 import Loader from './components/loader';
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/dimension/:dimensionCode" element={<DimensionDetail />} />
                 <Route path="/dimension-articulos/:slug" element={<DimensionArticles />} />
                 <Route path="/calendario" element={<KatunCalendar />} />
+                <Route path="/encuesta" element={<Survey />} />
                 <Route path="/privacidad" element={<PrivacyPolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
