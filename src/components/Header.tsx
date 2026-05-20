@@ -74,7 +74,7 @@ const Header = () => {
               <img className="h-16 w-auto my-4" src={SegeplanLogo} alt="SEGEPLAN Logo"/>
               <div className="hidden lg:block">
                 <div className="text-sm font-bold text-gray-900 group-hover:text-cyan-700 transition-colors">SEGEPLAN</div>
-                <div className="text-xs text-gray-600 group-hover:text-cyan-600 transition-colors">K'atun 2052</div>
+                <div className="text-xs text-gray-600 group-hover:text-cyan-600 transition-colors">K'atun 2032</div>
               </div>
             </Link>
           </div>

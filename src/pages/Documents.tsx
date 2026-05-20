@@ -81,7 +81,7 @@ const Documents = () => {
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Explora los documentos oficiales validados por SEGEPLAN organizados por dimensión
-              del Plan Nacional de Desarrollo K'atun 2052.
+              del Plan Nacional de Desarrollo K'atun 2032.
             </p>
             <div className="flex justify-center my-6">
               <img src={Linea} alt="Separador" />

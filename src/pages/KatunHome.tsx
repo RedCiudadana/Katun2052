@@ -87,7 +87,7 @@ const KatunHome = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              K'atun: Nuestra Guatemala 2052
+              K'atun: Nuestra Guatemala 2032
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Participa en la actualización del Plan Nacional de Desarrollo.
@@ -104,7 +104,7 @@ const KatunHome = () => {
                 <iframe
                   className="absolute top-0 left-0 w-full h-full"
                   src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                  title="K'atun: Nuestra Guatemala 2052"
+                  title="K'atun: Nuestra Guatemala 2032"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -123,7 +123,7 @@ const KatunHome = () => {
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               El Plan Nacional de Desarrollo se organiza en cinco dimensiones estratégicas
-              que definen la visión integral del país hacia el 2052.
+              que definen la visión integral del país hacia el 2032.
             </p>
             <div className="flex justify-center my-6">
               <img src={Linea} alt="Separador" />

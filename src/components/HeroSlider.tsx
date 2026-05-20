@@ -18,7 +18,7 @@ const HeroSlider = () => {
       <div className="absolute inset-0">
         <img
           src={Slider1}
-          alt="K'atun: Nuestra Guatemala 2052"
+          alt="K'atun: Nuestra Guatemala 2032"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-800/85 to-blue-900/80"></div>
@@ -40,7 +40,7 @@ const HeroSlider = () => {
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
                 <span className="block">K'atun:</span>
                 <span className="block bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  Nuestra Guatemala 2052
+                  Nuestra Guatemala 2032
                 </span>
               </h1>
 
@@ -97,7 +97,7 @@ const HeroSlider = () => {
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-                <div className="text-5xl font-bold text-white mb-2">2052</div>
+                <div className="text-5xl font-bold text-white mb-2">2032</div>
                 <div className="text-lg text-blue-100 font-semibold mb-1">Horizonte</div>
                 <div className="text-sm text-blue-200">Visión de largo plazo</div>
               </div>

@@ -221,7 +221,7 @@ const DimensionArticles = () => {
                     Comentarios Generales
                   </h2>
                   <p className="text-gray-600 mb-6">
-                    Comparte tu opinión general sobre esta dimensión del K'atun 2052.
+                    Comparte tu opinión general sobre esta dimensión del K'atun 2032.
                     Tus aportes son fundamentales para la construcción participativa del Plan Nacional de Desarrollo.
                   </p>
                 </div>

@@ -92,7 +92,7 @@ const KatunCalendar = () => {
               <CalendarIcon className="h-8 w-8 text-blue-600" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Cronograma del Proceso K'atun 2052
+              Cronograma del Proceso K'atun 2032
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Conoce las fases y fechas clave del proceso de actualización del

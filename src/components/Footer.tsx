@@ -18,9 +18,9 @@ const Footer = () => {
             {/* Logo */}
             <div>
               <img src={SegeplanLogo} alt="SEGEPLAN Logo" className="h-16 w-auto"/>
-              <h3 className="text-lg font-semibold mt-4 mb-2">K'atun 2052</h3>
+              <h3 className="text-lg font-semibold mt-4 mb-2">K'atun 2032</h3>
               <p className="text-sm text-gray-300">
-                Plan Nacional de Desarrollo: Nuestra Guatemala 2052
+                Plan Nacional de Desarrollo: Nuestra Guatemala 2032
               </p>
               <p className='mt-4 text-xs text-gray-400'>Plataforma desarrollada con tecnología de:</p>
               <img className="h-8 w-auto filter-white mt-2" src="https://www.redciudadana.org/assets/img/red/LOGO-RED_NEGRO.png" alt="Red Ciudadana Logo"/>
@@ -100,7 +100,7 @@ const Footer = () => {
               2025 SEGEPLAN - Secretaría de Planificación y Programación de la Presidencia
             </p>
             <p className="text-xs text-white mt-2">
-              Plataforma de Participación Ciudadana K'atun 2052
+              Plataforma de Participación Ciudadana K'atun 2032
             </p>
             <div className="flex items-center justify-center gap-4 mt-3">
               <Link to="/privacidad" className="text-xs text-blue-300 hover:text-blue-200 underline">

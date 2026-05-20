@@ -35,7 +35,7 @@ const TopBar = () => {
           {/* Left side - Organization info */}
           <div className="flex items-center space-x-4">
             <span className="text-gray-200 font-medium">
-              K'atun: Nuestra Guatemala 2052 | SEGEPLAN
+              K'atun: Nuestra Guatemala 2032 | SEGEPLAN
             </span>
           </div>
 
