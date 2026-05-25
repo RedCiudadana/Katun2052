@@ -1,4 +1,5 @@
-import { Heart, TrendingUp, Leaf, Map, Shield, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Heart, TrendingUp, Leaf, Map, Shield, ChevronDown, ArrowRight, MessageSquare } from 'lucide-react';
 import Slider1 from '../assets/slider/Banner.png';
 
 const dimensions = [
@@ -61,10 +62,31 @@ const HeroSlider = () => (
             </span>
           </p>
 
+          {/* CTAs */}
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in"
+            style={{ animationDelay: '300ms' }}
+          >
+            <Link
+              to="/documentos"
+              className="group flex items-center gap-3 bg-white text-brand-800 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-wide transition-all duration-300 hover:bg-teal-50 hover:shadow-hero transform hover:scale-105 shadow-soft"
+            >
+              Conoce los Ejes
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+            </Link>
+            <Link
+              to="/encuesta"
+              className="group flex items-center gap-3 bg-teal-400/20 backdrop-blur-sm border-2 border-teal-300/60 text-white px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-wide transition-all duration-300 hover:bg-teal-400/30 hover:border-teal-300 transform hover:scale-105"
+            >
+              <MessageSquare className="h-4 w-4" />
+              Participa Aquí
+            </Link>
+          </div>
+
           {/* Dimension pills */}
           <div
             className="flex flex-wrap justify-center gap-3 animate-fade-in"
-            style={{ animationDelay: '300ms' }}
+            style={{ animationDelay: '400ms' }}
           >
             {dimensions.map((d, i) => {
               const Icon = d.icon;
