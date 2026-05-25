@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, MessageSquare, Users, TrendingUp, Heart, Leaf, Map, Shield, BarChart3, Clock, CheckCircle, ChevronRight, ClipboardList } from 'lucide-react';
+import { ArrowRight, FileText, MessageSquare, Users, TrendingUp, Heart, Leaf, Map, Shield, BarChart3, CheckCircle, ChevronRight, ClipboardList, Download, ExternalLink } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import HeroSlider from '../components/HeroSlider';
 import GuatemalaMap from '../components/GuatemalaMap';
+import { supabase } from '../lib/supabase';
+import type { Document } from '../types/katun';
 import Linea from '../assets/LINEA.png';
 
 const dimensions = [
@@ -70,7 +73,44 @@ const values = [
   { icon: BarChart3,   title: 'Impacto Real',  desc: 'Aportes integrados al plan' },
 ];
 
-const KatunHome = () => (
+// Icon map for document types
+const DOC_TYPE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+  plan:         { bg: 'bg-brand-100',  text: 'text-brand-700',  label: 'Plan' },
+  lineamientos: { bg: 'bg-teal-100',   text: 'text-teal-700',   label: 'Lineamientos' },
+  diagnóstico:  { bg: 'bg-amber-100',  text: 'text-amber-700',  label: 'Diagnóstico' },
+  estrategia:   { bg: 'bg-blue-100',   text: 'text-blue-700',   label: 'Estrategia' },
+  informe:      { bg: 'bg-green-100',  text: 'text-green-700',  label: 'Informe' },
+  otro:         { bg: 'bg-slate-100',  text: 'text-slate-600',  label: 'Documento' },
+};
+
+// Generic cover thumbnails from Pexels keyed by document_type
+const FALLBACK_THUMBS: Record<string, string> = {
+  plan:         'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=600',
+  lineamientos: 'https://images.pexels.com/photos/5905709/pexels-photo-5905709.jpeg?auto=compress&cs=tinysrgb&w=600',
+  diagnóstico:  'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=600',
+  estrategia:   'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600',
+  informe:      'https://images.pexels.com/photos/669619/pexels-photo-669619.jpeg?auto=compress&cs=tinysrgb&w=600',
+  otro:         'https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?auto=compress&cs=tinysrgb&w=600',
+};
+
+const KatunHome = () => {
+  const [featuredDocs, setFeaturedDocs] = useState<Document[]>([]);
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase
+      .from('documents')
+      .select('*')
+      .eq('is_published', true)
+      .order('is_featured', { ascending: false })
+      .order('publication_date', { ascending: false })
+      .limit(6)
+      .then(({ data }) => {
+        if (data) setFeaturedDocs(data as Document[]);
+      });
+  }, []);
+
+  return (
   <div>
     <HeroSlider />
 
@@ -310,7 +350,120 @@ const KatunHome = () => (
         </div>
       </div>
     </AnimatedSection>
+
+    {/* Featured Documents */}
+    <AnimatedSection className="section bg-slate-50">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <span className="badge-teal text-xs uppercase tracking-wider mb-3 inline-block">
+            Descarga
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            Documentos Destacados para Descarga
+          </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            Accede a los documentos oficiales del Plan Nacional de Desarrollo K'atun 2032.
+          </p>
+          <img src={Linea} alt="" className="linea mt-8" />
+        </div>
+
+        {featuredDocs.length === 0 ? (
+          <div className="text-center py-16 text-slate-400">
+            <FileText className="h-12 w-12 mx-auto mb-3 opacity-40" />
+            <p className="text-sm">No hay documentos disponibles aún.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            {featuredDocs.map((doc, i) => {
+              const typeInfo = DOC_TYPE_COLORS[doc.document_type] ?? DOC_TYPE_COLORS.otro;
+              const thumb = doc.thumbnail_url || FALLBACK_THUMBS[doc.document_type] || FALLBACK_THUMBS.otro;
+              const hasDownload = !!(doc.pdf_url || doc.word_url);
+              return (
+                <AnimatedSection key={doc.id} delay={i * 80}>
+                  <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-soft hover:shadow-md transition-shadow flex flex-col h-full">
+                    {/* Thumbnail */}
+                    <div className="relative h-44 overflow-hidden bg-slate-100">
+                      <img
+                        src={thumb}
+                        alt={doc.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                      <span className={`absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full ${typeInfo.bg} ${typeInfo.text}`}>
+                        {typeInfo.label}
+                      </span>
+                      {doc.is_featured && (
+                        <span className="absolute top-3 right-3 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-400 text-amber-900">
+                          Destacado
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-5 flex flex-col flex-1">
+                      <h3 className="font-bold text-slate-900 text-sm leading-snug mb-2 line-clamp-2">
+                        {doc.title}
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed mb-4 flex-1 line-clamp-3">
+                        {doc.description}
+                      </p>
+                      <div className="flex gap-2 flex-wrap">
+                        {doc.pdf_url && (
+                          <a
+                            href={doc.pdf_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            className="inline-flex items-center gap-1.5 bg-brand-700 hover:bg-brand-800 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                          >
+                            <Download className="h-3.5 w-3.5" />
+                            PDF
+                          </a>
+                        )}
+                        {(doc as any).word_url && (
+                          <a
+                            href={(doc as any).word_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                            className="inline-flex items-center gap-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                          >
+                            <Download className="h-3.5 w-3.5" />
+                            Word
+                          </a>
+                        )}
+                        {!hasDownload && (
+                          <Link
+                            to={`/documentos/${doc.id}`}
+                            className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                            Ver detalles
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="text-center">
+          <Link
+            to="/documentos"
+            className="inline-flex items-center gap-2 btn-primary px-8 py-3"
+          >
+            <FileText className="h-4 w-4" />
+            Ver todos los documentos
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </AnimatedSection>
   </div>
-);
+  );
+};
 
 export default KatunHome;

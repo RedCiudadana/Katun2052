@@ -19,6 +19,9 @@ export interface Document {
   version: string;
   status: string;
   pdf_url: string;
+  word_url?: string;
+  thumbnail_url?: string;
+  is_featured: boolean;
   publication_date: string;
   sections: DocumentSection[];
   metadata: Record<string, any>;
