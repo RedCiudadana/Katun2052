@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import SocialSidebar from './components/SocialSidebar';
 import KatunHome from './pages/KatunHome';
 import Documents from './pages/Documents';
+import DocumentDetail from './pages/DocumentDetail';
 import DimensionDetail from './pages/DimensionDetail';
 import DimensionArticles from './pages/DimensionArticles';
 import KatunCalendar from './pages/KatunCalendar';
@@ -47,6 +48,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<KatunHome />} />
                 <Route path="/documentos" element={<Documents />} />
+                <Route path="/documento/:id" element={<DocumentDetail />} />
                 <Route path="/dimension/:dimensionCode" element={<DimensionDetail />} />
                 <Route path="/dimension-articulos/:slug" element={<DimensionArticles />} />
                 <Route path="/calendario" element={<KatunCalendar />} />
