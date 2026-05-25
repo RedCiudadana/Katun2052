@@ -12,11 +12,13 @@ const iconMap: Record<string, React.ComponentType<any>> = {
 };
 
 const colorMap: Record<string, { bg: string; text: string; accent: string }> = {
-  'blue': { bg: 'bg-blue-50', text: 'text-blue-900', accent: 'bg-blue-500' },
-  'green': { bg: 'bg-green-50', text: 'text-green-900', accent: 'bg-green-500' },
+  'blue':    { bg: 'bg-blue-50',    text: 'text-blue-900',    accent: 'bg-blue-500' },
+  'green':   { bg: 'bg-green-50',   text: 'text-green-900',   accent: 'bg-green-500' },
   'emerald': { bg: 'bg-emerald-50', text: 'text-emerald-900', accent: 'bg-emerald-500' },
-  'orange': { bg: 'bg-orange-50', text: 'text-orange-900', accent: 'bg-orange-500' },
-  'red': { bg: 'bg-red-50', text: 'text-red-900', accent: 'bg-red-500' }
+  'teal':    { bg: 'bg-teal-50',    text: 'text-teal-900',    accent: 'bg-teal-500' },
+  'amber':   { bg: 'bg-amber-50',   text: 'text-amber-900',   accent: 'bg-amber-500' },
+  'orange':  { bg: 'bg-orange-50',  text: 'text-orange-900',  accent: 'bg-orange-500' },
+  'red':     { bg: 'bg-red-50',     text: 'text-red-900',     accent: 'bg-red-500' },
 };
 
 const DimensionArticles = () => {
