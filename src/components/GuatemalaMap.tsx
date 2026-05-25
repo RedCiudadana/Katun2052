@@ -290,6 +290,3 @@ function GuatemalaMap() {
 }
 
 export default GuatemalaMap;
-
-
-export default GuatemalaMap
