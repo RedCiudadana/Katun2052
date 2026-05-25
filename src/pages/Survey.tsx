@@ -2,7 +2,7 @@ import AnimatedSection from '../components/AnimatedSection';
 import Linea from '../assets/LINEA.png';
 import { ClipboardList, Users, MapPin, Heart, Leaf, TrendingUp } from 'lucide-react';
 
-const SURVEY_URL = 'https://ee.kobotoolbox.org/i/R25zBE2N';
+const SURVEY_URL = 'https://ee.kobotoolbox.org/i/EfHgXxdw';
 
 const topics = [
   { icon: Heart,      label: 'Bienestar y servicios públicos' },
