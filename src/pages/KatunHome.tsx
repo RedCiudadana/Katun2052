@@ -232,6 +232,84 @@ const KatunHome = () => (
         </AnimatedSection>
       </div>
     </AnimatedSection>
+
+    {/* Process Route */}
+    <AnimatedSection className="section bg-white">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <span className="badge-slate text-xs uppercase tracking-wider mb-3 inline-block">
+            Proceso
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            Ruta del Proceso
+          </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            El Plan Nacional de Desarrollo K'atun 2032 se construye a través de seis fases
+            que garantizan rigor técnico y amplia participación ciudadana.
+          </p>
+          <img src={Linea} alt="" className="linea mt-8" />
+        </div>
+
+        {/* Timeline horizontal scroll */}
+        <div className="relative">
+          {/* Connector line */}
+          <div className="hidden md:block absolute top-8 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-200 via-brand-400 to-brand-200 z-0" style={{ top: '2rem' }} />
+
+          <div className="flex gap-6 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory md:grid md:grid-cols-6 md:overflow-visible md:pb-0 md:px-0 md:mx-0">
+            {[
+              {
+                num: '01',
+                title: 'Preparación estratégica y diseño metodológico',
+                color: 'bg-brand-600', ring: 'ring-brand-200', text: 'text-brand-700', bg: 'bg-brand-50', border: 'border-brand-100',
+              },
+              {
+                num: '02',
+                title: 'Recopilación de información técnica territorial y participativa',
+                color: 'bg-teal-600', ring: 'ring-teal-200', text: 'text-teal-700', bg: 'bg-teal-50', border: 'border-teal-100',
+              },
+              {
+                num: '03',
+                title: 'Sistematización, análisis integrado y prospectiva estratégica',
+                color: 'bg-amber-500', ring: 'ring-amber-200', text: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-100',
+              },
+              {
+                num: '04',
+                title: 'Formulación estratégica y redacción del plan',
+                color: 'bg-blue-600', ring: 'ring-blue-200', text: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-100',
+              },
+              {
+                num: '05',
+                title: 'Validación, aprobación y lanzamiento',
+                color: 'bg-green-600', ring: 'ring-green-200', text: 'text-green-700', bg: 'bg-green-50', border: 'border-green-100',
+              },
+              {
+                num: '06',
+                title: 'Institucionalización, seguimiento e implementación inicial',
+                color: 'bg-slate-700', ring: 'ring-slate-200', text: 'text-slate-700', bg: 'bg-slate-50', border: 'border-slate-200',
+              },
+            ].map((phase, i) => (
+              <AnimatedSection key={phase.num} delay={i * 100} className="shrink-0 w-52 md:w-auto snap-start">
+                <div className="flex flex-col items-center text-center relative z-10">
+                  {/* Node */}
+                  <div className={`w-16 h-16 rounded-2xl ${phase.color} ring-4 ${phase.ring} flex items-center justify-center mb-4 shadow-soft shrink-0`}>
+                    <span className="text-white font-bold text-xl">{phase.num}</span>
+                  </div>
+                  {/* Card */}
+                  <div className={`${phase.bg} border ${phase.border} rounded-2xl p-4 w-full`}>
+                    <p className={`text-xs font-bold uppercase tracking-wider ${phase.text} mb-2`}>
+                      Fase {i + 1}
+                    </p>
+                    <p className="text-sm font-semibold text-slate-800 leading-snug">
+                      {phase.title}
+                    </p>
+                  </div>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </div>
+    </AnimatedSection>
   </div>
 );
 
