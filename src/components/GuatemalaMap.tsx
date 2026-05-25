@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { Users, MessageSquare, ClipboardList, X } from 'lucide-react';
+import geojson from '../data/gt.json';
 
 type DeptData = {
   department_code: string;
@@ -12,143 +13,81 @@ type DeptData = {
 
 type Tooltip = { dept: DeptData; x: number; y: number };
 
-// SVG paths derived from Guatemala's official IGN department boundaries
-// Projected and scaled to viewBox 0 0 500 460
-// Source geometry based on GADM Guatemala Level-1 simplified polygons
-const DEPT_PATHS: { code: string; name: string; d: string; labelX: number; labelY: number }[] = [
-  {
-    // Petén — large northern department
-    code: 'GT-PE', name: 'Petén',
-    d: 'M 30,18 L 95,15 L 162,14 L 230,13 L 298,14 L 340,16 L 358,18 L 362,30 L 360,50 L 356,70 L 352,95 L 348,120 L 344,145 L 338,168 L 326,178 L 300,182 L 268,184 L 238,182 L 208,180 L 178,180 L 148,180 L 120,180 L 92,178 L 68,172 L 50,160 L 38,148 L 30,130 L 26,108 L 24,82 L 24,56 Z',
-    labelX: 192, labelY: 100,
-  },
-  {
-    // Huehuetenango — northwest
-    code: 'GT-HU', name: 'Huehuetenango',
-    d: 'M 30,130 L 50,160 L 68,172 L 92,178 L 92,192 L 90,210 L 88,228 L 82,248 L 74,265 L 62,278 L 48,286 L 34,288 L 22,280 L 16,264 L 14,248 L 16,228 L 18,210 L 22,192 Z',
-    labelX: 54, labelY: 230,
-  },
-  {
-    // Quiché — central north
-    code: 'GT-QC', name: 'Quiché',
-    d: 'M 92,178 L 120,180 L 148,180 L 178,180 L 178,196 L 176,214 L 172,234 L 166,252 L 156,266 L 142,274 L 126,278 L 110,276 L 96,268 L 86,256 L 82,248 L 88,228 L 90,210 L 92,192 Z',
-    labelX: 132, labelY: 226,
-  },
-  {
-    // Alta Verapaz
-    code: 'GT-AV', name: 'Alta Verapaz',
-    d: 'M 178,180 L 208,180 L 238,182 L 268,184 L 290,186 L 296,200 L 298,218 L 296,238 L 288,254 L 274,264 L 256,270 L 236,272 L 216,268 L 198,258 L 186,244 L 178,228 L 176,214 L 178,196 Z',
-    labelX: 238, labelY: 224,
-  },
-  {
-    // Izabal — northeast with Caribbean coast
-    code: 'GT-IZ', name: 'Izabal',
-    d: 'M 268,184 L 300,182 L 326,178 L 338,168 L 352,160 L 368,158 L 386,162 L 400,172 L 410,188 L 412,206 L 406,222 L 394,234 L 376,242 L 354,248 L 330,250 L 308,248 L 296,238 L 298,218 L 296,200 L 290,186 Z',
-    labelX: 352, labelY: 208,
-  },
-  {
-    // Baja Verapaz
-    code: 'GT-BV', name: 'Baja Verapaz',
-    d: 'M 198,258 L 216,268 L 236,272 L 252,278 L 256,296 L 250,312 L 236,320 L 218,322 L 202,316 L 192,300 L 188,284 L 186,268 Z',
-    labelX: 222, labelY: 292,
-  },
-  {
-    // Zacapa
-    code: 'GT-ZA', name: 'Zacapa',
-    d: 'M 256,270 L 274,264 L 288,254 L 308,248 L 330,250 L 342,260 L 350,276 L 348,294 L 338,308 L 320,316 L 300,318 L 278,314 L 262,304 L 256,290 L 252,278 L 256,270 Z',  // fixed: closed path
-    labelX: 304, labelY: 286,
-  },
-  {
-    // Chiquimula — east border with Honduras
-    code: 'GT-CH', name: 'Chiquimula',
-    d: 'M 342,260 L 354,248 L 376,242 L 394,234 L 406,222 L 416,234 L 420,252 L 418,272 L 410,290 L 396,302 L 378,310 L 358,312 L 340,308 L 338,308 L 348,294 L 350,276 Z',
-    labelX: 382, labelY: 274,
-  },
-  {
-    // Totonicapán — small central
-    code: 'GT-TO', name: 'Totonicapán',
-    d: 'M 110,276 L 126,278 L 138,284 L 142,298 L 136,312 L 122,318 L 108,314 L 100,302 L 100,288 Z',
-    labelX: 121, labelY: 298,
-  },
-  {
-    // Quetzaltenango — western
-    code: 'GT-QZ', name: 'Quetzaltenango',
-    d: 'M 48,286 L 62,278 L 74,265 L 86,256 L 96,268 L 100,288 L 100,302 L 96,318 L 86,330 L 72,338 L 56,338 L 42,330 L 36,316 L 34,300 Z',
-    labelX: 67, labelY: 308,
-  },
-  {
-    // San Marcos — far west, Pacific slope
-    code: 'GT-SM', name: 'San Marcos',
-    d: 'M 14,248 L 22,280 L 34,288 L 48,286 L 34,300 L 36,316 L 30,332 L 18,338 L 8,328 L 6,310 L 8,290 L 10,270 Z',
-    labelX: 22, labelY: 302,
-  },
-  {
-    // Sololá — Lake Atitlán area
-    code: 'GT-SO', name: 'Sololá',
-    d: 'M 126,278 L 142,274 L 156,266 L 166,278 L 168,294 L 160,308 L 146,316 L 132,314 L 122,306 L 122,318 L 108,314 L 100,302 L 108,292 Z',  // fixed extra point
-    labelX: 135, labelY: 296,
-  },
-  {
-    // Chimaltenango
-    code: 'GT-CM', name: 'Chimaltenango',
-    d: 'M 166,278 L 186,268 L 202,274 L 210,288 L 208,306 L 196,318 L 180,324 L 164,320 L 154,308 L 160,308 L 168,294 Z',
-    labelX: 184, labelY: 300,
-  },
-  {
-    // Guatemala (capital)
-    code: 'GT-GU', name: 'Guatemala',
-    d: 'M 202,274 L 218,272 L 236,276 L 244,290 L 242,308 L 228,320 L 210,326 L 194,322 L 184,310 L 184,298 L 196,318 L 208,306 L 210,288 Z',  // closed properly
-    labelX: 216, labelY: 300,
-  },
-  {
-    // El Progreso
-    code: 'GT-PR', name: 'El Progreso',
-    d: 'M 236,272 L 256,270 L 262,280 L 264,296 L 258,312 L 244,320 L 228,320 L 228,306 L 236,294 Z',
-    labelX: 248, labelY: 296,
-  },
-  {
-    // Jalapa
-    code: 'GT-JA', name: 'Jalapa',
-    d: 'M 262,304 L 278,314 L 300,318 L 312,330 L 308,348 L 292,358 L 272,360 L 254,352 L 244,336 L 244,318 L 258,312 L 264,296 Z',
-    labelX: 280, labelY: 334,
-  },
-  {
-    // Sacatepéquez — very small, near capital
-    code: 'GT-SA', name: 'Sacatepéquez',
-    d: 'M 180,324 L 196,322 L 210,326 L 212,340 L 200,350 L 184,348 L 176,336 Z',
-    labelX: 195, labelY: 338,
-  },
-  {
-    // Retalhuleu — Pacific coast
-    code: 'GT-RE', name: 'Retalhuleu',
-    d: 'M 18,338 L 30,332 L 42,338 L 48,354 L 44,372 L 30,380 L 16,374 L 10,358 Z',
-    labelX: 30, labelY: 356,
-  },
-  {
-    // Suchitepéquez — Pacific coast
-    code: 'GT-SU', name: 'Suchitepéquez',
-    d: 'M 56,338 L 72,338 L 86,344 L 98,354 L 98,372 L 86,382 L 68,384 L 52,376 L 46,360 L 48,354 L 42,338 Z',
-    labelX: 72, labelY: 360,
-  },
-  {
-    // Escuintla — Pacific coast
-    code: 'GT-ES', name: 'Escuintla',
-    d: 'M 98,344 L 122,334 L 146,330 L 164,334 L 176,344 L 178,360 L 172,378 L 156,390 L 132,394 L 108,390 L 94,378 L 92,360 L 98,354 L 98,372 L 86,382 Z',
-    labelX: 136, labelY: 364,
-  },
-  {
-    // Santa Rosa
-    code: 'GT-SR', name: 'Santa Rosa',
-    d: 'M 210,326 L 228,320 L 244,318 L 254,332 L 256,350 L 248,366 L 230,376 L 208,378 L 190,370 L 182,354 L 184,342 L 200,350 L 212,340 Z',
-    labelX: 222, labelY: 352,
-  },
-  {
-    // Jutiapa — southeast, El Salvador border
-    code: 'GT-JU', name: 'Jutiapa',
-    d: 'M 272,360 L 292,358 L 308,348 L 324,352 L 336,366 L 334,384 L 318,396 L 296,402 L 272,400 L 252,390 L 246,374 L 248,366 L 256,350 L 272,358 Z',
-    labelX: 292, labelY: 378,
-  },
-];
+// Map GeoJSON id (GT01–GT22) to ISO 3166-2 codes used in department_participation table
+const GEOID_TO_ISO: Record<string, string> = {
+  GT01: 'GT-GU',
+  GT02: 'GT-PR',
+  GT03: 'GT-SA',
+  GT04: 'GT-CM',
+  GT05: 'GT-ES',
+  GT06: 'GT-SR',
+  GT07: 'GT-SO',
+  GT08: 'GT-TO',
+  GT09: 'GT-QZ',
+  GT10: 'GT-SU',
+  GT11: 'GT-RE',
+  GT12: 'GT-SM',
+  GT13: 'GT-HU',
+  GT14: 'GT-QC',
+  GT15: 'GT-BV',
+  GT16: 'GT-AV',
+  GT17: 'GT-PE',
+  GT18: 'GT-IZ',
+  GT19: 'GT-ZA',
+  GT20: 'GT-CH',
+  GT21: 'GT-JA',
+  GT22: 'GT-JU',
+};
+
+// SVG canvas size
+const W = 500;
+const H = 460;
+
+// Guatemala bounding box (WGS84) with padding
+const MIN_LON = -92.246256;
+const MAX_LON = -88.220937;
+const MIN_LAT = 13.731404;
+const MAX_LAT = 17.816020;
+
+function lonToX(lon: number): number {
+  return ((lon - MIN_LON) / (MAX_LON - MIN_LON)) * W;
+}
+
+function latToY(lat: number): number {
+  // Invert Y: higher latitude = smaller Y (top of SVG)
+  return (1 - (lat - MIN_LAT) / (MAX_LAT - MIN_LAT)) * H;
+}
+
+function ringToPath(ring: number[][]): string {
+  return ring.map(([lon, lat], i) => `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`).join(' ') + ' Z';
+}
+
+function featureToPath(geometry: { type: string; coordinates: number[][][] | number[][][][] }): string {
+  if (geometry.type === 'Polygon') {
+    return (geometry.coordinates as number[][][]).map(ringToPath).join(' ');
+  }
+  if (geometry.type === 'MultiPolygon') {
+    return (geometry.coordinates as number[][][][]).flatMap(poly => poly.map(ringToPath)).join(' ');
+  }
+  return '';
+}
+
+function getCentroid(geometry: { type: string; coordinates: number[][][] | number[][][][] }): [number, number] {
+  const rings: number[][][] =
+    geometry.type === 'Polygon'
+      ? [(geometry.coordinates as number[][][])[0]]
+      : (geometry.coordinates as number[][][][]).map(p => p[0]);
+
+  let sumX = 0, sumY = 0, count = 0;
+  for (const ring of rings) {
+    for (const [lon, lat] of ring) {
+      sumX += lonToX(lon);
+      sumY += latToY(lat);
+      count++;
+    }
+  }
+  return [sumX / count, sumY / count];
+}
 
 function getColor(total: number, max: number): string {
   if (max === 0 || total === 0) return '#e2e8f0';
@@ -176,16 +115,26 @@ function GuatemalaMap() {
       });
   }, []);
 
-  const byCode = Object.fromEntries(data.map(d => [d.department_code, d]));
-  const max = Math.max(...data.map(d => d.total_participants), 1);
+  const byCode = useMemo(() => Object.fromEntries(data.map(d => [d.department_code, d])), [data]);
+  const max = useMemo(() => Math.max(...data.map(d => d.total_participants), 1), [data]);
 
-  const emptyDept = (code: string, name: string): DeptData => ({
-    department_code: code,
+  const emptyDept = (isoCode: string, name: string): DeptData => ({
+    department_code: isoCode,
     department_name: name,
     total_participants: 0,
     survey_responses: 0,
     comments_count: 0,
   });
+
+  type GeoFeature = { properties: { id: string; name: string }; geometry: { type: string; coordinates: number[][][] | number[][][][] } };
+
+  const features = useMemo(() =>
+    ((geojson as unknown as { features: GeoFeature[] }).features).map(f => {
+      const isoCode = GEOID_TO_ISO[f.properties.id] ?? f.properties.id;
+      const pathD = featureToPath(f.geometry);
+      const [cx, cy] = getCentroid(f.geometry);
+      return { isoCode, name: f.properties.name, pathD, cx, cy };
+    }), []);
 
   return (
     <div className="relative">
@@ -199,53 +148,48 @@ function GuatemalaMap() {
         {/* Map */}
         <div className="flex-1 min-w-0">
           <svg
-            viewBox="0 0 430 420"
+            viewBox={`0 0 ${W} ${H}`}
             className="w-full h-auto rounded-2xl border border-slate-200 bg-slate-50 shadow-soft"
-            style={{ maxHeight: 460 }}
+            style={{ maxHeight: 520 }}
+            onMouseLeave={() => setTooltip(null)}
           >
-            {DEPT_PATHS.map(({ code, name, d, labelX, labelY }) => {
-              const dept = byCode[code];
+            {features.map(({ isoCode, name, pathD, cx, cy }) => {
+              const dept = byCode[isoCode];
               const total = dept?.total_participants ?? 0;
               const fill = getColor(total, max);
-              const isSelected = selected?.department_code === code;
+              const isSelected = selected?.department_code === isoCode;
               return (
-                <g key={code}>
+                <g key={isoCode}>
                   <path
-                    d={d}
+                    d={pathD}
                     fill={fill}
                     stroke={isSelected ? '#1e3a8a' : '#94a3b8'}
-                    strokeWidth={isSelected ? 2 : 0.7}
+                    strokeWidth={isSelected ? 1.5 : 0.5}
                     strokeLinejoin="round"
                     className="cursor-pointer transition-all duration-150 hover:opacity-80"
                     style={{ filter: isSelected ? 'drop-shadow(0 0 4px #3b82f680)' : undefined }}
                     onMouseEnter={e => {
-                      const rect = (e.target as SVGPathElement).closest('svg')!.getBoundingClientRect();
-                      const svgEl = (e.target as SVGPathElement).closest('svg')!;
-                      const svgW = svgEl.clientWidth;
-                      const svgH = svgEl.clientHeight;
-                      const relX = (e.clientX - rect.left) / rect.width * 430;
-                      const relY = (e.clientY - rect.top) / rect.height * 420;
+                      const rect = (e.currentTarget as SVGPathElement).closest('svg')!.getBoundingClientRect();
                       setTooltip({
-                        dept: dept ?? emptyDept(code, name),
-                        x: (e.clientX - rect.left) / rect.width * svgW,
-                        y: (e.clientY - rect.top) / rect.height * svgH,
+                        dept: dept ?? emptyDept(isoCode, name),
+                        x: (e.clientX - rect.left) / rect.width * W,
+                        y: (e.clientY - rect.top) / rect.height * H,
                       });
-                      void relX; void relY;
                     }}
                     onMouseLeave={() => setTooltip(null)}
-                    onClick={() => setSelected(dept ?? emptyDept(code, name))}
+                    onClick={() => setSelected(dept ?? emptyDept(isoCode, name))}
                   />
                   <text
-                    x={labelX}
-                    y={labelY}
+                    x={cx}
+                    y={cy}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize="6"
+                    fontSize="5.5"
                     fill={total > max * 0.5 ? '#fff' : '#334155'}
                     className="pointer-events-none select-none"
                     fontWeight="600"
                   >
-                    {name.length > 13 ? name.split(' ')[0] : name}
+                    {name.length > 12 ? name.split(' ')[0] : name}
                   </text>
                 </g>
               );
@@ -346,3 +290,6 @@ function GuatemalaMap() {
 }
 
 export default GuatemalaMap;
+
+
+export default GuatemalaMap
