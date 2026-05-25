@@ -13,9 +13,9 @@ const dimensions = [
 
 const navItems = [
   { name: 'Inicio',                   href: '/' },
+  { name: 'Participa',                href: '/encuesta' },
   { name: 'Proceso de Actualización', href: '/documentos' },
   { name: 'Sala de Prensa',           href: '/sala-de-prensa' },
-  { name: 'Participa',                href: '/encuesta' },
 ];
 
 const Header = () => {
