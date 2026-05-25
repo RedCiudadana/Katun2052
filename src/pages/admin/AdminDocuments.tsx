@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Plus, CreditCard as Edit2, Trash2, FileText, Upload, X, Save, Loader2, CheckCircle, AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { Plus, CreditCard as Edit2, Trash2, FileText, Upload, X, Save, Loader2, CheckCircle, AlertTriangle, Eye, EyeOff, Star, Image } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import type { Document, Dimension } from '../../types/katun';
 
@@ -11,9 +11,11 @@ type DocForm = {
   status: string;
   pdf_url: string;
   word_url: string;
+  thumbnail_url: string;
   publication_date: string;
   dimension_id: string;
   is_published: boolean;
+  is_featured: boolean;
 };
 
 const emptyForm = (): DocForm => ({
@@ -24,9 +26,11 @@ const emptyForm = (): DocForm => ({
   status: 'vigente',
   pdf_url: '',
   word_url: '',
+  thumbnail_url: '',
   publication_date: new Date().toISOString().split('T')[0],
   dimension_id: '',
   is_published: true,
+  is_featured: false,
 });
 
 const DOC_TYPES = ['plan', 'lineamientos', 'diagnóstico', 'estrategia', 'informe', 'otro'];
@@ -40,10 +44,11 @@ const AdminDocuments = () => {
   const [form, setForm] = useState<DocForm>(emptyForm());
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [uploadingFile, setUploadingFile] = useState<'word' | 'pdf' | null>(null);
+  const [uploadingFile, setUploadingFile] = useState<'word' | 'pdf' | 'thumbnail' | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
   const wordRef = useRef<HTMLInputElement>(null);
   const pdfRef = useRef<HTMLInputElement>(null);
+  const thumbRef = useRef<HTMLInputElement>(null);
 
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
     setToast({ msg, type });
@@ -78,20 +83,23 @@ const AdminDocuments = () => {
       version: doc.version,
       status: doc.status,
       pdf_url: doc.pdf_url || '',
-      word_url: (doc as any).word_url || '',
+      word_url: doc.word_url || '',
+      thumbnail_url: doc.thumbnail_url || '',
       publication_date: doc.publication_date,
       dimension_id: doc.dimension_id,
       is_published: doc.is_published,
+      is_featured: doc.is_featured ?? false,
     });
     setShowForm(true);
   };
 
-  const handleFileUpload = async (file: File, type: 'word' | 'pdf') => {
+  const handleFileUpload = async (file: File, type: 'word' | 'pdf' | 'thumbnail') => {
     if (!supabase) return;
     setUploadingFile(type);
     try {
       const ext = file.name.split('.').pop();
-      const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+      const folder = type === 'thumbnail' ? 'thumbnails' : 'files';
+      const path = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
       const { error: upErr } = await supabase.storage
         .from('documents')
         .upload(path, file, { upsert: true });
@@ -101,11 +109,10 @@ const AdminDocuments = () => {
       const { data: urlData } = supabase.storage.from('documents').getPublicUrl(path);
       const url = urlData.publicUrl;
 
-      if (type === 'word') {
-        setForm(p => ({ ...p, word_url: url }));
-      } else {
-        setForm(p => ({ ...p, pdf_url: url }));
-      }
+      if (type === 'word') setForm(p => ({ ...p, word_url: url }));
+      else if (type === 'pdf') setForm(p => ({ ...p, pdf_url: url }));
+      else setForm(p => ({ ...p, thumbnail_url: url }));
+
       showToast('Archivo subido correctamente');
     } catch (err: any) {
       showToast(err.message || 'Error al subir el archivo', 'error');
@@ -127,9 +134,11 @@ const AdminDocuments = () => {
         status: form.status,
         pdf_url: form.pdf_url || null,
         word_url: form.word_url || null,
+        thumbnail_url: form.thumbnail_url || null,
         publication_date: form.publication_date,
-        dimension_id: form.dimension_id,
+        dimension_id: form.dimension_id || null,
         is_published: form.is_published,
+        is_featured: form.is_featured,
         updated_at: new Date().toISOString(),
       };
 
@@ -262,6 +271,50 @@ const AdminDocuments = () => {
                 </div>
               </div>
 
+              {/* Thumbnail upload */}
+              <div>
+                <label className="form-label">Imagen de portada (thumbnail)</label>
+                <div className="flex gap-3 items-start">
+                  <div className="flex-1 space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <input ref={thumbRef} type="file" accept="image/*" className="hidden"
+                        onChange={e => { const f = e.target.files?.[0]; if (f) handleFileUpload(f, 'thumbnail'); }} />
+                      <button type="button" onClick={() => thumbRef.current?.click()}
+                        disabled={uploadingFile === 'thumbnail'}
+                        className="btn-secondary btn-sm shrink-0">
+                        {uploadingFile === 'thumbnail'
+                          ? <><Loader2 className="h-4 w-4 animate-spin" /> Subiendo…</>
+                          : <><Image className="h-4 w-4" /> Subir imagen</>}
+                      </button>
+                      <input type="url" value={form.thumbnail_url}
+                        onChange={e => setForm(p => ({ ...p, thumbnail_url: e.target.value }))}
+                        className="form-input flex-1 text-sm" placeholder="O pega la URL de la imagen" />
+                    </div>
+                    {form.thumbnail_url && (
+                      <p className="text-xs text-green-700 truncate">
+                        <CheckCircle className="h-3 w-3 inline mr-1" />{form.thumbnail_url}
+                      </p>
+                    )}
+                  </div>
+                  {form.thumbnail_url && (
+                    <div className="relative shrink-0">
+                      <img
+                        src={form.thumbnail_url}
+                        alt="Preview"
+                        className="w-20 h-14 object-cover rounded-lg border border-slate-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setForm(p => ({ ...p, thumbnail_url: '' }))}
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Word upload */}
               <div>
                 <label className="form-label">Documento Word (.docx)</label>
@@ -312,13 +365,24 @@ const AdminDocuments = () => {
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
-                <input type="checkbox" id="is_published" checked={form.is_published}
-                  onChange={e => setForm(p => ({ ...p, is_published: e.target.checked }))}
-                  className="h-4 w-4 rounded border-slate-300 text-brand-600" />
-                <label htmlFor="is_published" className="text-sm text-slate-700 font-medium">
-                  Publicado (visible en el sitio)
-                </label>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex items-center gap-3">
+                  <input type="checkbox" id="is_published" checked={form.is_published}
+                    onChange={e => setForm(p => ({ ...p, is_published: e.target.checked }))}
+                    className="h-4 w-4 rounded border-slate-300 text-brand-600" />
+                  <label htmlFor="is_published" className="text-sm text-slate-700 font-medium">
+                    Publicado (visible en el sitio)
+                  </label>
+                </div>
+                <div className="flex items-center gap-3">
+                  <input type="checkbox" id="is_featured" checked={form.is_featured}
+                    onChange={e => setForm(p => ({ ...p, is_featured: e.target.checked }))}
+                    className="h-4 w-4 rounded border-slate-300 text-amber-500" />
+                  <label htmlFor="is_featured" className="text-sm text-slate-700 font-medium flex items-center gap-1.5">
+                    <Star className="h-3.5 w-3.5 text-amber-500" />
+                    Destacado (aparece primero en inicio)
+                  </label>
+                </div>
               </div>
 
               <div className="flex gap-3 pt-2">
@@ -350,7 +414,7 @@ const AdminDocuments = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-5 py-3 font-semibold text-slate-600">Título</th>
+                <th className="text-left px-5 py-3 font-semibold text-slate-600">Documento</th>
                 <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden lg:table-cell">Dimensión</th>
                 <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden md:table-cell">Tipo</th>
                 <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden md:table-cell">Fecha</th>
@@ -362,8 +426,28 @@ const AdminDocuments = () => {
               {documents.map(doc => (
                 <tr key={doc.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-5 py-4">
-                    <div className="font-medium text-slate-900 line-clamp-1 max-w-xs">{doc.title}</div>
-                    <div className="text-xs text-slate-400 line-clamp-1 mt-0.5">{doc.description}</div>
+                    <div className="flex items-center gap-3">
+                      {doc.thumbnail_url ? (
+                        <img
+                          src={doc.thumbnail_url}
+                          alt=""
+                          className="w-12 h-9 object-cover rounded-lg border border-slate-200 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-12 h-9 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center shrink-0">
+                          <FileText className="h-4 w-4 text-slate-300" />
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-medium text-slate-900 line-clamp-1 max-w-[200px]">{doc.title}</span>
+                          {doc.is_featured && (
+                            <Star className="h-3.5 w-3.5 text-amber-400 shrink-0" fill="currentColor" />
+                          )}
+                        </div>
+                        <div className="text-xs text-slate-400 line-clamp-1 mt-0.5">{doc.description}</div>
+                      </div>
+                    </div>
                   </td>
                   <td className="px-4 py-4 text-slate-600 hidden lg:table-cell">
                     <span className="line-clamp-1 max-w-[160px]">{dimName(doc.dimension_id)}</span>
