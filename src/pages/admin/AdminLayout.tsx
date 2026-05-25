@@ -1,12 +1,13 @@
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import { FileText, MessageSquare, Settings, LogOut, LayoutDashboard } from 'lucide-react';
+import { FileText, MessageSquare, Settings, LogOut, LayoutDashboard, Newspaper } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
-  { to: '/admin',           label: 'Resumen',    icon: LayoutDashboard, exact: true },
-  { to: '/admin/documentos', label: 'Documentos', icon: FileText },
-  { to: '/admin/comentarios',label: 'Comentarios',icon: MessageSquare },
-  { to: '/admin/encuesta',   label: 'Encuesta',   icon: Settings },
+  { to: '/admin',            label: 'Resumen',        icon: LayoutDashboard, exact: true },
+  { to: '/admin/documentos', label: 'Documentos',     icon: FileText },
+  { to: '/admin/prensa',     label: 'Sala de Prensa', icon: Newspaper },
+  { to: '/admin/comentarios',label: 'Comentarios',    icon: MessageSquare },
+  { to: '/admin/encuesta',   label: 'Encuesta',       icon: Settings },
 ];
 
 const AdminLayout = () => {

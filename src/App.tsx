@@ -20,6 +20,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminDocuments from './pages/admin/AdminDocuments';
 import AdminComments from './pages/admin/AdminComments';
 import AdminSurvey from './pages/admin/AdminSurvey';
+import AdminPress from './pages/admin/AdminPress';
+import SalaDePrensaPage from './pages/SalaDePrensaPage';
+import PressPostDetail from './pages/PressPostDetail';
 import AdminGuard from './components/AdminGuard';
 import { AuthProvider } from './context/AuthContext';
 
@@ -74,6 +77,7 @@ function App() {
             <Route path="documentos" element={<AdminDocuments />} />
             <Route path="comentarios" element={<AdminComments />} />
             <Route path="encuesta" element={<AdminSurvey />} />
+            <Route path="prensa" element={<AdminPress />} />
           </Route>
 
           {/* Public routes */}
@@ -90,6 +94,8 @@ function App() {
                     <Route path="/dimension-articulos/:slug" element={<DimensionArticles />} />
                     <Route path="/calendario" element={<KatunCalendar />} />
                     <Route path="/encuesta" element={<Survey />} />
+                    <Route path="/sala-de-prensa" element={<SalaDePrensaPage />} />
+                    <Route path="/sala-de-prensa/:slug" element={<PressPostDetail />} />
                     <Route path="/privacidad" element={<PrivacyPolicy />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>

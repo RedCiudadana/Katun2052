@@ -12,10 +12,11 @@ const dimensions = [
 ];
 
 const navItems = [
-  { name: 'Inicio',      href: '/' },
-  { name: 'Documentos',  href: '/documentos' },
-  { name: 'Cronograma',  href: '/calendario' },
-  { name: 'Encuesta',    href: '/encuesta' },
+  { name: 'Inicio',         href: '/' },
+  { name: 'Documentos',     href: '/documentos' },
+  { name: 'Sala de Prensa', href: '/sala-de-prensa' },
+  { name: 'Cronograma',     href: '/calendario' },
+  { name: 'Encuesta',       href: '/encuesta' },
 ];
 
 const Header = () => {
