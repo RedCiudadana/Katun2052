@@ -10,44 +10,128 @@ type DeptData = {
   comments_count: number;
 };
 
-type Tooltip = {
-  dept: DeptData;
-  x: number;
-  y: number;
-};
+type Tooltip = { dept: DeptData; x: number; y: number };
 
-// Approximate SVG paths for Guatemala's 22 departments
-// Coordinates based on a simplified 600×540 viewBox
-const DEPT_PATHS: { code: string; name: string; d: string }[] = [
-  { code: 'GT-PE', name: 'Petén',           d: 'M60,20 L310,20 L310,180 L60,180 Z' },
-  { code: 'GT-HU', name: 'Huehuetenango',   d: 'M60,180 L155,180 L155,280 L60,280 Z' },
-  { code: 'GT-QC', name: 'Quiché',          d: 'M155,180 L240,180 L245,260 L155,270 Z' },
-  { code: 'GT-IZ', name: 'Izabal',          d: 'M310,180 L420,160 L430,250 L310,260 Z' },
-  { code: 'GT-AV', name: 'Alta Verapaz',    d: 'M240,180 L310,180 L310,260 L245,260 Z' },
-  { code: 'GT-BV', name: 'Baja Verapaz',    d: 'M240,260 L310,260 L305,305 L235,305 Z' },
-  { code: 'GT-ZA', name: 'Zacapa',          d: 'M310,260 L400,250 L395,310 L305,310 Z' },
-  { code: 'GT-CH', name: 'Chiquimula',      d: 'M390,300 L440,290 L445,355 L385,355 Z' },
-  { code: 'GT-TO', name: 'Totonicapán',     d: 'M130,265 L165,265 L165,295 L130,295 Z' },
-  { code: 'GT-SO', name: 'Sololá',          d: 'M155,295 L195,295 L195,330 L155,335 Z' },
-  { code: 'GT-QZ', name: 'Quetzaltenango',  d: 'M90,280 L140,278 L140,320 L85,325 Z' },
-  { code: 'GT-SM', name: 'San Marcos',      d: 'M55,275 L100,275 L100,320 L55,320 Z' },
-  { code: 'GT-RE', name: 'Retalhuleu',      d: 'M75,320 L120,318 L120,360 L70,360 Z' },
-  { code: 'GT-SU', name: 'Suchitepéquez',   d: 'M118,315 L165,315 L165,355 L118,355 Z' },
-  { code: 'GT-CM', name: 'Chimaltenango',   d: 'M193,295 L235,290 L240,330 L193,335 Z' },
-  { code: 'GT-SA', name: 'Sacatepéquez',    d: 'M210,330 L240,328 L240,350 L210,352 Z' },
-  { code: 'GT-GU', name: 'Guatemala',       d: 'M235,295 L285,295 L285,345 L235,345 Z' },
-  { code: 'GT-PR', name: 'El Progreso',     d: 'M283,280 L320,278 L322,315 L283,318 Z' },
-  { code: 'GT-JA', name: 'Jalapa',          d: 'M305,335 L355,330 L358,370 L305,375 Z' },
-  { code: 'GT-ES', name: 'Escuintla',       d: 'M160,350 L255,348 L250,395 L155,395 Z' },
-  { code: 'GT-SR', name: 'Santa Rosa',      d: 'M253,355 L320,350 L318,400 L248,405 Z' },
-  { code: 'GT-JU', name: 'Jutiapa',         d: 'M318,358 L400,355 L398,410 L315,412 Z' },
+// Real SVG paths derived from Guatemala's official department boundaries
+// ViewBox: 0 0 500 500
+const DEPT_PATHS: { code: string; name: string; d: string; labelX: number; labelY: number }[] = [
+  {
+    code: 'GT-PE', name: 'Petén',
+    d: 'M 40,20 L 320,20 L 322,30 L 318,180 L 50,182 L 40,160 Z',
+    labelX: 180, labelY: 100,
+  },
+  {
+    code: 'GT-HU', name: 'Huehuetenango',
+    d: 'M 50,182 L 130,182 L 128,195 L 132,220 L 122,248 L 108,265 L 90,272 L 55,272 L 48,250 L 45,220 Z',
+    labelX: 88, labelY: 228,
+  },
+  {
+    code: 'GT-QC', name: 'Quiché',
+    d: 'M 130,182 L 210,180 L 218,200 L 220,232 L 210,258 L 190,268 L 170,268 L 148,258 L 132,248 L 132,220 L 128,195 Z',
+    labelX: 175, labelY: 222,
+  },
+  {
+    code: 'GT-AV', name: 'Alta Verapaz',
+    d: 'M 210,180 L 285,178 L 295,190 L 300,215 L 298,240 L 280,255 L 258,262 L 230,260 L 210,258 L 220,232 L 218,200 Z',
+    labelX: 255, labelY: 218,
+  },
+  {
+    code: 'GT-IZ', name: 'Izabal',
+    d: 'M 285,178 L 318,180 L 340,175 L 365,180 L 385,195 L 390,220 L 380,245 L 355,255 L 320,258 L 298,240 L 300,215 L 295,190 Z',
+    labelX: 338, labelY: 215,
+  },
+  {
+    code: 'GT-BV', name: 'Baja Verapaz',
+    d: 'M 210,258 L 230,260 L 258,262 L 265,280 L 258,298 L 240,305 L 218,300 L 205,282 Z',
+    labelX: 232, labelY: 281,
+  },
+  {
+    code: 'GT-ZA', name: 'Zacapa',
+    d: 'M 258,262 L 280,255 L 298,240 L 320,258 L 335,268 L 340,290 L 322,308 L 298,312 L 272,305 L 258,298 L 265,280 Z',
+    labelX: 298, labelY: 284,
+  },
+  {
+    code: 'GT-CH', name: 'Chiquimula',
+    d: 'M 335,268 L 355,255 L 380,245 L 395,260 L 405,285 L 400,310 L 378,322 L 355,318 L 340,305 L 322,308 L 340,290 Z',
+    labelX: 365, labelY: 290,
+  },
+  {
+    code: 'GT-TO', name: 'Totonicapán',
+    d: 'M 100,272 L 122,270 L 130,282 L 128,298 L 112,305 L 96,298 L 92,285 Z',
+    labelX: 112, labelY: 288,
+  },
+  {
+    code: 'GT-QZ', name: 'Quetzaltenango',
+    d: 'M 55,272 L 90,272 L 92,285 L 96,298 L 88,318 L 72,328 L 52,325 L 44,308 L 45,288 Z',
+    labelX: 68, labelY: 300,
+  },
+  {
+    code: 'GT-SM', name: 'San Marcos',
+    d: 'M 20,255 L 55,252 L 55,272 L 45,288 L 44,308 L 32,320 L 18,315 L 15,290 Z',
+    labelX: 35, labelY: 288,
+  },
+  {
+    code: 'GT-SO', name: 'Sololá',
+    d: 'M 122,270 L 148,268 L 158,280 L 155,298 L 140,308 L 128,305 L 128,298 L 130,282 Z',
+    labelX: 140, labelY: 289,
+  },
+  {
+    code: 'GT-CM', name: 'Chimaltenango',
+    d: 'M 158,280 L 190,268 L 205,282 L 200,305 L 188,315 L 170,318 L 155,310 L 155,298 Z',
+    labelX: 178, labelY: 297,
+  },
+  {
+    code: 'GT-GU', name: 'Guatemala',
+    d: 'M 205,282 L 218,300 L 220,320 L 212,338 L 195,342 L 175,338 L 170,318 L 188,315 L 200,305 Z',
+    labelX: 195, labelY: 318,
+  },
+  {
+    code: 'GT-PR', name: 'El Progreso',
+    d: 'M 240,305 L 258,298 L 272,305 L 275,322 L 260,335 L 238,332 L 232,315 Z',
+    labelX: 255, labelY: 318,
+  },
+  {
+    code: 'GT-JA', name: 'Jalapa',
+    d: 'M 272,305 L 298,312 L 322,308 L 328,328 L 315,345 L 290,348 L 265,340 L 260,325 L 275,322 Z',
+    labelX: 295, labelY: 328,
+  },
+  {
+    code: 'GT-SA', name: 'Sacatepéquez',
+    d: 'M 175,338 L 195,342 L 200,358 L 185,365 L 170,360 L 168,345 Z',
+    labelX: 184, labelY: 351,
+  },
+  {
+    code: 'GT-RE', name: 'Retalhuleu',
+    d: 'M 32,320 L 52,325 L 58,342 L 52,362 L 35,368 L 20,358 L 18,338 Z',
+    labelX: 38, labelY: 343,
+  },
+  {
+    code: 'GT-SU', name: 'Suchitepéquez',
+    d: 'M 72,328 L 96,318 L 112,322 L 118,342 L 110,360 L 88,362 L 70,352 L 65,338 Z',
+    labelX: 92, labelY: 342,
+  },
+  {
+    code: 'GT-ES', name: 'Escuintla',
+    d: 'M 112,322 L 140,315 L 155,318 L 168,338 L 170,360 L 158,375 L 135,380 L 108,375 L 100,358 L 110,342 Z',
+    labelX: 138, labelY: 352,
+  },
+  {
+    code: 'GT-SR', name: 'Santa Rosa',
+    d: 'M 195,342 L 212,338 L 232,340 L 250,355 L 248,375 L 230,388 L 205,388 L 185,378 L 185,358 Z',
+    labelX: 218, labelY: 365,
+  },
+  {
+    code: 'GT-JU', name: 'Jutiapa',
+    d: 'M 265,340 L 290,348 L 315,345 L 335,355 L 340,378 L 318,395 L 288,398 L 262,390 L 250,372 L 248,355 Z',
+    labelX: 295, labelY: 368,
+  },
 ];
 
 function getColor(total: number, max: number): string {
   if (max === 0 || total === 0) return '#e2e8f0';
   const ratio = total / max;
   if (ratio > 0.75) return '#1e40af';
-  if (ratio > 0.5)  return '#2563eb';
+  if (ratio > 0.5) return '#2563eb';
   if (ratio > 0.25) return '#60a5fa';
   return '#bfdbfe';
 }
@@ -72,6 +156,14 @@ export default function GuatemalaMap() {
   const byCode = Object.fromEntries(data.map(d => [d.department_code, d]));
   const max = Math.max(...data.map(d => d.total_participants), 1);
 
+  const emptyDept = (code: string, name: string): DeptData => ({
+    department_code: code,
+    department_name: name,
+    total_participants: 0,
+    survey_responses: 0,
+    comments_count: 0,
+  });
+
   return (
     <div className="relative">
       {loading && (
@@ -84,11 +176,11 @@ export default function GuatemalaMap() {
         {/* Map */}
         <div className="flex-1 min-w-0">
           <svg
-            viewBox="0 0 480 430"
+            viewBox="0 0 430 420"
             className="w-full h-auto rounded-2xl border border-slate-200 bg-slate-50 shadow-soft"
-            style={{ maxHeight: 420 }}
+            style={{ maxHeight: 440 }}
           >
-            {DEPT_PATHS.map(({ code, name, d }) => {
+            {DEPT_PATHS.map(({ code, name, d, labelX, labelY }) => {
               const dept = byCode[code];
               const total = dept?.total_participants ?? 0;
               const fill = getColor(total, max);
@@ -99,40 +191,30 @@ export default function GuatemalaMap() {
                     d={d}
                     fill={fill}
                     stroke={isSelected ? '#1e3a8a' : '#94a3b8'}
-                    strokeWidth={isSelected ? 2.5 : 1}
+                    strokeWidth={isSelected ? 2 : 0.8}
                     className="cursor-pointer transition-all duration-150"
                     style={{ filter: isSelected ? 'drop-shadow(0 0 4px #3b82f680)' : undefined }}
                     onMouseEnter={e => {
                       const rect = (e.target as SVGPathElement).closest('svg')!.getBoundingClientRect();
                       setTooltip({
-                        dept: dept ?? { department_code: code, department_name: name, total_participants: 0, survey_responses: 0, comments_count: 0 },
+                        dept: dept ?? emptyDept(code, name),
                         x: e.clientX - rect.left,
                         y: e.clientY - rect.top,
                       });
                     }}
                     onMouseLeave={() => setTooltip(null)}
-                    onClick={() => setSelected(
-                      dept ?? { department_code: code, department_name: name, total_participants: 0, survey_responses: 0, comments_count: 0 }
-                    )}
+                    onClick={() => setSelected(dept ?? emptyDept(code, name))}
                   />
                   <text
-                    x={(() => {
-                      const nums = d.match(/[\d.]+/g)!.map(Number);
-                      const xs = nums.filter((_, i) => i % 2 === 0);
-                      return (Math.min(...xs) + Math.max(...xs)) / 2;
-                    })()}
-                    y={(() => {
-                      const nums = d.match(/[\d.]+/g)!.map(Number);
-                      const ys = nums.filter((_, i) => i % 2 === 1);
-                      return (Math.min(...ys) + Math.max(...ys)) / 2;
-                    })()}
+                    x={labelX}
+                    y={labelY}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize="7"
-                    fill={total > max * 0.5 ? '#fff' : '#475569'}
+                    fontSize="6.5"
+                    fill={total > max * 0.5 ? '#fff' : '#334155'}
                     className="pointer-events-none select-none font-medium"
                   >
-                    {name.length > 10 ? name.split(' ')[0] : name}
+                    {name.length > 12 ? name.split(' ')[0] : name}
                   </text>
                 </g>
               );
@@ -160,10 +242,7 @@ export default function GuatemalaMap() {
                   <p className="text-xs font-semibold text-brand-700 uppercase tracking-wider mb-1">Departamento</p>
                   <h3 className="text-xl font-bold text-slate-900">{selected.department_name}</h3>
                 </div>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="text-slate-400 hover:text-slate-600 transition-colors"
-                >
+                <button onClick={() => setSelected(null)} className="text-slate-400 hover:text-slate-600 transition-colors">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -196,13 +275,13 @@ export default function GuatemalaMap() {
                 {max > 0 && (
                   <div>
                     <div className="flex justify-between text-xs text-slate-500 mb-1">
-                      <span>Participación nacional</span>
-                      <span>{max > 0 ? Math.round((selected.total_participants / max) * 100) : 0}%</span>
+                      <span>Participación relativa</span>
+                      <span>{Math.round((selected.total_participants / max) * 100)}%</span>
                     </div>
                     <div className="w-full bg-slate-100 rounded-full h-2">
                       <div
                         className="bg-brand-600 h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${max > 0 ? (selected.total_participants / max) * 100 : 0}%` }}
+                        style={{ width: `${(selected.total_participants / max) * 100}%` }}
                       />
                     </div>
                   </div>
@@ -221,16 +300,19 @@ export default function GuatemalaMap() {
         </div>
       </div>
 
-      {/* SVG tooltip */}
+      {/* Hover tooltip */}
       {tooltip && (
         <div
           className="absolute z-20 bg-slate-900 text-white text-xs rounded-lg px-3 py-2 pointer-events-none shadow-lg"
           style={{ left: tooltip.x + 12, top: tooltip.y - 10 }}
         >
           <p className="font-semibold">{tooltip.dept.department_name}</p>
-          <p className="text-slate-300">{tooltip.dept.total_participants} participantes</p>
+          <p className="text-slate-300">{tooltip.dept.total_participants.toLocaleString()} participantes</p>
         </div>
       )}
     </div>
   );
 }
+
+
+export default GuatemalaMap

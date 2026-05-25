@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import { FileText, MessageSquare, Settings, LogOut, LayoutDashboard, Newspaper } from 'lucide-react';
+import { FileText, MessageSquare, Settings, LogOut, LayoutDashboard, Newspaper, MapPin } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
@@ -7,7 +7,8 @@ const navItems = [
   { to: '/admin/documentos', label: 'Documentos',     icon: FileText },
   { to: '/admin/prensa',     label: 'Sala de Prensa', icon: Newspaper },
   { to: '/admin/comentarios',label: 'Comentarios',    icon: MessageSquare },
-  { to: '/admin/encuesta',   label: 'Encuesta',       icon: Settings },
+  { to: '/admin/encuesta',        label: 'Encuesta',        icon: Settings },
+  { to: '/admin/participacion',   label: 'Participación',   icon: MapPin },
 ];
 
 const AdminLayout = () => {
