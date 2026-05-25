@@ -3,6 +3,7 @@ import { HashRouter  as Router, Routes, Route, useLocation } from 'react-router-
 import TopBar from './components/TopBar';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import SocialSidebar from './components/SocialSidebar';
 import KatunHome from './pages/KatunHome';
 import Documents from './pages/Documents';
 import DimensionDetail from './pages/DimensionDetail';
@@ -41,6 +42,7 @@ function App() {
           <div className="min-h-screen bg-gray-50 flex flex-col">
             <TopBar />
             <Header />
+            <SocialSidebar />
             <main className="flex-1 pt-16">
               <Routes>
                 <Route path="/" element={<KatunHome />} />
