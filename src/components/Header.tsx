@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Heart, TrendingUp, Leaf, Map, Shield } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, ChevronDown, Heart, TrendingUp, Leaf, Map, Shield, Search } from 'lucide-react';
 import SegeplanLogo from '/images/segeplan-logo.jpg';
 
 const dimensions = [
@@ -19,13 +19,17 @@ const navItems = [
 ];
 
 const Header = () => {
-  const [menuOpen, setMenuOpen]     = useState(false);
-  const [dimOpen, setDimOpen]       = useState(false);
-  const [dimMobOpen, setDimMobOpen] = useState(false);
-  const [scrolled, setScrolled]     = useState(false);
-  const [topH, setTopH]             = useState(0);
-  const topHRef                     = useRef(0);
-  const location                    = useLocation();
+  const [menuOpen, setMenuOpen]       = useState(false);
+  const [dimOpen, setDimOpen]         = useState(false);
+  const [dimMobOpen, setDimMobOpen]   = useState(false);
+  const [scrolled, setScrolled]       = useState(false);
+  const [topH, setTopH]               = useState(0);
+  const [searchOpen, setSearchOpen]   = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const topHRef                       = useRef(0);
+  const searchInputRef                = useRef<HTMLInputElement>(null);
+  const location                      = useLocation();
+  const navigate                      = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY >= topHRef.current);
@@ -46,7 +50,12 @@ const Header = () => {
     return () => window.removeEventListener('resize', measure);
   }, []);
 
-  useEffect(() => { setMenuOpen(false); setDimOpen(false); }, [location.pathname]);
+  useEffect(() => { setMenuOpen(false); setDimOpen(false); setSearchOpen(false); }, [location.pathname]);
+
+  useEffect(() => {
+    if (searchOpen) setTimeout(() => searchInputRef.current?.focus(), 50);
+    else setSearchQuery('');
+  }, [searchOpen]);
 
   const isActive = (href: string) => location.pathname === href;
   const isDimActive = () => location.pathname.startsWith('/dimension-articulos/');
@@ -57,6 +66,14 @@ const Header = () => {
         ? 'bg-brand-50 text-brand-700 shadow-sm'
         : 'text-slate-600 hover:text-brand-700 hover:bg-brand-50'
     }`;
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (!q) return;
+    setSearchOpen(false);
+    navigate(`/buscar?q=${encodeURIComponent(q)}`);
+  };
 
   return (
     <header
@@ -87,7 +104,6 @@ const Header = () => {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {/* Inicio */}
             <Link to="/" className={linkCls(isActive('/'))}>Inicio</Link>
 
             {/* Ejes K'atun dropdown */}
@@ -125,22 +141,75 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Rest of nav items */}
             {navItems.slice(1).map(item => (
               <Link key={item.href} to={item.href} className={linkCls(isActive(item.href))}>
                 {item.name}
               </Link>
             ))}
+
+            {/* Search button */}
+            <button
+              onClick={() => setSearchOpen(s => !s)}
+              className={`p-2 rounded-xl transition-all duration-200 ${
+                searchOpen
+                  ? 'bg-brand-50 text-brand-700'
+                  : 'text-slate-500 hover:text-brand-700 hover:bg-brand-50'
+              }`}
+              aria-label="Buscar"
+            >
+              <Search className="h-4 w-4" />
+            </button>
           </nav>
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 rounded-xl text-slate-600 hover:text-brand-700 hover:bg-brand-50 transition-all duration-200"
-            aria-label="Menú"
-          >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {/* Mobile right buttons */}
+          <div className="flex md:hidden items-center gap-1">
+            <button
+              onClick={() => { setSearchOpen(s => !s); setMenuOpen(false); }}
+              className="p-2 rounded-xl text-slate-600 hover:text-brand-700 hover:bg-brand-50 transition-all duration-200"
+              aria-label="Buscar"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false); }}
+              className="p-2 rounded-xl text-slate-600 hover:text-brand-700 hover:bg-brand-50 transition-all duration-200"
+              aria-label="Menú"
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Expandable search bar */}
+        <div className={`overflow-hidden transition-all duration-300 ${
+          searchOpen ? 'max-h-20 opacity-100 pb-3' : 'max-h-0 opacity-0'
+        }`}>
+          <form onSubmit={submitSearch} className="flex gap-2 pt-1">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Buscar documentos, noticias, ejes…"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white"
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-4 py-2.5 bg-brand-700 hover:bg-brand-800 text-white text-sm font-semibold rounded-xl transition-colors duration-200 shrink-0"
+            >
+              Buscar
+            </button>
+            <button
+              type="button"
+              onClick={() => setSearchOpen(false)}
+              className="p-2.5 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </form>
         </div>
 
         {/* Mobile menu */}
@@ -148,7 +217,6 @@ const Header = () => {
           menuOpen ? 'max-h-[600px] opacity-100 pb-4' : 'max-h-0 opacity-0'
         }`}>
           <div className="border-t border-slate-100 pt-3 space-y-1">
-            {/* Inicio */}
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
@@ -159,7 +227,6 @@ const Header = () => {
               Inicio
             </Link>
 
-            {/* Ejes K'atun accordion */}
             <div>
               <button
                 onClick={() => setDimMobOpen(!dimMobOpen)}
@@ -193,7 +260,6 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Rest of nav items */}
             {navItems.slice(1).map(item => (
               <Link
                 key={item.href}

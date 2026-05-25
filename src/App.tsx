@@ -24,6 +24,7 @@ import AdminPress from './pages/admin/AdminPress';
 import AdminParticipacion from './pages/admin/AdminParticipacion';
 import SalaDePrensaPage from './pages/SalaDePrensaPage';
 import PressPostDetail from './pages/PressPostDetail';
+import SearchResults from './pages/SearchResults';
 import AdminGuard from './components/AdminGuard';
 import { AuthProvider } from './context/AuthContext';
 
@@ -98,6 +99,7 @@ function App() {
                     <Route path="/encuesta" element={<Survey />} />
                     <Route path="/sala-de-prensa" element={<SalaDePrensaPage />} />
                     <Route path="/sala-de-prensa/:slug" element={<PressPostDetail />} />
+                    <Route path="/buscar" element={<SearchResults />} />
                     <Route path="/privacidad" element={<PrivacyPolicy />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
