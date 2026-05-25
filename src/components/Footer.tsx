@@ -27,7 +27,7 @@ const Footer = () => (
   <footer className="bg-slate-900 text-slate-300">
     {/* Main content */}
     <div className="container-wide py-14">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
         {/* Brand */}
         <div className="space-y-4">
@@ -55,25 +55,8 @@ const Footer = () => (
           </div>
         </div>
 
-        {/* Quick links + Contact */}
-        <div className="grid grid-cols-2 gap-8">
-          <div>
-            <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
-              Navegación
-            </h4>
-            <ul className="space-y-2">
-              {quickLinks.map(l => (
-                <li key={l.to}>
-                  <Link
-                    to={l.to}
-                    className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Contact */}
+        <div className="grid grid-cols-1 gap-8">
           <div>
             <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
               Contacto
