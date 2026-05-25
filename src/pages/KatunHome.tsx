@@ -90,43 +90,30 @@ const KatunHome = () => (
           <img src={Linea} alt="" className="linea mt-8" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="flex gap-5 overflow-x-auto pb-3 -mx-2 px-2 snap-x snap-mandatory">
           {dimensions.map((d, i) => {
             const Icon = d.icon;
             return (
-              <AnimatedSection key={d.code} delay={i * 80}>
-                <div className={`card h-full flex flex-col ${d.bg} border ${d.border} p-6`}>
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className={`w-12 h-12 ${d.iconBg} rounded-xl flex items-center justify-center shrink-0`}>
-                      <Icon className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-slate-900 leading-snug text-base">
-                        {d.name}
-                      </h3>
-                    </div>
+              <AnimatedSection key={d.code} delay={i * 80} className="shrink-0 w-64 snap-start">
+                <div className={`h-full flex flex-col ${d.bg} border ${d.border} rounded-2xl p-6`}>
+                  <div className={`w-12 h-12 ${d.iconBg} rounded-xl flex items-center justify-center mb-4 shrink-0`}>
+                    <Icon className="h-6 w-6 text-white" />
                   </div>
-
-                  <p className="text-sm text-slate-600 leading-relaxed flex-1 mb-5">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                    Eje {i + 1}
+                  </span>
+                  <h3 className="font-bold text-slate-900 leading-snug text-sm mb-3 flex-1">
+                    {d.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed mb-5">
                     {d.description}
                   </p>
-
-                  <div className="flex flex-col gap-2">
-                    <Link
-                      to={`/dimension-articulos/${d.slug}`}
-                      className="btn-primary btn-sm justify-between"
-                    >
-                      Ver Artículos y Comentar
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
-                    <Link
-                      to={`/dimension/${d.code}`}
-                      className="btn-ghost btn-sm text-slate-600 justify-between"
-                    >
-                      Explorar Documentos
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
+                  <Link
+                    to={`/dimension/${d.code}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-900 transition-colors"
+                  >
+                    Ver más <ChevronRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </AnimatedSection>
             );
