@@ -378,5 +378,4 @@ export default function AdminParticipacion() {
   );
 }
 
-
 export default AdminParticipacion
