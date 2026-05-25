@@ -34,7 +34,7 @@ const emptyForm = (): PostForm => ({
   cover_image_url: '',
   author_name: 'SEGEPLAN',
   published_at: new Date().toISOString().split('T')[0],
-  is_published: false,
+  is_published: true,
   is_featured: false,
   tags: '',
 });
@@ -343,23 +343,39 @@ const AdminPress = () => {
               </div>
 
               {/* Flags */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex items-center gap-3">
+              <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden">
+                <label htmlFor="pp_published" className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-colors ${form.is_published ? 'bg-green-50' : 'bg-amber-50'}`}>
+                  <div className="flex items-center gap-3">
+                    {form.is_published
+                      ? <Eye className="h-4 w-4 text-green-600" />
+                      : <EyeOff className="h-4 w-4 text-amber-600" />}
+                    <div>
+                      <span className={`text-sm font-semibold ${form.is_published ? 'text-green-800' : 'text-amber-800'}`}>
+                        {form.is_published ? 'Visible en Sala de Prensa' : 'Borrador — no visible al público'}
+                      </span>
+                      <p className={`text-xs mt-0.5 ${form.is_published ? 'text-green-600' : 'text-amber-600'}`}>
+                        {form.is_published
+                          ? 'La noticia aparecerá en la página pública inmediatamente.'
+                          : 'Activa "Publicado" para que aparezca en la Sala de Prensa.'}
+                      </p>
+                    </div>
+                  </div>
                   <input type="checkbox" id="pp_published" checked={form.is_published}
                     onChange={e => setForm(p => ({ ...p, is_published: e.target.checked }))}
                     className="h-4 w-4 rounded border-slate-300 text-brand-600" />
-                  <label htmlFor="pp_published" className="text-sm text-slate-700 font-medium flex items-center gap-1.5">
-                    <Eye className="h-3.5 w-3.5 text-slate-400" /> Publicado
-                  </label>
-                </div>
-                <div className="flex items-center gap-3">
+                </label>
+                <label htmlFor="pp_featured" className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Star className={`h-4 w-4 ${form.is_featured ? 'text-amber-500' : 'text-slate-300'}`} fill={form.is_featured ? 'currentColor' : 'none'} />
+                    <div>
+                      <span className="text-sm font-semibold text-slate-700">Destacado</span>
+                      <p className="text-xs text-slate-400 mt-0.5">Aparece en la parte superior como noticia principal.</p>
+                    </div>
+                  </div>
                   <input type="checkbox" id="pp_featured" checked={form.is_featured}
                     onChange={e => setForm(p => ({ ...p, is_featured: e.target.checked }))}
                     className="h-4 w-4 rounded border-slate-300 text-amber-500" />
-                  <label htmlFor="pp_featured" className="text-sm text-slate-700 font-medium flex items-center gap-1.5">
-                    <Star className="h-3.5 w-3.5 text-amber-500" /> Destacado
-                  </label>
-                </div>
+                </label>
               </div>
 
               <div className="flex gap-3 pt-2">

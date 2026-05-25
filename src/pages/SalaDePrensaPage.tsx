@@ -50,8 +50,8 @@ const SalaDePrensaPage = () => {
       .eq('is_published', true)
       .order('is_featured', { ascending: false })
       .order('published_at', { ascending: false })
-      .then(({ data }) => {
-        setPosts((data as PressPost[]) || []);
+      .then(({ data, error }) => {
+        if (!error) setPosts((data as PressPost[]) || []);
         setLoading(false);
       });
   }, []);
