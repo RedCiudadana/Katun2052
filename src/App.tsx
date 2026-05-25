@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HashRouter  as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -14,6 +14,14 @@ import Survey from './pages/Survey';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import NotFound from './pages/NotFound';
 import Loader from './components/loader';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminDocuments from './pages/admin/AdminDocuments';
+import AdminComments from './pages/admin/AdminComments';
+import AdminSurvey from './pages/admin/AdminSurvey';
+import AdminGuard from './components/AdminGuard';
+import { AuthProvider } from './context/AuthContext';
 
 function LoaderWrapper({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -21,7 +29,6 @@ function LoaderWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setLoading(true);
-    // Simula un pequeño retardo para mostrar el loader (ajusta según tus necesidades)
     const timeout = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timeout);
   }, [location.pathname]);
@@ -36,31 +43,63 @@ function LoaderWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <TopBar />
+      <Header />
+      <SocialSidebar />
+      <main className="flex-1 pt-16">{children}</main>
+      <Footer />
+    </div>
+  );
+}
+
 function App() {
   return (
+    <AuthProvider>
       <Router>
-        <LoaderWrapper>
-          <div className="min-h-screen bg-gray-50 flex flex-col">
-            <TopBar />
-            <Header />
-            <SocialSidebar />
-            <main className="flex-1 pt-16">
-              <Routes>
-                <Route path="/" element={<KatunHome />} />
-                <Route path="/documentos" element={<Documents />} />
-                <Route path="/documento/:id" element={<DocumentDetail />} />
-                <Route path="/dimension/:dimensionCode" element={<DimensionDetail />} />
-                <Route path="/dimension-articulos/:slug" element={<DimensionArticles />} />
-                <Route path="/calendario" element={<KatunCalendar />} />
-                <Route path="/encuesta" element={<Survey />} />
-                <Route path="/privacidad" element={<PrivacyPolicy />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </LoaderWrapper>
+        <Routes>
+          {/* Admin routes — no public layout */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminGuard>
+                <AdminLayout />
+              </AdminGuard>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="documentos" element={<AdminDocuments />} />
+            <Route path="comentarios" element={<AdminComments />} />
+            <Route path="encuesta" element={<AdminSurvey />} />
+          </Route>
+
+          {/* Public routes */}
+          <Route
+            path="/*"
+            element={
+              <LoaderWrapper>
+                <PublicLayout>
+                  <Routes>
+                    <Route path="/" element={<KatunHome />} />
+                    <Route path="/documentos" element={<Documents />} />
+                    <Route path="/documento/:id" element={<DocumentDetail />} />
+                    <Route path="/dimension/:dimensionCode" element={<DimensionDetail />} />
+                    <Route path="/dimension-articulos/:slug" element={<DimensionArticles />} />
+                    <Route path="/calendario" element={<KatunCalendar />} />
+                    <Route path="/encuesta" element={<Survey />} />
+                    <Route path="/privacidad" element={<PrivacyPolicy />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </PublicLayout>
+              </LoaderWrapper>
+            }
+          />
+        </Routes>
       </Router>
+    </AuthProvider>
   );
 }
 

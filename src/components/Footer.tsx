@@ -20,6 +20,7 @@ const quickLinks = [
   { label: 'Cronograma',  to: '/calendario' },
   { label: 'Encuesta',    to: '/encuesta' },
   { label: 'Privacidad',  to: '/privacidad' },
+  { label: 'Admin',       to: '/admin' },
 ];
 
 const Footer = () => (
