@@ -27,7 +27,7 @@ const Footer = () => (
   <footer className="bg-slate-900 text-slate-300">
     {/* Main content */}
     <div className="container-wide py-14">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
         {/* Brand */}
         <div className="space-y-4">
@@ -56,33 +56,31 @@ const Footer = () => (
         </div>
 
         {/* Contact */}
-        <div className="grid grid-cols-1 gap-8">
-          <div>
-            <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
-              Contacto
-            </h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-sm text-slate-400">
-                <Phone className="h-3.5 w-3.5 shrink-0 text-slate-500" />
-                PBX: 2326-0000
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <ExternalLink className="h-3.5 w-3.5 shrink-0 text-slate-500" />
-                <a
-                  href="https://www.segeplan.gob.gt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-300 hover:text-brand-200 transition-colors"
-                >
-                  segeplan.gob.gt
-                </a>
-              </li>
-              <li className="flex items-start gap-2 text-sm text-slate-400">
-                <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0 text-slate-500" />
-                9a. calle 10-44 Zona 1, Guatemala
-              </li>
-            </ul>
-          </div>
+        <div>
+          <h4 className="text-white font-semibold text-sm mb-4 uppercase tracking-wider">
+            Contacto
+          </h4>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-2 text-sm text-slate-400">
+              <Phone className="h-3.5 w-3.5 shrink-0 text-slate-500" />
+              PBX: 2326-0000
+            </li>
+            <li className="flex items-center gap-2 text-sm">
+              <ExternalLink className="h-3.5 w-3.5 shrink-0 text-slate-500" />
+              <a
+                href="https://www.segeplan.gob.gt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-300 hover:text-brand-200 transition-colors"
+              >
+                segeplan.gob.gt
+              </a>
+            </li>
+            <li className="flex items-start gap-2 text-sm text-slate-400">
+              <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0 text-slate-500" />
+              9a. calle 10-44 Zona 1, Guatemala
+            </li>
+          </ul>
         </div>
 
         {/* Social */}
