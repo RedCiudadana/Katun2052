@@ -164,56 +164,6 @@ const KatunHome = () => (
           })}
         </div>
 
-        {/* Values banner */}
-        <AnimatedSection delay={400}>
-          <div className="bg-gradient-brand rounded-3xl p-8 sm:p-10 text-white">
-            <div className="text-center mb-8">
-              <Clock className="h-10 w-10 text-teal-300 mx-auto mb-3" />
-              <h3 className="text-2xl font-bold mb-2">Tu Participación es Fundamental</h3>
-              <p className="text-white/75 max-w-2xl mx-auto text-sm leading-relaxed">
-                Cada comentario y propuesta es revisado, analizado e integrado por el equipo técnico
-                de SEGEPLAN. Tu voz construye un plan verdaderamente representativo.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {values.map((v, i) => {
-                const Icon = v.icon;
-                return (
-                  <div key={i} className="flex flex-col items-center text-center bg-white/10 border border-white/20 rounded-2xl p-6">
-                    <Icon className="h-8 w-8 text-teal-300 mb-3" />
-                    <h4 className="font-semibold text-white mb-1">{v.title}</h4>
-                    <p className="text-sm text-white/65">{v.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </AnimatedSection>
-      </div>
-    </AnimatedSection>
-
-    {/* CTA band */}
-    <AnimatedSection className="section bg-brand-700">
-      <div className="container-narrow text-center text-white space-y-6">
-        <h2 className="text-3xl sm:text-4xl font-bold">Comienza a Participar Hoy</h2>
-        <p className="text-lg text-brand-100 max-w-xl mx-auto">
-          SEGEPLAN te invita a ser parte activa de la construcción del futuro de Guatemala.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-          <Link
-            to="/documentos"
-            className="btn bg-white text-brand-800 px-8 py-4 rounded-2xl text-base hover:bg-brand-50 hover:shadow-hero"
-          >
-            <FileText className="h-5 w-5" />
-            Ver Documentos
-          </Link>
-          <Link
-            to="/encuesta"
-            className="btn bg-white/15 border-2 border-white/40 text-white px-8 py-4 rounded-2xl text-base hover:bg-white/25 hover:border-white/60"
-          >
-            Participar en Encuesta
-          </Link>
-        </div>
       </div>
     </AnimatedSection>
   </div>
