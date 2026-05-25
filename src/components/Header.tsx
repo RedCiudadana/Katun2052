@@ -4,29 +4,28 @@ import { Menu, X, ChevronDown, Heart, TrendingUp, Leaf, Map, Shield } from 'luci
 import SegeplanLogo from '/images/segeplan-logo.jpg';
 
 const dimensions = [
-  { name: 'Bienestar para la Gente',    slug: 'bienestar',  icon: Heart,       color: 'text-blue-500' },
-  { name: 'Riqueza para Todos',         slug: 'riqueza',    icon: TrendingUp,  color: 'text-green-500' },
-  { name: 'Recursos Naturales',         slug: 'recursos',   icon: Leaf,        color: 'text-teal-500' },
-  { name: 'Guatemala Urbana y Rural',   slug: 'territorial',icon: Map,         color: 'text-amber-500' },
-  { name: 'Estado Garante',             slug: 'estado',     icon: Shield,      color: 'text-red-500' },
+  { name: 'Bienestar para la Gente',  slug: 'bienestar',   icon: Heart,      color: 'text-blue-500' },
+  { name: 'Riqueza para Todos',       slug: 'riqueza',     icon: TrendingUp, color: 'text-green-500' },
+  { name: 'Recursos Naturales',       slug: 'recursos',    icon: Leaf,       color: 'text-teal-500' },
+  { name: 'Guatemala Urbana y Rural', slug: 'territorial', icon: Map,        color: 'text-amber-500' },
+  { name: 'Estado Garante',           slug: 'estado',      icon: Shield,     color: 'text-red-500' },
 ];
 
 const navItems = [
-  { name: 'Inicio',         href: '/' },
-  { name: 'Documentos',     href: '/documentos' },
-  { name: 'Sala de Prensa', href: '/sala-de-prensa' },
-  { name: 'Cronograma',     href: '/calendario' },
-  { name: 'Encuesta',       href: '/encuesta' },
+  { name: 'Inicio',                   href: '/' },
+  { name: 'Proceso de Actualización', href: '/documentos' },
+  { name: 'Sala de Prensa',           href: '/sala-de-prensa' },
+  { name: 'Participa',                href: '/encuesta' },
 ];
 
 const Header = () => {
-  const [menuOpen, setMenuOpen]       = useState(false);
-  const [dimOpen, setDimOpen]         = useState(false);
-  const [dimMobOpen, setDimMobOpen]   = useState(false);
-  const [scrolled, setScrolled]       = useState(false);
-  const [topH, setTopH]               = useState(0);
-  const topHRef                       = useRef(0);
-  const location                      = useLocation();
+  const [menuOpen, setMenuOpen]     = useState(false);
+  const [dimOpen, setDimOpen]       = useState(false);
+  const [dimMobOpen, setDimMobOpen] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
+  const [topH, setTopH]             = useState(0);
+  const topHRef                     = useRef(0);
+  const location                    = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY >= topHRef.current);
@@ -88,29 +87,26 @@ const Header = () => {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map(item => (
-              <Link key={item.href} to={item.href} className={linkCls(isActive(item.href))}>
-                {item.name}
-              </Link>
-            ))}
+            {/* Inicio */}
+            <Link to="/" className={linkCls(isActive('/'))}>Inicio</Link>
 
-            {/* Dimensions dropdown */}
+            {/* Ejes K'atun dropdown */}
             <div
               className="relative"
               onMouseEnter={() => setDimOpen(true)}
               onMouseLeave={() => setDimOpen(false)}
             >
               <button className={linkCls(isDimActive()) + ' flex items-center gap-1'}>
-                Dimensiones
+                Ejes K'atun
                 <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${dimOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              <div className={`absolute top-full right-0 mt-1 w-68 bg-white rounded-2xl shadow-card-hover border border-slate-200 py-2 z-50 transition-all duration-200 ${
+              <div className={`absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl shadow-card-hover border border-slate-200 py-2 z-50 transition-all duration-200 ${
                 dimOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
               }`}>
                 <div className="px-3 py-2 border-b border-slate-100 mb-1">
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    5 Dimensiones del Plan
+                    5 Ejes del Plan K'atun
                   </p>
                 </div>
                 {dimensions.map(d => {
@@ -119,7 +115,7 @@ const Header = () => {
                     <Link
                       key={d.slug}
                       to={`/dimension-articulos/${d.slug}`}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-50 hover:text-brand-800 transition-colors group"
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-50 hover:text-brand-800 transition-colors"
                     >
                       <Icon className={`h-4 w-4 ${d.color} shrink-0`} />
                       {d.name}
@@ -128,6 +124,13 @@ const Header = () => {
                 })}
               </div>
             </div>
+
+            {/* Rest of nav items */}
+            {navItems.slice(1).map(item => (
+              <Link key={item.href} to={item.href} className={linkCls(isActive(item.href))}>
+                {item.name}
+              </Link>
+            ))}
           </nav>
 
           {/* Mobile toggle */}
@@ -145,21 +148,18 @@ const Header = () => {
           menuOpen ? 'max-h-[600px] opacity-100 pb-4' : 'max-h-0 opacity-0'
         }`}>
           <div className="border-t border-slate-100 pt-3 space-y-1">
-            {navItems.map(item => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setMenuOpen(false)}
-                className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                  isActive(item.href)
-                    ? 'bg-brand-50 text-brand-700'
-                    : 'text-slate-700 hover:text-brand-700 hover:bg-brand-50'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {/* Inicio */}
+            <Link
+              to="/"
+              onClick={() => setMenuOpen(false)}
+              className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isActive('/') ? 'bg-brand-50 text-brand-700' : 'text-slate-700 hover:text-brand-700 hover:bg-brand-50'
+              }`}
+            >
+              Inicio
+            </Link>
 
+            {/* Ejes K'atun accordion */}
             <div>
               <button
                 onClick={() => setDimMobOpen(!dimMobOpen)}
@@ -169,7 +169,7 @@ const Header = () => {
                     : 'text-slate-700 hover:text-brand-700 hover:bg-brand-50'
                 }`}
               >
-                Dimensiones
+                Ejes K'atun
                 <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${dimMobOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -192,6 +192,22 @@ const Header = () => {
                 </div>
               </div>
             </div>
+
+            {/* Rest of nav items */}
+            {navItems.slice(1).map(item => (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setMenuOpen(false)}
+                className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                  isActive(item.href)
+                    ? 'bg-brand-50 text-brand-700'
+                    : 'text-slate-700 hover:text-brand-700 hover:bg-brand-50'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
