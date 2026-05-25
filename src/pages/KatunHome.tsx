@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, MessageSquare, Users, TrendingUp, Heart, Leaf, Map, Shield, BarChart3, Clock, CheckCircle, ChevronRight } from 'lucide-react';
+import { ArrowRight, FileText, MessageSquare, Users, TrendingUp, Heart, Leaf, Map, Shield, BarChart3, Clock, CheckCircle, ChevronRight, ClipboardList } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import HeroSlider from '../components/HeroSlider';
+import GuatemalaMap from '../components/GuatemalaMap';
 import Linea from '../assets/LINEA.png';
 
 const dimensions = [
@@ -164,6 +165,71 @@ const KatunHome = () => (
           })}
         </div>
 
+      </div>
+    </AnimatedSection>
+
+    {/* Participation Tools */}
+    <AnimatedSection className="section bg-slate-50">
+      <div className="container-wide">
+        <div className="text-center mb-12">
+          <span className="badge-brand text-xs uppercase tracking-wider mb-3 inline-block">
+            Participa
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            Herramientas de Participación Ciudadana
+          </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            Comparte tu opinión y conoce cómo participa Guatemala en la construcción del Plan Nacional de Desarrollo.
+          </p>
+          <img src={Linea} alt="" className="linea mt-8" />
+        </div>
+
+        {/* Survey CTA */}
+        <AnimatedSection delay={100}>
+          <div className="bg-gradient-brand rounded-3xl p-8 sm:p-10 mb-10 flex flex-col sm:flex-row items-center gap-8">
+            <div className="flex-1 text-white">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center shrink-0">
+                  <ClipboardList className="h-7 w-7 text-white" />
+                </div>
+                <span className="text-sm font-semibold text-white/75 uppercase tracking-wider">Encuesta</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-bold mb-3">Encuesta Digital Nacional</h3>
+              <p className="text-white/75 leading-relaxed max-w-xl">
+                Responde la encuesta oficial del proceso participativo. Tu opinión sobre las cinco dimensiones
+                del K'atun contribuye directamente al Plan Nacional de Desarrollo Guatemala 2032.
+              </p>
+            </div>
+            <div className="shrink-0">
+              <Link
+                to="/encuesta"
+                className="inline-flex items-center gap-3 bg-white text-brand-800 font-bold px-8 py-4 rounded-2xl text-base hover:bg-brand-50 transition-colors shadow-lg hover:shadow-xl"
+              >
+                <ClipboardList className="h-5 w-5" />
+                Participar en la Encuesta
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* Interactive Map */}
+        <AnimatedSection delay={200}>
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-soft">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center shrink-0">
+                <Map className="h-5 w-5 text-brand-700" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-900">Mapa de Participación Departamental</h3>
+                <p className="text-sm text-slate-500">Haz clic en un departamento para ver sus estadísticas de participación</p>
+              </div>
+            </div>
+            <div className="mt-6">
+              <GuatemalaMap />
+            </div>
+          </div>
+        </AnimatedSection>
       </div>
     </AnimatedSection>
   </div>
