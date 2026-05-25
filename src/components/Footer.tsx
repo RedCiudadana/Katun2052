@@ -15,12 +15,12 @@ const social = [
 ];
 
 const quickLinks = [
-  { label: 'Inicio',      to: '/' },
-  { label: 'Documentos',  to: '/documentos' },
-  { label: 'Cronograma',  to: '/calendario' },
-  { label: 'Encuesta',    to: '/encuesta' },
-  { label: 'Privacidad',  to: '/privacidad' },
-  { label: 'Admin',       to: '/admin' },
+  { label: 'Inicio',                   to: '/' },
+  { label: 'Ejes K\'atun',             to: '/dimension-articulos/bienestar' },
+  { label: 'Proceso de Actualización', to: '/documentos' },
+  { label: 'Sala de Prensa',           to: '/sala-de-prensa' },
+  { label: 'Participa',                to: '/encuesta' },
+  { label: 'Privacidad',               to: '/privacidad' },
 ];
 
 const Footer = () => (

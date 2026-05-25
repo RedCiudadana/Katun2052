@@ -4,11 +4,11 @@ import { Menu, X, ChevronDown, Heart, TrendingUp, Leaf, Map, Shield } from 'luci
 import SegeplanLogo from '/images/segeplan-logo.jpg';
 
 const dimensions = [
-  { name: 'Bienestar para la Gente',  slug: 'bienestar',   icon: Heart,      color: 'text-blue-500' },
-  { name: 'Riqueza para Todos',       slug: 'riqueza',     icon: TrendingUp, color: 'text-green-500' },
-  { name: 'Recursos Naturales',       slug: 'recursos',    icon: Leaf,       color: 'text-teal-500' },
-  { name: 'Guatemala Urbana y Rural', slug: 'territorial', icon: Map,        color: 'text-amber-500' },
-  { name: 'Estado Garante',           slug: 'estado',      icon: Shield,     color: 'text-red-500' },
+  { name: 'Bienestar para la Gente',                                     slug: 'bienestar',   icon: Heart,      color: 'text-blue-500' },
+  { name: 'Riqueza para Todos y Todas',                                  slug: 'riqueza',     icon: TrendingUp, color: 'text-green-500' },
+  { name: 'Recursos Naturales para Hoy y para el Futuro',                slug: 'recursos',    icon: Leaf,       color: 'text-teal-500' },
+  { name: 'Guatemala Urbana y Rural',                                    slug: 'territorial', icon: Map,        color: 'text-amber-500' },
+  { name: 'Estado como Garante de los Derechos Humanos',                 slug: 'estado',      icon: Shield,     color: 'text-red-500' },
 ];
 
 const navItems = [

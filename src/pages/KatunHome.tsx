@@ -124,7 +124,7 @@ const KatunHome = () => {
                     {d.description}
                   </p>
                   <Link
-                    to={`/dimension/${d.code}`}
+                    to={`/dimension-articulos/${d.slug}`}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-900 transition-colors"
                   >
                     Ver más <ChevronRight className="h-4 w-4" />

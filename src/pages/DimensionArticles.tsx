@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield } from 'lucide-react';
+import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield, ChevronDown } from 'lucide-react';
 import { dimensionService, Dimension, DimensionArticle, DimensionComment } from '../services/dimensionService';
 
 const iconMap: Record<string, React.ComponentType<any>> = {
@@ -29,6 +29,8 @@ const DimensionArticles = () => {
   const [activeTab, setActiveTab] = useState<'general' | string>('general');
   const [showCommentForm, setShowCommentForm] = useState<string | null>(null);
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -149,10 +151,57 @@ const DimensionArticles = () => {
         </div>
       </section>
 
-      <div className="container-wide py-10">
+      <div className="container-wide py-6 sm:py-10">
+
+        {/* Mobile section picker */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-700 shadow-soft"
+          >
+            <span>
+              {activeTab === 'general'
+                ? 'Vista General'
+                : articles.find(a => a.id === activeTab)?.title ?? 'Seleccionar sección'}
+            </span>
+            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${sidebarOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <div className={`overflow-hidden transition-all duration-300 ${sidebarOpen ? 'max-h-[600px] mt-2' : 'max-h-0'}`}>
+            <div className="bg-white border border-slate-200 rounded-2xl p-3 space-y-1">
+              <button
+                onClick={() => { setActiveTab('general'); setSidebarOpen(false); }}
+                className={`w-full text-left px-3 py-3 rounded-xl transition-colors text-sm ${
+                  activeTab === 'general' ? 'bg-brand-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold">Vista General</span>
+                  <MessageSquare className="h-3.5 w-3.5 opacity-70" />
+                </div>
+                <div className="text-xs mt-0.5 opacity-70">{commentCounts.general || 0} comentarios</div>
+              </button>
+              {articles.map(article => (
+                <button
+                  key={article.id}
+                  onClick={() => { setActiveTab(article.id); setSidebarOpen(false); }}
+                  className={`w-full text-left px-3 py-3 rounded-xl transition-colors text-sm ${
+                    activeTab === article.id ? 'bg-brand-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="font-medium leading-snug">{article.title}</span>
+                    <FileText className="h-3.5 w-3.5 shrink-0 opacity-70 mt-0.5" />
+                  </div>
+                  <div className="text-xs mt-0.5 opacity-70">{commentCounts[article.id] || 0} comentarios</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
+          {/* Sidebar — desktop only */}
+          <aside className="hidden lg:block lg:col-span-1">
             <div className="card-flat border border-slate-200 bg-white p-4 sticky top-24">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-1">
                 Contenido

@@ -37,36 +37,36 @@ const Home = () => {
   const processSteps = [
     {
       step: 1,
-      title: 'Explora el contenido de la nueva Ley',
-      description: 'Revisa el documento que contiene la propuesta de la nueva Ley.',
+      title: 'Explora los Ejes del K\'atun',
+      description: 'Conoce las cinco dimensiones estratégicas del Plan Nacional de Desarrollo.',
       icon: FileText,
       color: 'blue',
       actions: [
-        'Descarga el documento PDF completo si lo deseas.',
-        'Identifica los temas que te interesan.'
+        'Descarga los documentos oficiales del plan.',
+        'Identifica los ejes que más te interesan.'
       ]
     },
     {
       step: 2,
-      title: 'Lee Artículo por Artículo',
-      description: 'Puedes comentar sobre artículos individuales o la ley completa.',
+      title: 'Responde la Encuesta',
+      description: 'Participa en la encuesta digital nacional y comparte tu visión sobre cada eje.',
       icon: MessageSquare,
       color: 'green',
       actions: [
-        'Revisa cada artículo cuidadosamente',
-        'Identifica aspectos que te parezcan importantes',
-        'establece los artículos de impacto en el proceso de contratación pública'
+        'Responde cada pregunta con honestidad',
+        'Indica tus prioridades para el desarrollo del país',
+        'Comparte tu perspectiva desde tu comunidad o sector'
       ]
     },
     {
       step: 3,
-      title: 'Comparte tu Opinión',
-      description: 'Envía comentarios constructivos y específicos. Tu opinión es valiosa para mejorar el proyecto.',
+      title: 'Deja tu Comentario',
+      description: 'Envía aportes específicos sobre los ejes del plan. Tu voz es fundamental.',
       icon: Users,
       color: 'orange',
       actions: [
-        'Escribe comentarios claros y específicos',
-        'Redacta tus propuestas de mejora o cambios concretos'
+        'Escribe propuestas claras y concretas',
+        'Sugiere mejoras basadas en tu experiencia'
       ]
     }
   ];
@@ -111,9 +111,7 @@ const Home = () => {
               Participación Ciudadana
             </h2>
             <p className="text-xl text-gray-600">
-              para la
-              creación de una Nueva Ley de
-              Contrataciones Públicas.
+              en la actualización del Plan Nacional de Desarrollo K'atun: Nuestra Guatemala 2032.
             </p>
             <div className="flex justify-center my-6">
               <img src={Linea}/>
@@ -180,13 +178,12 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Hacia una nueva era en las contrataciones públicas
+              Hacia una Guatemala 2032 más próspera e inclusiva
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Impulsamos un cambio integral en el Sistema Nacional de
-              Contrataciones Públicas. Nuestro objetivo es modernizarlo,
-              promoviendo la transparencia, eficiencia, rendición de cuentas y una
-              activa participación ciudadana en el control de los recursos públicos.
+              El Plan Nacional de Desarrollo K'atun traza la visión estratégica del país.
+              Su actualización incorpora las voces de todos los guatemaltecos, promoviendo
+              la transparencia, la equidad y el desarrollo sostenible en sus cinco ejes.
             </p>
             {/* <div className="flex justify-center my-6">
               <img src={Linea}/>
@@ -229,10 +226,10 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Conoce el proceso de la nueva Ley de Contrataciones Públicas
+              Proceso de Actualización del Plan K'atun 2032
             </h2>
             <p className="text-xl text-gray-600">
-              La creación de esta nueva ley, impulsada por el Ministerio de Finanzas Públicas, se llevó a cabo en varias fases.
+              La actualización del Plan Nacional de Desarrollo, liderada por SEGEPLAN, se desarrolla en etapas estructuradas.
             </p>
             <div className="flex justify-center my-6">
               <img src={Linea}/>
@@ -251,9 +248,7 @@ const Home = () => {
               ¿Cómo Participar?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Participa activamente en la modernización del
-              Sistema Nacional de Contrataciones Públicas de
-              Guatemala
+              Participa activamente en la actualización del Plan Nacional de Desarrollo K'atun: Nuestra Guatemala 2032
             </p>
             <div className="flex justify-center my-6">
               <img src={Linea}/>
@@ -324,26 +319,23 @@ const Home = () => {
                   ¡Tu participación es clave!
                 </h3>
                 <p className="text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed text-lg">
-                  Cada comentario que envíes será revisado, analizado e integrado en el proyecto final por el equipo
-                  técnico y especialista del Ministerio de Finanzas Públicas.
+                  Cada aporte que envíes será revisado, analizado e integrado en el plan final por el equipo
+                  técnico de SEGEPLAN.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
                   <div className="text-center bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
                       <MessageSquare className="h-8 w-8 text-white" />
                     </div>
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Explora el contenido de la nueva Ley</h4>
-                    <p className="text-base text-gray-600 leading-relaxed">Revisa el documento que
-                      contiene la propuesta de la
-                      nueva Ley.</p>
+                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Participa en la Encuesta Nacional</h4>
+                    <p className="text-base text-gray-600 leading-relaxed">Responde la encuesta oficial y contribuye directamente al Plan Nacional de Desarrollo.</p>
                   </div>
                   <div className="text-center bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                     <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
                       <CheckCircle className="h-8 w-8 text-white" />
                     </div>
                     <h4 className="font-bold text-gray-900 mb-3 text-lg">Impacto Real</h4>
-                    <p className="text-base text-gray-600 leading-relaxed">Tus aportes enriquecen el
-                      proyecto.</p>
+                    <p className="text-base text-gray-600 leading-relaxed">Tus aportes enriquecen la visión del país hacia 2032.</p>
                   </div>
                 </div>
               </div>
@@ -358,21 +350,28 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">
-              Tus comentarios y sugerencias son importantes
+              Tu voz construye el futuro de Guatemala
             </h2>
             <p className="text-xl text-cyan-50 mb-8 leading-relaxed">
-              El Ministerio de Finanzas Públicas te invita a ser parte de este esfuerzo para
-              modernizar las contrataciones públicas de Guatemala.
+              SEGEPLAN te invita a ser parte de la actualización del Plan Nacional de Desarrollo
+              K'atun: Nuestra Guatemala 2032.
             </p>
             <div className="flex justify-center my-6">
               <img src={Linea} alt="Separador" className="opacity-80"/>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/ley/contrataciones-estado"
+                to="/encuesta"
                 className="group bg-white text-cyan-800 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105 hover:shadow-2xl shadow-lg"
               >
-                Ver Comentarios
+                Participa Ahora
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/documentos"
+                className="group border-2 border-white/50 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 inline-flex items-center justify-center transform hover:scale-105 hover:border-white hover:bg-white/10"
+              >
+                Conoce los Ejes
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
