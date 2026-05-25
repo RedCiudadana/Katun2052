@@ -78,7 +78,7 @@ const KatunHome = () => {
       .eq('is_published', true)
       .order('is_featured', { ascending: false })
       .order('publication_date', { ascending: false })
-      .limit(6)
+      .limit(3)
       .then(({ data }) => {
         if (data) setFeaturedDocs(data as Document[]);
       });
