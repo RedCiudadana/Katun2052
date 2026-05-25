@@ -45,7 +45,7 @@ const DEPT_NAMES: { code: string; name: string }[] = [
 
 type ViewMode = 'table' | 'map';
 
-export default function AdminParticipacion() {
+function AdminParticipacion() {
   const [rows, setRows] = useState<DeptRow[]>([]);
   const [edits, setEdits] = useState<EditState>({});
   const [saving, setSaving] = useState<string | null>(null);
