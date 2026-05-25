@@ -73,53 +73,6 @@ const KatunHome = () => (
   <div>
     <HeroSlider />
 
-    {/* Intro + video */}
-    <AnimatedSection className="section bg-white">
-      <div className="container-wide">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <span className="badge-brand text-xs uppercase tracking-wider">
-              Plan Nacional de Desarrollo
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
-              K'atun: Nuestra Guatemala 2032
-            </h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
-              El K'atun es el plan de largo plazo de Guatemala que establece prioridades
-              nacionales de desarrollo. SEGEPLAN lidera su actualización participativa para
-              que refleje las necesidades reales de toda la ciudadanía.
-            </p>
-            <p className="text-base text-slate-500 leading-relaxed">
-              Tu retroalimentación es fundamental. Cada propuesta ciudadana es analizada
-              e integrada por el equipo técnico de SEGEPLAN.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Link to="/documentos" className="btn-primary btn-sm">
-                Explorar Documentos
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link to="/calendario" className="btn-secondary btn-sm">
-                Ver Cronograma
-              </Link>
-            </div>
-          </div>
-
-          <div className="rounded-2xl overflow-hidden shadow-card-hover border border-slate-200">
-            <div className="relative pb-[56.25%]">
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/8QrbmCg34b0?si=wcK8DO-87s9kzAea"
-                title="K'atun: Nuestra Guatemala 2032"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </AnimatedSection>
-
     {/* Dimensions */}
     <AnimatedSection className="section bg-slate-50">
       <div className="container-wide">
