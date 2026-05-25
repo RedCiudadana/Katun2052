@@ -34,6 +34,7 @@ export interface DimensionComment {
 
 export const dimensionService = {
   async getAllDimensions(): Promise<Dimension[]> {
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('dimensions')
       .select('*')
@@ -45,6 +46,7 @@ export const dimensionService = {
   },
 
   async getDimensionBySlug(slug: string): Promise<Dimension | null> {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('dimensions')
       .select('*')
@@ -56,6 +58,7 @@ export const dimensionService = {
   },
 
   async getDimensionArticles(dimensionId: string): Promise<DimensionArticle[]> {
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('dimension_articles')
       .select('*')
@@ -67,6 +70,7 @@ export const dimensionService = {
   },
 
   async getGeneralComments(dimensionId: string): Promise<DimensionComment[]> {
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('dimension_comments')
       .select('*')
@@ -80,6 +84,7 @@ export const dimensionService = {
   },
 
   async getArticleComments(articleId: string): Promise<DimensionComment[]> {
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('dimension_comments')
       .select('*')
@@ -98,6 +103,7 @@ export const dimensionService = {
     comment: string,
     articleId?: string
   ): Promise<void> {
+    if (!supabase) throw new Error('Database not available');
     const { error } = await supabase
       .from('dimension_comments')
       .insert({
@@ -113,6 +119,7 @@ export const dimensionService = {
   },
 
   async getCommentCount(dimensionId: string, articleId?: string): Promise<number> {
+    if (!supabase) return 0;
     let query = supabase
       .from('dimension_comments')
       .select('id', { count: 'exact', head: true })
