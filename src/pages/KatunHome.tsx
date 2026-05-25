@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, MessageSquare, Users, TrendingUp, Heart, Leaf, Map, Shield, BarChart3, CheckCircle, ChevronRight, ClipboardList, Download, ExternalLink } from 'lucide-react';
+import { ArrowRight, FileText, TrendingUp, Heart, Leaf, Map, Shield, ChevronRight, ClipboardList, Download, ExternalLink } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import HeroSlider from '../components/HeroSlider';
 import GuatemalaMap from '../components/GuatemalaMap';
@@ -46,32 +46,6 @@ const dimensions = [
   },
 ];
 
-const steps = [
-  {
-    step: '01', title: 'Explora las Dimensiones',
-    description: 'Conoce las 5 áreas estratégicas del Plan Nacional y los documentos oficiales de cada una.',
-    icon: FileText,
-    href: '/documentos',
-  },
-  {
-    step: '02', title: 'Lee los Documentos',
-    description: 'Accede a los documentos validados por SEGEPLAN organizados por dimensión temática.',
-    icon: BarChart3,
-    href: '/documentos',
-  },
-  {
-    step: '03', title: 'Comparte tu Opinión',
-    description: 'Deja comentarios y propuestas concretas para enriquecer el plan de desarrollo.',
-    icon: MessageSquare,
-    href: '/dimension-articulos/bienestar',
-  },
-];
-
-const values = [
-  { icon: CheckCircle, title: 'Transparencia', desc: 'Proceso abierto y documentado' },
-  { icon: Users,       title: 'Inclusión',     desc: 'Todas las voces importan' },
-  { icon: BarChart3,   title: 'Impacto Real',  desc: 'Aportes integrados al plan' },
-];
 
 // Icon map for document types
 const DOC_TYPE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
@@ -160,51 +134,6 @@ const KatunHome = () => {
             );
           })}
         </div>
-      </div>
-    </AnimatedSection>
-
-    {/* How to participate */}
-    <AnimatedSection className="section bg-white">
-      <div className="container-wide">
-        <div className="text-center mb-12">
-          <span className="badge-teal text-xs uppercase tracking-wider mb-3 inline-block">
-            Guía de participación
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            ¿Cómo Participar?
-          </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Tres pasos sencillos para que tu voz forme parte del Plan Nacional de Desarrollo.
-          </p>
-          <img src={Linea} alt="" className="linea mt-8" />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {steps.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <AnimatedSection key={i} delay={i * 120}>
-                <div className="card-flat p-7 h-full flex flex-col items-center text-center border border-slate-200 bg-slate-50">
-                  <div className="w-14 h-14 rounded-2xl bg-brand-700 text-white font-bold text-xl flex items-center justify-center mb-4 shadow-soft">
-                    {s.step}
-                  </div>
-                  <div className="w-12 h-12 rounded-xl bg-brand-100 flex items-center justify-center mb-4">
-                    <Icon className="h-6 w-6 text-brand-700" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed flex-1">{s.description}</p>
-                  <Link
-                    to={s.href}
-                    className="mt-5 text-sm font-semibold text-brand-700 hover:text-brand-900 flex items-center gap-1 transition-colors"
-                  >
-                    Comenzar <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </AnimatedSection>
-            );
-          })}
-        </div>
-
       </div>
     </AnimatedSection>
 

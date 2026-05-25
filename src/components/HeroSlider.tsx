@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, Calendar, Heart, TrendingUp, Leaf, Map, Shield, ChevronDown } from 'lucide-react';
+import { Heart, TrendingUp, Leaf, Map, Shield, ChevronDown } from 'lucide-react';
 import Slider1 from '../assets/slider/Banner.png';
 
 const dimensions = [
@@ -62,32 +61,10 @@ const HeroSlider = () => (
             </span>
           </p>
 
-          {/* CTAs */}
-          <div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in"
-            style={{ animationDelay: '300ms' }}
-          >
-            <Link
-              to="/documentos"
-              className="group flex items-center gap-3 bg-white text-brand-800 px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300 hover:bg-teal-50 hover:shadow-hero transform hover:scale-105 shadow-soft"
-            >
-              <FileText className="h-5 w-5 shrink-0" />
-              Explorar Documentos
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
-            </Link>
-            <Link
-              to="/calendario"
-              className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border-2 border-white/40 text-white px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300 hover:bg-white/20 hover:border-white/60 transform hover:scale-105"
-            >
-              <Calendar className="h-5 w-5 shrink-0" />
-              Ver Cronograma
-            </Link>
-          </div>
-
           {/* Dimension pills */}
           <div
             className="flex flex-wrap justify-center gap-3 animate-fade-in"
-            style={{ animationDelay: '400ms' }}
+            style={{ animationDelay: '300ms' }}
           >
             {dimensions.map((d, i) => {
               const Icon = d.icon;
@@ -101,23 +78,6 @@ const HeroSlider = () => (
                 </div>
               );
             })}
-          </div>
-
-          {/* Stats row */}
-          <div
-            className="grid grid-cols-3 gap-4 max-w-lg mx-auto animate-fade-in"
-            style={{ animationDelay: '500ms' }}
-          >
-            {[
-              { value: '5',    label: 'Dimensiones' },
-              { value: '2032', label: 'Horizonte' },
-              { value: '∞',   label: 'Participantes' },
-            ].map(s => (
-              <div key={s.label} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl py-4 px-2 text-center">
-                <div className="text-3xl font-bold text-white">{s.value}</div>
-                <div className="text-xs text-white/70 mt-1 font-medium">{s.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
