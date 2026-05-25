@@ -136,7 +136,7 @@ function getColor(total: number, max: number): string {
   return '#bfdbfe';
 }
 
-export default function GuatemalaMap() {
+function GuatemalaMap() {
   const [data, setData] = useState<DeptData[]>([]);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
   const [selected, setSelected] = useState<DeptData | null>(null);
