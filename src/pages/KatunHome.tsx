@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, TrendingUp, Heart, Leaf, Map, Shield, ChevronRight, ClipboardList, Download, ExternalLink } from 'lucide-react';
+import { ArrowRight, FileText, TrendingUp, Heart, Leaf, Map, Shield, ChevronRight, ClipboardList, Download, ExternalLink, MessageSquare } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import HeroSlider from '../components/HeroSlider';
 import GuatemalaMap from '../components/GuatemalaMap';
@@ -14,35 +14,35 @@ const dimensions = [
     name: 'Bienestar para la Gente',
     description: 'Desarrollo humano, salud, educación y reducción de la pobreza.',
     icon: Heart,
-    bg: 'bg-blue-50', border: 'border-blue-200', iconBg: 'bg-blue-600', tag: 'badge-brand',
+    border: 'border-slate-200', iconBg: 'bg-blue-600', ctaBg: 'bg-[#3E7BBE]', tag: 'badge-brand',
   },
   {
     code: 'dimension-2', slug: 'riqueza',
     name: 'Riqueza para Todos y Todas',
     description: 'Desarrollo económico sostenible, empleo digno e inversión.',
     icon: TrendingUp,
-    bg: 'bg-green-50', border: 'border-green-200', iconBg: 'bg-green-600', tag: 'badge-teal',
+    border: 'border-slate-200', iconBg: 'bg-green-600', ctaBg: 'bg-[#D92C2C]', tag: 'badge-teal',
   },
   {
     code: 'dimension-3', slug: 'recursos',
     name: 'Recursos Naturales para Hoy y el Futuro',
     description: 'Gestión sostenible, conservación y protección ambiental.',
     icon: Leaf,
-    bg: 'bg-teal-50', border: 'border-teal-200', iconBg: 'bg-teal-600', tag: 'badge-teal',
+    border: 'border-slate-200', iconBg: 'bg-teal-600', ctaBg: 'bg-[#56A947]', tag: 'badge-teal',
   },
   {
     code: 'dimension-4', slug: 'territorial',
     name: 'Guatemala Urbana y Rural',
     description: 'Desarrollo territorial equilibrado e infraestructura inclusiva.',
     icon: Map,
-    bg: 'bg-amber-50', border: 'border-amber-200', iconBg: 'bg-amber-600', tag: 'badge-amber',
+    border: 'border-slate-200', iconBg: 'bg-amber-600', ctaBg: 'bg-[#F1BF3A]', tag: 'badge-amber',
   },
   {
     code: 'dimension-5', slug: 'estado',
     name: 'Estado como Garante de los Derechos',
     description: 'Gobernabilidad democrática, institucionalidad y transparencia.',
     icon: Shield,
-    bg: 'bg-red-50', border: 'border-red-200', iconBg: 'bg-red-600', tag: 'badge-red',
+    border: 'border-slate-200', iconBg: 'bg-red-600', ctaBg: 'bg-[#6CB6E8]', tag: 'badge-red',
   },
 ];
 
@@ -67,6 +67,45 @@ const FALLBACK_THUMBS: Record<string, string> = {
   otro:         'https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?auto=compress&cs=tinysrgb&w=600',
 };
 
+const processPhases = [
+  {
+    num: '01',
+    title: 'Preparación estratégica y diseño metodológico',
+    color: 'bg-[#F3BE32]',
+    line: 'bg-[#F3BE32]',
+  },
+  {
+    num: '02',
+    title: 'Recopilación de información técnica territorial y participativa',
+    color: 'bg-[#3E7BBE]',
+    line: 'bg-[#3E7BBE]',
+  },
+  {
+    num: '03',
+    title: 'Sistematización, análisis integrado y prospectiva estratégica',
+    color: 'bg-[#D92C2C]',
+    line: 'bg-[#D92C2C]',
+  },
+  {
+    num: '04',
+    title: 'Formulación estratégica y redacción del plan',
+    color: 'bg-[#CC2E8A]',
+    line: 'bg-[#CC2E8A]',
+  },
+  {
+    num: '05',
+    title: 'Validación, aprobación y lanzamiento',
+    color: 'bg-[#56A947]',
+    line: 'bg-[#56A947]',
+  },
+  {
+    num: '06',
+    title: 'Institucionalización, seguimiento e implementación inicial',
+    color: 'bg-[#56A947]',
+    line: 'bg-[#56A947]',
+  },
+];
+
 const KatunHome = () => {
   const [featuredDocs, setFeaturedDocs] = useState<Document[]>([]);
 
@@ -88,8 +127,29 @@ const KatunHome = () => {
   <div>
     <HeroSlider />
 
+    <section className="relative z-30 -mt-12 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-2xl justify-center">
+        <div className="grid w-full overflow-hidden rounded-[2rem] bg-white p-2 shadow-[0_24px_60px_rgba(15,23,42,0.22)] ring-1 ring-slate-200/80 sm:grid-cols-2">
+          <Link
+            to="/documentos"
+            className="group flex min-h-[74px] items-center justify-center gap-3 rounded-[1.5rem] bg-[#74BDF2] px-8 py-5 text-center text-sm font-extrabold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#5aafea]"
+          >
+            Conoce los Ejes
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
+          <Link
+            to="/encuesta"
+            className="group flex min-h-[74px] items-center justify-center gap-3 rounded-[1.5rem] px-8 py-5 text-center text-sm font-extrabold uppercase tracking-wide text-[#23286B] transition-all duration-300 hover:bg-slate-50"
+          >
+            <MessageSquare className="h-4 w-4" />
+            Participa Aqui
+          </Link>
+        </div>
+      </div>
+    </section>
+
     {/* Dimensions */}
-    <AnimatedSection className="section bg-slate-50">
+    <AnimatedSection className="section bg-slate-50 pt-24">
       <div className="container-wide">
         <div className="text-center mb-12">
           <span className="badge-slate text-xs uppercase tracking-wider mb-3 inline-block">
@@ -105,29 +165,32 @@ const KatunHome = () => {
           <img src={Linea} alt="" className="linea mt-8" />
         </div>
 
-        <div className="flex gap-5 overflow-x-auto pb-3 -mx-2 px-2 snap-x snap-mandatory">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-5">
           {dimensions.map((d, i) => {
             const Icon = d.icon;
             return (
-              <AnimatedSection key={d.code} delay={i * 80} className="shrink-0 w-64 snap-start">
-                <div className={`h-full flex flex-col ${d.bg} border ${d.border} rounded-2xl p-6`}>
-                  <div className={`w-12 h-12 ${d.iconBg} rounded-xl flex items-center justify-center mb-4 shrink-0`}>
-                    <Icon className="h-6 w-6 text-white" />
+              <AnimatedSection key={d.code} delay={i * 80} className="h-full">
+                <div className={`flex h-full flex-col rounded-[2rem] border bg-[#F3F1EF] ${d.border} shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg`}>
+                  <div className="flex flex-1 flex-col items-center px-7 pb-8 pt-10 text-center">
+                    <div className={`mb-6 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ${d.iconBg}`}>
+                      <Icon className="h-8 w-8 text-white" />
+                    </div>
+                    <span className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-slate-400">
+                      Eje {i + 1}
+                    </span>
+                    <h3 className="mb-4 text-2xl font-bold leading-tight text-slate-900">
+                      {d.name}
+                    </h3>
+                    <p className="text-base leading-relaxed text-slate-600">
+                      {d.description}
+                    </p>
                   </div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Eje {i + 1}
-                  </span>
-                  <h3 className="font-bold text-slate-900 leading-snug text-sm mb-3 flex-1">
-                    {d.name}
-                  </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed mb-5">
-                    {d.description}
-                  </p>
                   <Link
                     to={`/dimension-articulos/${d.slug}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-900 transition-colors"
+                    className={`flex items-center justify-center gap-2 px-6 py-5 text-xl font-extrabold text-white transition-opacity duration-300 hover:opacity-90 ${d.ctaBg}`}
                   >
-                    Ver más <ChevronRight className="h-4 w-4" />
+                    Ver más
+                    <ChevronRight className="h-5 w-5" />
                   </Link>
                 </div>
               </AnimatedSection>
@@ -219,63 +282,54 @@ const KatunHome = () => {
           <img src={Linea} alt="" className="linea mt-8" />
         </div>
 
-        {/* Timeline horizontal scroll */}
-        <div className="relative">
-          {/* Connector line */}
-          <div className="hidden md:block absolute top-8 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-200 via-brand-400 to-brand-200 z-0" style={{ top: '2rem' }} />
-
-          <div className="flex gap-6 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory md:grid md:grid-cols-6 md:overflow-visible md:pb-0 md:px-0 md:mx-0">
-            {[
-              {
-                num: '01',
-                title: 'Preparación estratégica y diseño metodológico',
-                color: 'bg-brand-600', ring: 'ring-brand-200', text: 'text-brand-700', bg: 'bg-brand-50', border: 'border-brand-100',
-              },
-              {
-                num: '02',
-                title: 'Recopilación de información técnica territorial y participativa',
-                color: 'bg-teal-600', ring: 'ring-teal-200', text: 'text-teal-700', bg: 'bg-teal-50', border: 'border-teal-100',
-              },
-              {
-                num: '03',
-                title: 'Sistematización, análisis integrado y prospectiva estratégica',
-                color: 'bg-amber-500', ring: 'ring-amber-200', text: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-100',
-              },
-              {
-                num: '04',
-                title: 'Formulación estratégica y redacción del plan',
-                color: 'bg-blue-600', ring: 'ring-blue-200', text: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-100',
-              },
-              {
-                num: '05',
-                title: 'Validación, aprobación y lanzamiento',
-                color: 'bg-green-600', ring: 'ring-green-200', text: 'text-green-700', bg: 'bg-green-50', border: 'border-green-100',
-              },
-              {
-                num: '06',
-                title: 'Institucionalización, seguimiento e implementación inicial',
-                color: 'bg-slate-700', ring: 'ring-slate-200', text: 'text-slate-700', bg: 'bg-slate-50', border: 'border-slate-200',
-              },
-            ].map((phase, i) => (
-              <AnimatedSection key={phase.num} delay={i * 100} className="shrink-0 w-52 md:w-auto snap-start">
-                <div className="flex flex-col items-center text-center relative z-10">
-                  {/* Node */}
-                  <div className={`w-16 h-16 rounded-2xl ${phase.color} ring-4 ${phase.ring} flex items-center justify-center mb-4 shadow-soft shrink-0`}>
-                    <span className="text-white font-bold text-xl">{phase.num}</span>
-                  </div>
-                  {/* Card */}
-                  <div className={`${phase.bg} border ${phase.border} rounded-2xl p-4 w-full`}>
-                    <p className={`text-xs font-bold uppercase tracking-wider ${phase.text} mb-2`}>
-                      Fase {i + 1}
-                    </p>
-                    <p className="text-sm font-semibold text-slate-800 leading-snug">
-                      {phase.title}
-                    </p>
-                  </div>
+        <div className="space-y-8 lg:hidden">
+          {processPhases.map((phase, i) => (
+            <AnimatedSection key={phase.num} delay={i * 80}>
+              <div className="flex items-start gap-4">
+                <div className="flex flex-col items-center">
+                  <div className={`h-5 w-5 rounded-full ${phase.color}`} />
+                  {i < processPhases.length - 1 && <div className={`mt-2 h-20 w-1 ${phase.line}`} />}
                 </div>
-              </AnimatedSection>
-            ))}
-          </div>
+                <div className="pt-0.5">
+                  <p className="text-lg font-extrabold text-[#23286B]">Fase {i + 1}</p>
+                  <p className="mt-1 text-lg leading-snug text-[#23286B]">{phase.title}</p>
+                </div>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+
+        <div className="mx-auto hidden max-w-7xl grid-cols-6 grid-rows-[1fr_auto_1fr] lg:grid">
+          {processPhases.map((phase, i) => (
+            <AnimatedSection key={`${phase.num}-top`} delay={i * 80} className="flex items-end justify-center pb-16">
+              {i % 2 === 1 ? (
+                <div className="w-[220px] text-center">
+                  <p className="text-[0.95rem] font-extrabold text-[#23286B]">Fase {i + 1}</p>
+                  <p className="mt-1 text-[0.95rem] leading-tight text-[#23286B]">{phase.title}</p>
+                </div>
+              ) : null}
+            </AnimatedSection>
+          ))}
+
+          {processPhases.map((phase, i) => (
+            <div key={`${phase.num}-line`} className="relative flex h-10 items-center justify-center">
+              {i < processPhases.length - 1 ? (
+                <div className={`absolute left-1/2 top-1/2 h-5 w-full -translate-y-1/2 rounded-full ${phase.line}`} />
+              ) : null}
+              <div className={`relative z-10 h-10 w-10 rounded-full ${phase.color}`} />
+            </div>
+          ))}
+
+          {processPhases.map((phase, i) => (
+            <AnimatedSection key={`${phase.num}-bottom`} delay={i * 80} className="flex items-start justify-center pt-16">
+              {i % 2 === 0 ? (
+                <div className="w-[220px] text-center">
+                  <p className="text-[0.95rem] font-extrabold text-[#23286B]">Fase {i + 1}</p>
+                  <p className="mt-1 text-[0.95rem] leading-tight text-[#23286B]">{phase.title}</p>
+                </div>
+              ) : null}
+            </AnimatedSection>
+          ))}
         </div>
       </div>
     </AnimatedSection>

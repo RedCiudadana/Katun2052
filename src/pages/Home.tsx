@@ -103,8 +103,29 @@ const Home = () => {
       {/* Hero Slider */}
       <HeroSlider />
 
+      <section className="relative z-30 -mt-16 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex w-full max-w-2xl justify-center">
+          <div className="grid w-full overflow-hidden rounded-[2rem] bg-white p-2 shadow-[0_24px_60px_rgba(15,23,42,0.22)] ring-1 ring-slate-200/80 sm:grid-cols-2">
+            <Link
+              to="/documentos"
+              className="group flex min-h-[74px] items-center justify-center gap-3 rounded-[1.5rem] bg-[#74BDF2] px-8 py-5 text-center text-sm font-extrabold uppercase tracking-wide text-white transition-all duration-300 hover:bg-[#5aafea]"
+            >
+              Conoce los Ejes
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+            <Link
+              to="/encuesta"
+              className="group flex min-h-[74px] items-center justify-center gap-3 rounded-[1.5rem] px-8 py-5 text-center text-sm font-extrabold uppercase tracking-wide text-[#23286B] transition-all duration-300 hover:bg-slate-50"
+            >
+              <MessageSquare className="h-4 w-4" />
+              Participa Aqui
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Statistics Section */}
-      <AnimatedSection className="py-16 bg-white">
+      <AnimatedSection className="bg-white pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
