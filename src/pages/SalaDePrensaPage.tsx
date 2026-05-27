@@ -75,7 +75,7 @@ const SalaDePrensaPage = () => {
             <Newspaper className="h-4 w-4" />
             Comunicación institucional
           </span>
-          <h1 className="text-4xl sm:text-5xl font-bold">Sala de Prensa</h1>
+          <h1 className="text-4xl text-white sm:text-5xl font-bold">Sala de Prensa</h1>
           <p className="text-lg text-white/75 max-w-xl mx-auto">
             Noticias, blogs y comunicados oficiales del proceso de actualización del Plan Nacional de Desarrollo K'atun 2032.
           </p>

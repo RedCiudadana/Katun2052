@@ -1,7 +1,7 @@
 const TopBar = () => (
   <div
     id="topbar"
-    className="bg-brand-900 text-white text-xs"
+    className="fixed left-0 right-0 top-0 z-[60] bg-brand-900 text-white text-xs"
     style={{ height: 'var(--topbar-h)' }}
   >
     <div className="container-wide h-full flex items-center justify-between">

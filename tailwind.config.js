@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sora: ['Sora', 'sans-serif'],
-        euclid: ['Euclid Circular A', 'Arial', 'sans-serif'],
+        sans: ['Montserrat', 'Arial', 'sans-serif'],
+        montserrat: ['Montserrat', 'Arial', 'sans-serif'],
       },
       colors: {
         brand: {

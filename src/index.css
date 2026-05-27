@@ -1,29 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
-
 @font-face {
-  font-family: 'Euclid Circular A';
-  src: url('./assets/fonts/EuclidCircularA-Regular.ttf') format('truetype');
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Euclid Circular A';
-  src: url('./assets/fonts/EuclidCircularA-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Euclid Circular A';
-  src: url('./assets/fonts/EuclidCircularA-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Euclid Circular A';
-  src: url('./assets/fonts/EuclidCircularA-Bold.ttf') format('truetype');
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -37,6 +21,7 @@
   :root {
     --topbar-h: 44px;
     --header-h: 64px;
+    --heading-color: #262262;
   }
 
   * { @apply antialiased box-border; }
@@ -44,16 +29,18 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Euclid Circular A', Arial, sans-serif;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 400;
     @apply text-slate-800 bg-slate-50;
     line-height: 1.65;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 700;
     line-height: 1.2;
-    @apply text-slate-900;
+    text-transform: uppercase;
+    color: var(--heading-color);
   }
 
   a { @apply transition-colors duration-200; }
@@ -178,7 +165,37 @@
 .article-content h2, .article-content h3, .article-content h4 {
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #0f172a;
+  color: var(--heading-color);
+}
+
+h1[class*='text-slate-900'],
+h2[class*='text-slate-900'],
+h3[class*='text-slate-900'],
+h4[class*='text-slate-900'],
+h5[class*='text-slate-900'],
+h6[class*='text-slate-900'],
+h1[class*='text-gray-900'],
+h2[class*='text-gray-900'],
+h3[class*='text-gray-900'],
+h4[class*='text-gray-900'],
+h5[class*='text-gray-900'],
+h6[class*='text-gray-900'],
+h1[class*='text-slate-800'],
+h2[class*='text-slate-800'],
+h3[class*='text-slate-800'],
+h4[class*='text-slate-800'],
+h5[class*='text-slate-800'],
+h6[class*='text-slate-800'] {
+  color: var(--heading-color);
+}
+
+h1[class*='text-white'],
+h2[class*='text-white'],
+h3[class*='text-white'],
+h4[class*='text-white'],
+h5[class*='text-white'],
+h6[class*='text-white'] {
+  text-transform: none;
 }
 .article-content blockquote {
   border-left: 3px solid #2a7fbd;

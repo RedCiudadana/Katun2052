@@ -28,7 +28,7 @@ const Footer = () => (
         <div className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-16">
           {/* K'atun 2032 */}
           <div className="flex flex-col items-center gap-2 group">
-            <div className="flex items-center justify-center h-16 px-6 rounded-xl border border-slate-100 bg-slate-50 group-hover:border-slate-200 transition-colors">
+            <div className="flex items-center justify-center h-16 px-6 rounded-xl borde group-hover:border-slate-200 transition-colors">
               <span className="font-bold text-slate-800 text-lg tracking-tight leading-tight text-center">
                 K'atun<br />
                 <span className="text-brand-600">2032</span>
@@ -46,7 +46,7 @@ const Footer = () => (
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-2 group"
           >
-            <div className="flex items-center justify-center h-16 px-4 rounded-xl border border-slate-100 bg-slate-50 group-hover:border-slate-200 transition-colors">
+            <div className="flex items-center justify-center h-16 px-4 rounded-xl border group-hover:border-slate-200 transition-colors">
               <img
                 src={SEGEPLAN_LOGO}
                 alt="SEGEPLAN"
@@ -70,7 +70,7 @@ const Footer = () => (
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-2 group"
           >
-            <div className="flex items-center justify-center h-16 px-4 rounded-xl border border-slate-100 bg-slate-50 group-hover:border-slate-200 transition-colors">
+            <div className="flex items-center justify-center h-16 px-4 rounded-xl border group-hover:border-slate-200 transition-colors">
               <img
                 src={RED_CIUDADANA_LOGO}
                 alt="Red Ciudadana"

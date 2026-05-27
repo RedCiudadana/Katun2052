@@ -1,47 +1,52 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, TrendingUp, Heart, Leaf, Map, Shield, ChevronRight, ClipboardList, Download, ExternalLink, MessageSquare } from 'lucide-react';
+import { ArrowRight, FileText, Map, ChevronRight, ClipboardList, Download, ExternalLink, MessageSquare } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import HeroSlider from '../components/HeroSlider';
 import GuatemalaMap from '../components/GuatemalaMap';
 import { supabase } from '../lib/supabase';
 import type { Document } from '../types/katun';
 import Linea from '../assets/LINEA.png';
+import Katun06 from '../assets/iconos/KATUN-06.png';
+import Katun07 from '../assets/iconos/KATUN-07.png';
+import Katun08 from '../assets/iconos/KATUN-08.png';
+import Katun09 from '../assets/iconos/KATUN-09.png';
+import Katun10 from '../assets/iconos/KATUN-10.png';
 
 const dimensions = [
   {
     code: 'dimension-1', slug: 'bienestar',
     name: 'Bienestar para la Gente',
     description: 'Desarrollo humano, salud, educación y reducción de la pobreza.',
-    icon: Heart,
+    icon: Katun06,
     border: 'border-slate-200', iconBg: 'bg-blue-600', ctaBg: 'bg-[#3E7BBE]', tag: 'badge-brand',
   },
   {
     code: 'dimension-2', slug: 'riqueza',
     name: 'Riqueza para Todos y Todas',
     description: 'Desarrollo económico sostenible, empleo digno e inversión.',
-    icon: TrendingUp,
+    icon: Katun07,
     border: 'border-slate-200', iconBg: 'bg-green-600', ctaBg: 'bg-[#D92C2C]', tag: 'badge-teal',
   },
   {
     code: 'dimension-3', slug: 'recursos',
     name: 'Recursos Naturales para Hoy y el Futuro',
     description: 'Gestión sostenible, conservación y protección ambiental.',
-    icon: Leaf,
+    icon: Katun08,
     border: 'border-slate-200', iconBg: 'bg-teal-600', ctaBg: 'bg-[#56A947]', tag: 'badge-teal',
   },
   {
     code: 'dimension-4', slug: 'territorial',
     name: 'Guatemala Urbana y Rural',
     description: 'Desarrollo territorial equilibrado e infraestructura inclusiva.',
-    icon: Map,
+    icon: Katun09,
     border: 'border-slate-200', iconBg: 'bg-amber-600', ctaBg: 'bg-[#F1BF3A]', tag: 'badge-amber',
   },
   {
     code: 'dimension-5', slug: 'estado',
     name: 'Estado como Garante de los Derechos',
     description: 'Gobernabilidad democrática, institucionalidad y transparencia.',
-    icon: Shield,
+    icon: Katun10,
     border: 'border-slate-200', iconBg: 'bg-red-600', ctaBg: 'bg-[#6CB6E8]', tag: 'badge-red',
   },
 ];
@@ -123,6 +128,16 @@ const KatunHome = () => {
       });
   }, []);
 
+  const documentPreviewCards = [
+    ...featuredDocs.map((doc) => ({
+      id: doc.id,
+      title: doc.title,
+      href: doc.pdf_url || (doc as any).word_url || `/documentos/${doc.id}`,
+      external: !!(doc.pdf_url || (doc as any).word_url),
+      isDummy: false,
+    })),
+  ];
+
   return (
   <div>
     <HeroSlider />
@@ -156,10 +171,10 @@ const KatunHome = () => {
             Estructura del Plan
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Las 5 Dimensiones del K'atun
+            Los 5 Ejes del K'atun
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            El Plan Nacional se organiza en cinco dimensiones estratégicas que
+            El Plan Nacional se organiza en cinco ejes estratégicos que
             definen la visión integral del país hacia 2032.
           </p>
           <img src={Linea} alt="" className="linea mt-8" />
@@ -167,13 +182,12 @@ const KatunHome = () => {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-5">
           {dimensions.map((d, i) => {
-            const Icon = d.icon;
             return (
               <AnimatedSection key={d.code} delay={i * 80} className="h-full">
                 <div className={`flex h-full flex-col rounded-[2rem] border bg-[#F3F1EF] ${d.border} shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg`}>
                   <div className="flex flex-1 flex-col items-center px-7 pb-8 pt-10 text-center">
-                    <div className={`mb-6 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ${d.iconBg}`}>
-                      <Icon className="h-8 w-8 text-white" />
+                    <div className={`mb-6 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl`}>
+                      <img src={d.icon} alt="" className="h-100 w-100 object-contain" />
                     </div>
                     <span className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-slate-400">
                       Eje {i + 1}
@@ -218,16 +232,10 @@ const KatunHome = () => {
 
         {/* Survey CTA */}
         <AnimatedSection delay={100}>
-          <div className="bg-gradient-brand rounded-3xl p-8 sm:p-10 mb-10 flex flex-col sm:flex-row items-center gap-8">
-            <div className="flex-1 text-white">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center shrink-0">
-                  <ClipboardList className="h-7 w-7 text-white" />
-                </div>
-                <span className="text-sm font-semibold text-white/75 uppercase tracking-wider">Encuesta</span>
-              </div>
+          <div className="bg-[#4FC4FF] rounded-3xl p-8 sm:p-10 mb-10 flex flex-col sm:flex-row items-center gap-8">
+            <div className="flex-1 text-slate-600">
               <h3 className="text-2xl sm:text-3xl font-bold mb-3">Encuesta Digital Nacional</h3>
-              <p className="text-white/75 leading-relaxed max-w-xl">
+              <p className="leading-relaxed max-w-xl text-slate-600">
                 Responde la encuesta oficial del proceso participativo. Tu opinión sobre las cinco dimensiones
                 del K'atun contribuye directamente al Plan Nacional de Desarrollo Guatemala 2032.
               </p>
@@ -350,7 +358,52 @@ const KatunHome = () => {
           <img src={Linea} alt="" className="linea mt-8" />
         </div>
 
-        {featuredDocs.length === 0 ? (
+        <div className="mb-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {documentPreviewCards.map((doc, i) => {
+            const titleParts = doc.title.split(' ');
+            const cardContent = (
+              <>
+                <div className="flex min-h-[360px] items-center justify-center rounded-[1.25rem_10rem_1.25rem_10rem] bg-[#BEEBFA] px-10 py-12 text-center shadow-[0_16px_40px_rgba(79,196,255,0.14)] transition-transform duration-300 group-hover:-translate-y-1">
+                  <h3 className="max-w-[14ch] text-3xl font-normal leading-[1.05] text-[#262262] sm:text-[2.15rem]">
+                    <span className="font-bold">{titleParts.slice(0, 2).join(' ')}</span>{' '}
+                    {titleParts.slice(2).join(' ')}
+                  </h3>
+                </div>
+                <div className="mt-6 flex justify-center">
+                  <span className="inline-flex items-center rounded-full bg-[#4FC4FF] px-7 py-3 text-xl font-bold uppercase tracking-wide text-white shadow-[0_10px_24px_rgba(79,196,255,0.28)]">
+                    Descarga
+                  </span>
+                </div>
+              </>
+            );
+
+            return (
+              <AnimatedSection key={doc.id} delay={i * 80}>
+                {doc.external && !doc.isDummy ? (
+                  <a
+                    href={doc.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className="group block"
+                  >
+                    {cardContent}
+                  </a>
+                ) : doc.isDummy ? (
+                  <div className="group block">
+                    {cardContent}
+                  </div>
+                ) : (
+                  <Link to={doc.href} className="group block">
+                    {cardContent}
+                  </Link>
+                )}
+              </AnimatedSection>
+            );
+          })}
+        </div>
+
+        {false && (featuredDocs.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
             <FileText className="h-12 w-12 mx-auto mb-3 opacity-40" />
             <p className="text-sm">No hay documentos disponibles aún.</p>
@@ -431,7 +484,7 @@ const KatunHome = () => {
               );
             })}
           </div>
-        )}
+        ))}
 
         <div className="text-center">
           <Link

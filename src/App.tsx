@@ -49,12 +49,17 @@ function LoaderWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <TopBar />
       <Header />
       <SocialSidebar />
-      <main className="flex-1 pt-16">{children}</main>
+      <main className="flex-1 pt-[calc(var(--topbar-h)+var(--header-h))]">
+        {isHome ? <div className="-mt-16">{children}</div> : children}
+      </main>
       <Footer />
     </div>
   );
