@@ -5,7 +5,8 @@ import Redes2 from '../assets/footer/REDES-02.png';
 import Redes3 from '../assets/footer/REDES-03.png';
 import Redes4 from '../assets/footer/REDES-04.png';
 import Linea from '../assets/footer/LINEA.png';
-import SegeplanLogo from '/images/segeplan-logo.jpg';
+import KatunLogo from '../assets/logos/KATUN-03.png';
+import SegeplanLogo from '../assets/logoFooter.png';
 
 const SEGEPLAN_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Logotipo-Secretar%C3%ADa_de_Planificaci%C3%B3n_y_Programaci%C3%B3n_de_la_Presidencia-SEGEPLAN-_H.png';
 const RED_CIUDADANA_LOGO = 'https://redciudadana.org/logo_red_ciudadana.png';
@@ -28,11 +29,12 @@ const Footer = () => (
         <div className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-16">
           {/* K'atun 2032 */}
           <div className="flex flex-col items-center gap-2 group">
-            <div className="flex items-center justify-center h-16 px-6 rounded-xl borde group-hover:border-slate-200 transition-colors">
-              <span className="font-bold text-slate-800 text-lg tracking-tight leading-tight text-center">
-                K'atun<br />
-                <span className="text-brand-600">2032</span>
-              </span>
+            <div className="flex items-center justify-center h-16 px-6 rounded-xl transition-colors">
+              <img
+                src={KatunLogo}
+                alt="K'atun 2032"
+                className="h-16 w-auto object-contain"
+              />
             </div>
             <span className="text-xs text-slate-400">Plan Nacional de Desarrollo</span>
           </div>
@@ -46,7 +48,7 @@ const Footer = () => (
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-2 group"
           >
-            <div className="flex items-center justify-center h-16 px-4 rounded-xl border group-hover:border-slate-200 transition-colors">
+            <div className="flex items-center justify-center h-16 px-4 rounded-xl group-hover:border-slate-200 transition-colors">
               <img
                 src={SEGEPLAN_LOGO}
                 alt="SEGEPLAN"
@@ -70,7 +72,7 @@ const Footer = () => (
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-2 group"
           >
-            <div className="flex items-center justify-center h-16 px-4 rounded-xl border group-hover:border-slate-200 transition-colors">
+            <div className="flex items-center justify-center h-16 px-4 rounded-xl group-hover:border-slate-200 transition-colors">
               <img
                 src={RED_CIUDADANA_LOGO}
                 alt="Red Ciudadana"
@@ -96,11 +98,7 @@ const Footer = () => (
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <img src={SegeplanLogo} alt="SEGEPLAN" className="h-12 w-auto rounded-lg" />
-              <div>
-                <div className="text-white font-bold text-sm">SEGEPLAN</div>
-                <div className="text-slate-400 text-xs">Secretaría de Planificación</div>
-              </div>
+              <img src={SegeplanLogo} alt="SEGEPLAN" className="h-12 w-auto object-contain" />
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
               Plataforma de participación ciudadana para la actualización del

@@ -25,7 +25,7 @@ const HeroSlider = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-[calc(100vh-100px)] overflow-hidden">
       <div className="absolute inset-0">
         <video
           autoPlay
@@ -41,7 +41,7 @@ const HeroSlider = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-brand-900/35 via-transparent to-transparent" />
       </div>
 
-      <div className="relative z-10 flex min-h-screen flex-col justify-center py-0">
+      <div className="relative z-10 flex min-h-[calc(100vh-100px)] flex-col justify-center py-0">
         <div className="container-wide w-full">
           <div className="mx-auto max-w-2xl space-y-10 text-left text-white">
             <div className="relative min-h-[18rem] sm:min-h-[20rem]">
