@@ -15,6 +15,13 @@ import Katun10 from '../assets/iconos/KATUN-10.png';
 
 const dimensions = [
   {
+    code: 'dimension-4', slug: 'territorial',
+    name: 'Guatemala Urbana y Rural',
+    description: 'Desarrollo territorial equilibrado e infraestructura inclusiva.',
+    icon: Katun09,
+    border: 'border-slate-200', iconBg: 'bg-amber-600', ctaBg: 'bg-[#F1BF3A]', tag: 'badge-amber',
+  },
+  {
     code: 'dimension-1', slug: 'bienestar',
     name: 'Bienestar para la Gente',
     description: 'Desarrollo humano, salud, educación y reducción de la pobreza.',
@@ -36,15 +43,8 @@ const dimensions = [
     border: 'border-slate-200', iconBg: 'bg-teal-600', ctaBg: 'bg-[#56A947]', tag: 'badge-teal',
   },
   {
-    code: 'dimension-4', slug: 'territorial',
-    name: 'Guatemala Urbana y Rural',
-    description: 'Desarrollo territorial equilibrado e infraestructura inclusiva.',
-    icon: Katun09,
-    border: 'border-slate-200', iconBg: 'bg-amber-600', ctaBg: 'bg-[#F1BF3A]', tag: 'badge-amber',
-  },
-  {
     code: 'dimension-5', slug: 'estado',
-    name: 'Estado como Garante de los Derechos',
+    name: 'Estado como Conductor del Desarrollo',
     description: 'Gobernabilidad democrática, institucionalidad y transparencia.',
     icon: Katun10,
     border: 'border-slate-200', iconBg: 'bg-red-600', ctaBg: 'bg-[#6CB6E8]', tag: 'badge-red',
@@ -171,11 +171,10 @@ const KatunHome = () => {
             Estructura del Plan
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Los 5 Ejes del K'atun
+            Los 5 Ejes del K'atun 2032
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            El Plan Nacional se organiza en cinco ejes estratégicos que
-            definen la visión integral del país hacia 2032.
+            El Plan Nacional se organiza en cinco ejes estratégicos.
           </p>
           <img src={Linea} alt="" className="linea mt-8" />
         </div>

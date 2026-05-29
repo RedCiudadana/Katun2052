@@ -101,8 +101,8 @@ const Footer = () => (
               <img src={SegeplanLogo} alt="SEGEPLAN" className="h-12 w-auto object-contain" />
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Plataforma de participación ciudadana para la actualización del
-              Plan Nacional de Desarrollo K'atun: Nuestra Guatemala 2032.
+              Es el ente de planificación del Estado, que asesora y asiste técnicamente a las instituciones públicas y al Sistema de Consejos de Desarrollo, 
+              para vincular los procesos de políticas públicas, planificación y programación con el Plan y la Política Nacional de Desarrollo, así como para su debido seguimiento y evaluación.
             </p>
             <div className="pt-2">
               <p className="text-xs text-slate-500 mb-2">Implementado con la Asistencia Técnica de:</p>

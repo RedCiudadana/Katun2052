@@ -11,6 +11,11 @@ const slides = [
     text:
       'Guatemala y el mundo cambiaron, nuestros problemas y metas también. ¡Actualicemos el Plan Nacional de Desarrollo para que tu voz sea el motor de la Guatemala del 2052!',
   },
+  {
+    title: '¡Actualicemos el Plan Nacional de Desarrollo!',
+    text:
+      'Participa, porque tu voz es el motor de la Guatemala del 2052: el país que soñamos hoy será la realidad de las futuras generaciones.',
+  },
 ];
 
 const HeroSlider = () => {
@@ -19,7 +24,7 @@ const HeroSlider = () => {
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       setActiveSlide((current) => (current + 1) % slides.length);
-    }, 6000);
+    }, 10000);
 
     return () => window.clearInterval(intervalId);
   }, []);
