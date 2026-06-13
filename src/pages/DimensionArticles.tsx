@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield, ChevronDown } from 'lucide-react';
+import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield, ChevronDown, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download } from 'lucide-react';
 import { dimensionService, Dimension, DimensionArticle, DimensionComment } from '../services/dimensionService';
 
 const iconMap: Record<string, React.ComponentType<any>> = {
@@ -20,6 +20,130 @@ const colorMap: Record<string, { bg: string; text: string; accent: string }> = {
   'orange':  { bg: 'bg-orange-50',  text: 'text-orange-900',  accent: 'bg-orange-500' },
   'red':     { bg: 'bg-red-50',     text: 'text-red-900',     accent: 'bg-red-500' },
 };
+
+function PdfBookViewer({ url, title }: { url: string; title: string }) {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState<number | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [inputPage, setInputPage] = useState('1');
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Build URL with page fragment for browsers that support it
+  const pdfSrc = `${url}#page=${page}&toolbar=1&navpanes=0&scrollbar=1&view=FitH`;
+
+  const go = (n: number) => {
+    const next = Math.max(1, totalPages ? Math.min(n, totalPages) : n);
+    setPage(next);
+    setInputPage(String(next));
+  };
+
+  const handleInputKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const n = parseInt(inputPage, 10);
+      if (!isNaN(n)) go(n);
+    }
+  };
+
+  return (
+    <div className={`${fullscreen ? 'fixed inset-0 z-50 bg-slate-900 flex flex-col' : 'relative'}`}>
+      {/* Toolbar */}
+      <div className={`flex items-center gap-3 px-5 py-3 ${fullscreen ? 'bg-slate-800 text-white' : 'bg-slate-900 text-white rounded-t-2xl'}`}>
+        <BookOpen className="h-4 w-4 text-brand-400 shrink-0" />
+        <span className="text-sm font-semibold truncate flex-1">{title}</span>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => go(page - 1)}
+            disabled={page <= 1}
+            className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-colors"
+            aria-label="Página anterior"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <div className="flex items-center gap-1.5 text-xs">
+            <input
+              value={inputPage}
+              onChange={e => setInputPage(e.target.value)}
+              onKeyDown={handleInputKey}
+              onBlur={() => { const n = parseInt(inputPage, 10); if (!isNaN(n)) go(n); else setInputPage(String(page)); }}
+              className="w-12 text-center bg-white/10 border border-white/20 rounded-lg py-1 px-1 text-white focus:outline-none focus:ring-1 focus:ring-brand-400"
+            />
+            {totalPages && <span className="text-slate-400">/ {totalPages}</span>}
+          </div>
+          <button
+            onClick={() => go(page + 1)}
+            disabled={totalPages !== null && page >= totalPages}
+            className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-colors"
+            aria-label="Página siguiente"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <div className="w-px h-4 bg-white/20 mx-1" />
+          <a
+            href={url}
+            download
+            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label="Descargar PDF"
+          >
+            <Download className="h-4 w-4" />
+          </a>
+          <button
+            onClick={() => setFullscreen(f => !f)}
+            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label={fullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+          >
+            {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          </button>
+        </div>
+      </div>
+
+      {/* PDF iframe */}
+      <div className={`${fullscreen ? 'flex-1' : 'h-[640px]'} bg-slate-700 ${!fullscreen ? 'rounded-b-2xl overflow-hidden' : ''}`}>
+        <iframe
+          ref={iframeRef}
+          key={pdfSrc}
+          src={pdfSrc}
+          className="w-full h-full border-0"
+          title={title}
+          onLoad={() => {
+            // Attempt to read page count via iframe contentWindow (only works same-origin)
+            try {
+              const win = iframeRef.current?.contentWindow as any;
+              const count = win?.PDFViewerApplication?.pdfDocument?.numPages;
+              if (count) setTotalPages(count);
+            } catch {
+              // cross-origin, skip
+            }
+          }}
+        />
+      </div>
+
+      {/* Bottom page navigation bar (non-fullscreen only) */}
+      {!fullscreen && (
+        <div className="flex items-center justify-center gap-4 pt-4 pb-1">
+          <button
+            onClick={() => go(page - 1)}
+            disabled={page <= 1}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Anterior
+          </button>
+          <span className="text-sm text-slate-500">
+            Página {page}{totalPages ? ` de ${totalPages}` : ''}
+          </span>
+          <button
+            onClick={() => go(page + 1)}
+            disabled={totalPages !== null && page >= totalPages}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition-colors"
+          >
+            Siguiente
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const DimensionArticles = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -152,6 +276,22 @@ const DimensionArticles = () => {
           </div>
         </div>
       </section>
+
+      {/* PDF Book Viewer */}
+      {dimension.pdf_url && (
+        <div className="container-wide py-8">
+          <div className="mb-4 flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-brand-600" />
+            <h2 className="text-lg font-bold text-slate-900">
+              {dimension.pdf_title || 'Documento del Eje'}
+            </h2>
+          </div>
+          <PdfBookViewer
+            url={dimension.pdf_url}
+            title={dimension.pdf_title || dimension.name}
+          />
+        </div>
+      )}
 
       <div className="container-wide py-6 sm:py-10">
 

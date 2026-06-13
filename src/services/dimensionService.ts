@@ -10,6 +10,8 @@ export interface Dimension {
   icon: string;
   color: string;
   order_index: number;
+  pdf_url: string | null;
+  pdf_title: string | null;
 }
 
 export interface DimensionArticle {

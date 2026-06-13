@@ -22,6 +22,7 @@ import AdminComments from './pages/admin/AdminComments';
 import AdminSurvey from './pages/admin/AdminSurvey';
 import AdminPress from './pages/admin/AdminPress';
 import AdminParticipacion from './pages/admin/AdminParticipacion';
+import AdminDimensions from './pages/admin/AdminDimensions';
 import SalaDePrensaPage from './pages/SalaDePrensaPage';
 import PressPostDetail from './pages/PressPostDetail';
 import SearchResults from './pages/SearchResults';
@@ -86,6 +87,7 @@ function App() {
             <Route path="encuesta" element={<AdminSurvey />} />
             <Route path="prensa" element={<AdminPress />} />
             <Route path="participacion" element={<AdminParticipacion />} />
+            <Route path="ejes" element={<AdminDimensions />} />
           </Route>
 
           {/* Public routes */}
