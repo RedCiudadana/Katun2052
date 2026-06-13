@@ -278,20 +278,33 @@ const DimensionArticles = () => {
       </section>
 
       {/* PDF Book Viewer */}
-      {dimension.pdf_url && (
-        <div className="container-wide py-8">
-          <div className="mb-4 flex items-center gap-2">
-            <BookOpen className="h-5 w-5 text-brand-600" />
-            <h2 className="text-lg font-bold text-slate-900">
-              {dimension.pdf_title || 'Documento del Eje'}
-            </h2>
-          </div>
+      <div className="container-wide py-8">
+        <div className="mb-4 flex items-center gap-2">
+          <BookOpen className="h-5 w-5 text-brand-600" />
+          <h2 className="text-lg font-bold text-slate-900">
+            {dimension.pdf_title || 'Documento del Eje'}
+          </h2>
+        </div>
+        {dimension.pdf_url ? (
           <PdfBookViewer
             url={dimension.pdf_url}
             title={dimension.pdf_title || dimension.name}
           />
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4 py-16 bg-white border-2 border-dashed border-slate-200 rounded-2xl text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center">
+              <BookOpen className="h-8 w-8 text-slate-400" />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-700 mb-1">Documento no disponible aún</p>
+              <p className="text-sm text-slate-400 max-w-xs">
+                El administrador puede subir el PDF de este eje desde{' '}
+                <span className="font-medium text-brand-600">Panel Admin → Ejes K'atun</span>.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="container-wide py-6 sm:py-10">
 
