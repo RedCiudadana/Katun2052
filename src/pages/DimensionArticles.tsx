@@ -1,7 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield, ChevronDown, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download } from 'lucide-react';
+import { ArrowLeft, MessageSquare, FileText, Send, CheckCircle, Heart, TrendingUp, Leaf, Map, Shield, ChevronDown, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download, Loader2 } from 'lucide-react';
 import { dimensionService, Dimension, DimensionArticle, DimensionComment } from '../services/dimensionService';
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).href;
 
 const iconMap: Record<string, React.ComponentType<any>> = {
   'heart': Heart,
@@ -21,121 +27,201 @@ const colorMap: Record<string, { bg: string; text: string; accent: string }> = {
   'red':     { bg: 'bg-red-50',     text: 'text-red-900',     accent: 'bg-red-500' },
 };
 
-function PdfBookViewer({ url, title }: { url: string; title: string }) {
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState<number | null>(null);
-  const [fullscreen, setFullscreen] = useState(false);
-  const [inputPage, setInputPage] = useState('1');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+// Renders a single PDF page onto a <canvas>
+function PdfPage({ doc, pageNum, containerWidth }: {
+  doc: any;
+  pageNum: number;
+  containerWidth: number;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [rendering, setRendering] = useState(true);
 
-  // Build URL with page fragment for browsers that support it
-  const pdfSrc = `${url}#page=${page}&toolbar=1&navpanes=0&scrollbar=1&view=FitH`;
+  useEffect(() => {
+    if (!doc || pageNum < 1 || !canvasRef.current) return;
+    let cancelled = false;
+    setRendering(true);
 
-  const go = (n: number) => {
-    const next = Math.max(1, totalPages ? Math.min(n, totalPages) : n);
-    setPage(next);
-    setInputPage(String(next));
-  };
+    doc.getPage(pageNum).then((page: any) => {
+      if (cancelled) return;
+      const viewport = page.getViewport({ scale: 1 });
+      const scale = containerWidth / viewport.width;
+      const scaled = page.getViewport({ scale });
 
-  const handleInputKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const n = parseInt(inputPage, 10);
-      if (!isNaN(n)) go(n);
-    }
-  };
+      const canvas = canvasRef.current!;
+      canvas.width = scaled.width;
+      canvas.height = scaled.height;
+
+      const ctx = canvas.getContext('2d')!;
+      page.render({ canvasContext: ctx, viewport: scaled }).promise.then(() => {
+        if (!cancelled) setRendering(false);
+      });
+    });
+
+    return () => { cancelled = true; };
+  }, [doc, pageNum, containerWidth]);
 
   return (
-    <div className={`${fullscreen ? 'fixed inset-0 z-50 bg-slate-900 flex flex-col' : 'relative'}`}>
-      {/* Toolbar */}
-      <div className={`flex items-center gap-3 px-5 py-3 ${fullscreen ? 'bg-slate-800 text-white' : 'bg-slate-900 text-white rounded-t-2xl'}`}>
+    <div className="relative flex-1 flex items-center justify-center bg-white">
+      {rendering && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white">
+          <Loader2 className="h-6 w-6 animate-spin text-slate-300" />
+        </div>
+      )}
+      <canvas ref={canvasRef} className="w-full h-auto block" />
+    </div>
+  );
+}
+
+function PdfBookViewer({ url, title }: { url: string; title: string }) {
+  // spread = pair index (1-based). Spread 1 = pages 1+2, spread 2 = pages 3+4…
+  const [spread, setSpread] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [loadError, setLoadError] = useState('');
+  const [fullscreen, setFullscreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [pageWidth, setPageWidth] = useState(400);
+
+  const totalSpreads = totalPages ? Math.ceil(totalPages / 2) : 0;
+  const leftPage = spread * 2 - 1;        // always odd
+  const rightPage = spread * 2;            // even, may exceed totalPages
+
+  // Load the PDF
+  useEffect(() => {
+    let cancelled = false;
+    setPdfDoc(null);
+    setLoadError('');
+    setTotalPages(0);
+    setSpread(1);
+
+    pdfjsLib.getDocument({ url, withCredentials: false }).promise.then(doc => {
+      if (!cancelled) {
+        setPdfDoc(doc);
+        setTotalPages(doc.numPages);
+      }
+    }).catch(() => {
+      if (!cancelled) setLoadError('No se pudo cargar el PDF. Verifica que la URL sea accesible.');
+    });
+
+    return () => { cancelled = true; };
+  }, [url]);
+
+  // Measure container to size each page canvas correctly
+  const measureContainer = useCallback(() => {
+    if (!containerRef.current) return;
+    // Each page takes roughly half of the book area minus spine/padding
+    const w = Math.floor((containerRef.current.offsetWidth - 48) / 2);
+    setPageWidth(Math.max(200, w));
+  }, []);
+
+  useEffect(() => {
+    measureContainer();
+    const ro = new ResizeObserver(measureContainer);
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [measureContainer, fullscreen]);
+
+  const prevSpread = () => setSpread(s => Math.max(1, s - 1));
+  const nextSpread = () => setSpread(s => Math.min(totalSpreads || s, s + 1));
+
+  const pageLabel = totalPages
+    ? rightPage <= totalPages
+      ? `Páginas ${leftPage}–${rightPage} de ${totalPages}`
+      : `Página ${leftPage} de ${totalPages}`
+    : 'Cargando…';
+
+  return (
+    <div className={fullscreen ? 'fixed inset-0 z-50 bg-slate-950 flex flex-col' : 'relative'}>
+      {/* ── Toolbar ── */}
+      <div className={`flex items-center gap-3 px-5 py-3 ${fullscreen ? 'bg-slate-900' : 'bg-slate-900 rounded-t-2xl'} text-white shrink-0`}>
         <BookOpen className="h-4 w-4 text-brand-400 shrink-0" />
         <span className="text-sm font-semibold truncate flex-1">{title}</span>
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => go(page - 1)}
-            disabled={page <= 1}
-            className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-colors"
-            aria-label="Página anterior"
-          >
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button onClick={prevSpread} disabled={spread <= 1}
+            className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-colors" aria-label="Páginas anteriores">
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <div className="flex items-center gap-1.5 text-xs">
-            <input
-              value={inputPage}
-              onChange={e => setInputPage(e.target.value)}
-              onKeyDown={handleInputKey}
-              onBlur={() => { const n = parseInt(inputPage, 10); if (!isNaN(n)) go(n); else setInputPage(String(page)); }}
-              className="w-12 text-center bg-white/10 border border-white/20 rounded-lg py-1 px-1 text-white focus:outline-none focus:ring-1 focus:ring-brand-400"
-            />
-            {totalPages && <span className="text-slate-400">/ {totalPages}</span>}
-          </div>
-          <button
-            onClick={() => go(page + 1)}
-            disabled={totalPages !== null && page >= totalPages}
-            className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-colors"
-            aria-label="Página siguiente"
-          >
+          <span className="text-xs text-slate-300 min-w-[130px] text-center">{pageLabel}</span>
+          <button onClick={nextSpread} disabled={!totalSpreads || spread >= totalSpreads}
+            className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-colors" aria-label="Páginas siguientes">
             <ChevronRight className="h-4 w-4" />
           </button>
           <div className="w-px h-4 bg-white/20 mx-1" />
-          <a
-            href={url}
-            download
-            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-            aria-label="Descargar PDF"
-          >
+          <a href={url} download className="p-1.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Descargar PDF">
             <Download className="h-4 w-4" />
           </a>
-          <button
-            onClick={() => setFullscreen(f => !f)}
+          <button onClick={() => setFullscreen(f => !f)}
             className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
-            aria-label={fullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
-          >
+            aria-label={fullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}>
             {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
-      {/* PDF iframe */}
-      <div className={`${fullscreen ? 'flex-1' : 'h-[640px]'} bg-slate-700 ${!fullscreen ? 'rounded-b-2xl overflow-hidden' : ''}`}>
-        <iframe
-          ref={iframeRef}
-          key={pdfSrc}
-          src={pdfSrc}
-          className="w-full h-full border-0"
-          title={title}
-          onLoad={() => {
-            // Attempt to read page count via iframe contentWindow (only works same-origin)
-            try {
-              const win = iframeRef.current?.contentWindow as any;
-              const count = win?.PDFViewerApplication?.pdfDocument?.numPages;
-              if (count) setTotalPages(count);
-            } catch {
-              // cross-origin, skip
-            }
-          }}
-        />
+      {/* ── Book stage ── */}
+      <div
+        className={`${fullscreen ? 'flex-1' : 'h-[620px]'} bg-slate-800 flex items-center justify-center px-6 py-6 ${!fullscreen ? 'rounded-b-2xl' : ''} overflow-hidden`}
+        ref={containerRef}
+      >
+        {loadError ? (
+          <p className="text-red-300 text-sm text-center max-w-xs">{loadError}</p>
+        ) : !pdfDoc ? (
+          <div className="flex flex-col items-center gap-3 text-slate-400">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <span className="text-sm">Cargando documento…</span>
+          </div>
+        ) : (
+          /* ── Open-book spread ── */
+          <div className="flex h-full items-stretch gap-0"
+            style={{ maxHeight: '100%', width: '100%', maxWidth: pageWidth * 2 + 48 }}>
+
+            {/* Left page */}
+            <div className="flex-1 flex flex-col overflow-hidden rounded-l-sm"
+              style={{
+                boxShadow: '-4px 0 12px rgba(0,0,0,0.5), inset -6px 0 18px rgba(0,0,0,0.15)',
+              }}>
+              <PdfPage doc={pdfDoc} pageNum={leftPage} containerWidth={pageWidth} />
+              <div className="bg-white text-center text-[10px] text-slate-400 py-1 border-t border-slate-100 shrink-0">
+                {leftPage}
+              </div>
+            </div>
+
+            {/* Book spine */}
+            <div className="w-3 shrink-0 bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400"
+              style={{ boxShadow: '0 0 8px rgba(0,0,0,0.6)' }} />
+
+            {/* Right page */}
+            <div className="flex-1 flex flex-col overflow-hidden rounded-r-sm"
+              style={{
+                boxShadow: '4px 0 12px rgba(0,0,0,0.5), inset 6px 0 18px rgba(0,0,0,0.15)',
+              }}>
+              {rightPage <= totalPages ? (
+                <>
+                  <PdfPage doc={pdfDoc} pageNum={rightPage} containerWidth={pageWidth} />
+                  <div className="bg-white text-center text-[10px] text-slate-400 py-1 border-t border-slate-100 shrink-0">
+                    {rightPage}
+                  </div>
+                </>
+              ) : (
+                /* blank back page for last odd-page docs */
+                <div className="flex-1 bg-slate-50 rounded-r-sm" />
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Bottom page navigation bar (non-fullscreen only) */}
+      {/* ── Bottom nav (non-fullscreen) ── */}
       {!fullscreen && (
         <div className="flex items-center justify-center gap-4 pt-4 pb-1">
-          <button
-            onClick={() => go(page - 1)}
-            disabled={page <= 1}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition-colors"
-          >
+          <button onClick={prevSpread} disabled={spread <= 1}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition-colors">
             <ChevronLeft className="h-4 w-4" />
             Anterior
           </button>
-          <span className="text-sm text-slate-500">
-            Página {page}{totalPages ? ` de ${totalPages}` : ''}
-          </span>
-          <button
-            onClick={() => go(page + 1)}
-            disabled={totalPages !== null && page >= totalPages}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition-colors"
-          >
+          <span className="text-sm text-slate-500">{pageLabel}</span>
+          <button onClick={nextSpread} disabled={!totalSpreads || spread >= totalSpreads}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 disabled:opacity-40 transition-colors">
             Siguiente
             <ChevronRight className="h-4 w-4" />
           </button>
