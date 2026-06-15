@@ -224,9 +224,11 @@ function GuatemalaMap() {
                 `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
               ).join(' ');
 
-              // Label position: shift left towards mainland to avoid coast overlap
-              const lx = bx - 12;
-              const ly = by - 6;
+              // Box dimensions for the note label
+              const boxW = 46;
+              const boxH = 22;
+              const boxX = bx - boxW / 2;
+              const boxY = by - boxH / 2;
 
               return (
                 <g className="pointer-events-none">
@@ -248,32 +250,32 @@ function GuatemalaMap() {
                     strokeDasharray="4 2.5"
                     strokeLinecap="round"
                   />
-                  {/* Country name */}
+                  {/* Note box */}
+                  <rect
+                    x={boxX}
+                    y={boxY}
+                    width={boxW}
+                    height={boxH}
+                    rx={2}
+                    ry={2}
+                    fill="white"
+                    fillOpacity={0.85}
+                    stroke="#b45309"
+                    strokeWidth={0.8}
+                  />
+                  {/* Differendum note — centered inside box */}
                   <text
-                    x={lx}
-                    y={ly}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="6"
-                    fontWeight="700"
-                    fill="#92400e"
-                    className="select-none"
-                  >
-                    Belice
-                  </text>
-                  {/* Differendum note */}
-                  <text
-                    x={lx}
-                    y={ly + 8}
+                    x={bx}
+                    y={boxY + 5}
                     textAnchor="middle"
                     fontSize="3.8"
                     fill="#78350f"
                     className="select-none"
                     fontStyle="italic"
                   >
-                    <tspan x={lx} dy="0">Diferendo territorial,</tspan>
-                    <tspan x={lx} dy="5">insular y marítimo</tspan>
-                    <tspan x={lx} dy="5">pendiente de resolver</tspan>
+                    <tspan x={bx} dy="0">Diferendo territorial,</tspan>
+                    <tspan x={bx} dy="5">insular y marítimo</tspan>
+                    <tspan x={bx} dy="5">pendiente de resolver</tspan>
                   </text>
                 </g>
               );
