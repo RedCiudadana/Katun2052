@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, FileText, Heart, TrendingUp, Leaf, Map, Shield, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download, Loader2 } from 'lucide-react';
-import { dimensionService, Dimension, DimensionArticle } from '../services/dimensionService';
+import { ArrowLeft, Heart, TrendingUp, Leaf, Map, Shield, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download, Loader2 } from 'lucide-react';
+import { dimensionService, Dimension } from '../services/dimensionService';
 import * as pdfjsLib from 'pdfjs-dist';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
@@ -17,15 +17,6 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   'shield': Shield
 };
 
-const colorMap: Record<string, { bg: string; text: string; accent: string }> = {
-  'blue':    { bg: 'bg-blue-50',    text: 'text-blue-900',    accent: 'bg-blue-500' },
-  'green':   { bg: 'bg-green-50',   text: 'text-green-900',   accent: 'bg-green-500' },
-  'emerald': { bg: 'bg-emerald-50', text: 'text-emerald-900', accent: 'bg-emerald-500' },
-  'teal':    { bg: 'bg-teal-50',    text: 'text-teal-900',    accent: 'bg-teal-500' },
-  'amber':   { bg: 'bg-amber-50',   text: 'text-amber-900',   accent: 'bg-amber-500' },
-  'orange':  { bg: 'bg-orange-50',  text: 'text-orange-900',  accent: 'bg-orange-500' },
-  'red':     { bg: 'bg-red-50',     text: 'text-red-900',     accent: 'bg-red-500' },
-};
 
 // Renders a single PDF page onto a <canvas>
 function PdfPage({ doc, pageNum, containerWidth }: {
@@ -234,7 +225,6 @@ function PdfBookViewer({ url, title }: { url: string; title: string }) {
 const DimensionArticles = () => {
   const { slug } = useParams<{ slug: string }>();
   const [dimension, setDimension] = useState<Dimension | null>(null);
-  const [articles, setArticles] = useState<DimensionArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -246,11 +236,7 @@ const DimensionArticles = () => {
     try {
       setLoading(true);
       const dimensionData = await dimensionService.getDimensionBySlug(slug);
-      if (dimensionData) {
-        setDimension(dimensionData);
-        const articlesData = await dimensionService.getDimensionArticles(dimensionData.id);
-        setArticles(articlesData);
-      }
+      if (dimensionData) setDimension(dimensionData);
     } catch (error) {
       console.error('Error loading dimension:', error);
     } finally {
@@ -274,7 +260,6 @@ const DimensionArticles = () => {
   );
 
   const IconComponent = iconMap[dimension.icon] || FileText;
-  const colors = colorMap[dimension.color] || colorMap.blue;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -326,25 +311,6 @@ const DimensionArticles = () => {
         )}
       </div>
 
-      {/* Articles */}
-      {articles.length > 0 && (
-        <div className="container-wide pb-12">
-          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 ${colors.bg} ${colors.text}`}>
-            <FileText className="h-3.5 w-3.5" />
-            Artículos del eje
-          </div>
-          <div className="space-y-5">
-            {articles.map(article => (
-              <div key={article.id} className="card bg-white p-6 sm:p-8">
-                <h2 className="text-xl font-bold text-slate-900 mb-4">{article.title}</h2>
-                <div className="text-slate-700 text-sm leading-relaxed whitespace-pre-line">
-                  {article.content}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
