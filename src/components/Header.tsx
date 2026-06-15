@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Heart, TrendingUp, Leaf, Map, Shield, Search } from 'lucide-react';
-import KatunLogo from '../assets/logos/KATUN-03.png';
+import KatunLogo from '../assets/logos/002_-_logo_katun_sege_-_horizontal_-_2052_-_nuevo_3_1.gif';
 
 const dimensions = [
   { name: 'Guatemala Urbana y Rural', slug: 'territorial', icon: Map, color: 'text-amber-500' },

@@ -1,4 +1,4 @@
-import LoaderGif from '../assets/loader.gif';
+import LoaderGif from '../assets/logos/002_-_logo_katun_sege_-_horizontal_-_2052_-_nuevo_3_1.gif';
 import './loader.css';
 
 const Loader = () => {
