@@ -224,18 +224,15 @@ function GuatemalaMap() {
                 `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
               ).join(' ');
 
-              // Anchor the box near the Guatemala/Petén border (western side of Belize)
-              // Use the midpoint of the adjacency line rather than the geographic centroid
-              const adjMidLon = BZ_ADJACENCY[Math.floor(BZ_ADJACENCY.length / 2)][0];
-              const adjMidLat = BZ_ADJACENCY[Math.floor(BZ_ADJACENCY.length / 2)][1];
-              const px = lonToX(adjMidLon) + 36; // shift right into Belize territory
-              const py = latToY(adjMidLat);
+              // Place box in upper-central area of Belize, well inside the territory
+              // lon -88.55 / lat 17.25 puts it in the northern strip, clear of the coast
+              const px = lonToX(-88.55);
+              const py = latToY(17.25);
 
               const fontSize = 7.6;
-              const lineH = fontSize * 1.45;
-              const boxPadX = 5;
-              const boxPadY = 4;
-              const boxW = 62;
+              const lineH = fontSize * 1.55;
+              const boxPadY = 5;
+              const boxW = 92;
               const boxH = lineH * 3 + boxPadY * 2;
               const boxX = px - boxW / 2;
               const boxY = py - boxH / 2;
