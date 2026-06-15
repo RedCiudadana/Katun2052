@@ -6,6 +6,15 @@ import type { Dimension, Document } from '../types/katun';
 import AnimatedSection from '../components/AnimatedSection';
 import Linea from '../assets/LINEA.png';
 
+const FALLBACK_THUMBS: Record<string, string> = {
+  plan:         'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=600',
+  lineamientos: 'https://images.pexels.com/photos/5905709/pexels-photo-5905709.jpeg?auto=compress&cs=tinysrgb&w=600',
+  diagnóstico:  'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=600',
+  estrategia:   'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600',
+  informe:      'https://images.pexels.com/photos/669619/pexels-photo-669619.jpeg?auto=compress&cs=tinysrgb&w=600',
+  otro:         'https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?auto=compress&cs=tinysrgb&w=600',
+};
+
 const getDimIcon = (code: string) => {
   const map: Record<string, React.ElementType> = {
     'dimension-1': Heart,
@@ -156,10 +165,23 @@ const Documents = () => {
               const Icon = dim ? getDimIcon(dim.code) : FileText;
               const iconColor = dim ? getDimColor(dim.code) : 'bg-slate-100 text-slate-600';
 
+              const thumb = doc.thumbnail_url || FALLBACK_THUMBS[doc.document_type] || FALLBACK_THUMBS.otro;
+
               return (
                 <AnimatedSection key={doc.id} delay={i * 60}>
-                  <div className="card bg-white p-5 sm:p-6">
-                    <div className="flex flex-col lg:flex-row gap-5">
+                  <div className="card bg-white overflow-hidden">
+                    <div className="flex flex-col lg:flex-row gap-0">
+                      {/* Thumbnail */}
+                      <div className="lg:w-48 shrink-0 h-36 lg:h-auto overflow-hidden bg-slate-100">
+                        <img
+                          src={thumb}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          onError={e => { (e.currentTarget as HTMLImageElement).src = FALLBACK_THUMBS.otro; }}
+                        />
+                      </div>
+
+                      <div className="flex flex-col lg:flex-row gap-5 flex-1 min-w-0 p-5 sm:p-6">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start gap-4">
                           <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${iconColor}`}>
@@ -214,6 +236,7 @@ const Documents = () => {
                           </a>
                         )}
                       </div>
+                      </div>{/* inner flex row */}
                     </div>
                   </div>
                 </AnimatedSection>
