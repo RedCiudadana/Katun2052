@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Heart, TrendingUp, Leaf, Map, Shield, Search } from 'lucide-react';
 import KatunLogo from '../assets/logos/KATUN-03.png';
@@ -26,8 +26,22 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const dimRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const closeDim = useCallback(() => setDimOpen(false), []);
+
+  useEffect(() => {
+    if (!dimOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (dimRef.current && !dimRef.current.contains(e.target as Node)) {
+        closeDim();
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [dimOpen, closeDim]);
 
   const isHome = location.pathname === '/';
   const transparentMode = isHome && !scrolled;
@@ -102,15 +116,17 @@ const Header = () => {
           <nav className={`hidden items-center gap-1 pr-14 md:flex lg:gap-2 ${transparentMode ? 'text-white' : 'text-slate-700'}`}>
             <Link to="/" className={linkCls(isActive('/'))}>Inicio</Link>
 
-            <div
-              className="relative"
-              onMouseEnter={() => setDimOpen(true)}
-              onMouseLeave={() => setDimOpen(false)}
-            >
-              <button className={`${linkCls(isDimActive())} flex items-center gap-1`}>
+            <div ref={dimRef} className="relative">
+              <button
+                onClick={() => setDimOpen((o) => !o)}
+                className={`${linkCls(isDimActive())} flex items-center gap-1`}
+              >
                 Ejes K'atun
                 <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${dimOpen ? 'rotate-180' : ''}`} />
               </button>
+
+              {/* Invisible bridge so mouse can reach dropdown without closing */}
+              <div className="absolute left-0 top-full h-3 w-full" />
 
               <div
                 className={`absolute left-0 top-full mt-3 w-72 rounded-2xl border border-slate-200 bg-white py-2 shadow-card-hover transition-all duration-200 ${
@@ -128,6 +144,7 @@ const Header = () => {
                     <Link
                       key={d.slug}
                       to={`/dimension-articulos/${d.slug}`}
+                      onClick={closeDim}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-800"
                     >
                       <Icon className={`h-4 w-4 shrink-0 ${d.color}`} />
