@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { Users, MessageSquare, ClipboardList, X } from 'lucide-react';
 import geojson from '../data/gt.json';
+import bzGeojson from '../data/bz.json';
 
 type DeptData = {
   department_code: string;
@@ -43,24 +44,27 @@ const GEOID_TO_ISO: Record<string, string> = {
 const W = 500;
 const H = 460;
 
-// Guatemala bounding box (WGS84) with padding
-// Extended eastward to include Belize
+// Guatemala bounding box (WGS84) with padding — extended eastward to show Belize
 const MIN_LON = -92.246256;
-const MAX_LON = -87.5;
+const MAX_LON = -87.25;
 const MIN_LAT = 13.731404;
 const MAX_LAT = 17.816020;
 
-// Simplified Belize boundary coordinates (WGS84) — clockwise outer ring
-// Source: approximate official border / adjacency line with Guatemala
-const BELIZE_COORDS: [number, number][] = [
-  [-89.224, 17.816], // NW corner (meeting point with Mexico/Petén)
-  [-88.867, 17.816], // NE corner
-  [-88.220, 16.445], // E coast north
-  [-88.105, 15.885], // SE coast
-  [-88.220, 15.610], // S tip
-  [-89.152, 15.888], // SW (Sarstún / Golfo Dulce area, border with Guatemala)
-  [-89.224, 16.404], // W border midpoint (adjacency line)
-  [-89.224, 17.816], // close
+// Western border of Belize (adjacency / differendum line with Guatemala)
+// Extracted from bz.json main polygon exterior ring — points with lon < -89.0
+const BZ_ADJACENCY: [number, number][] = [
+  [-89.22824397754086, 15.880840552492836],
+  [-89.2365122115767,  15.8939147203036],
+  [-89.23602227750116, 15.906493179450232],
+  [-89.23413509447238, 15.954944578794283],
+  [-89.2085168648659,  16.186131952296968],
+  [-89.19313966801498, 16.39262557809166],
+  [-89.18435269695574, 16.4958723769718],
+  [-89.1660674032374,  16.777009104407615],
+  [-89.14920484724416, 17.036270821074663],
+  [-89.1507278837867,  17.321032147946045],
+  [-89.15621740402241, 17.598243408553696],
+  [-89.16049616354516, 17.81431419094611],
 ];
 
 function lonToX(lon: number): number {
@@ -209,71 +213,67 @@ function GuatemalaMap() {
               );
             })}
 
-            {/* ── Belize — differendum territorial ── */}
+            {/* ── Belize — diferendo territorial ── */}
             {(() => {
-              const belizePath = BELIZE_COORDS.map(([lon, lat], i) =>
-                `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
-              ).join(' ') + ' Z';
+              type BzFeature = { geometry: { type: string; coordinates: number[][][] | number[][][][] } };
+              const bzFeature = (bzGeojson as unknown as { features: BzFeature[] }).features[0];
+              const bzPath = featureToPath(bzFeature.geometry);
+              const [bx, by] = getCentroid(bzFeature.geometry);
 
-              // Adjacency line (western border with Guatemala): same coords, just the W segment
-              const adjLine = [
-                BELIZE_COORDS[7], // NW
-                BELIZE_COORDS[6], // W midpoint
-                BELIZE_COORDS[5], // SW
-              ].map(([lon, lat], i) =>
+              const adjPath = BZ_ADJACENCY.map(([lon, lat], i) =>
                 `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
               ).join(' ');
 
-              // Centroid of Belize polygon for label placement
-              const bx = BELIZE_COORDS.reduce((s, [lon]) => s + lonToX(lon), 0) / BELIZE_COORDS.length;
-              const by = BELIZE_COORDS.reduce((s, [, lat]) => s + latToY(lat), 0) / BELIZE_COORDS.length;
+              // Label position: shift left towards mainland to avoid coast overlap
+              const lx = bx - 12;
+              const ly = by - 6;
 
               return (
                 <g className="pointer-events-none">
-                  {/* Filled area */}
+                  {/* Filled territory */}
                   <path
-                    d={belizePath}
+                    d={bzPath}
                     fill="#fef9c3"
-                    fillOpacity={0.55}
+                    fillOpacity={0.6}
                     stroke="#d97706"
-                    strokeWidth={0.6}
+                    strokeWidth={0.5}
                     strokeLinejoin="round"
                   />
-                  {/* Dashed adjacency / differendum line over the western border */}
+                  {/* Dashed adjacency / differendum line — western border */}
                   <path
-                    d={adjLine}
+                    d={adjPath}
                     fill="none"
                     stroke="#b45309"
-                    strokeWidth={1.4}
+                    strokeWidth={1.5}
                     strokeDasharray="4 2.5"
                     strokeLinecap="round"
                   />
-                  {/* Country label */}
+                  {/* Country name */}
                   <text
-                    x={bx}
-                    y={by - 8}
+                    x={lx}
+                    y={ly}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize="6.5"
+                    fontSize="6"
                     fontWeight="700"
                     fill="#92400e"
                     className="select-none"
                   >
                     Belice
                   </text>
-                  {/* Differendum note — two lines */}
+                  {/* Differendum note */}
                   <text
-                    x={bx}
-                    y={by + 2}
+                    x={lx}
+                    y={ly + 8}
                     textAnchor="middle"
-                    fontSize="4.2"
+                    fontSize="3.8"
                     fill="#78350f"
                     className="select-none"
                     fontStyle="italic"
                   >
-                    <tspan x={bx} dy="0">Diferendo territorial,</tspan>
-                    <tspan x={bx} dy="5.5">insular y marítimo</tspan>
-                    <tspan x={bx} dy="5.5">pendiente de resolver</tspan>
+                    <tspan x={lx} dy="0">Diferendo territorial,</tspan>
+                    <tspan x={lx} dy="5">insular y marítimo</tspan>
+                    <tspan x={lx} dy="5">pendiente de resolver</tspan>
                   </text>
                 </g>
               );
