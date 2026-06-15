@@ -224,11 +224,21 @@ function GuatemalaMap() {
                 `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
               ).join(' ');
 
-              // Box dimensions for the note label
-              const boxW = 46;
-              const boxH = 22;
-              const boxX = bx - boxW / 2;
-              const boxY = by - boxH / 2;
+              // Anchor the box near the Guatemala/Petén border (western side of Belize)
+              // Use the midpoint of the adjacency line rather than the geographic centroid
+              const adjMidLon = BZ_ADJACENCY[Math.floor(BZ_ADJACENCY.length / 2)][0];
+              const adjMidLat = BZ_ADJACENCY[Math.floor(BZ_ADJACENCY.length / 2)][1];
+              const px = lonToX(adjMidLon) + 36; // shift right into Belize territory
+              const py = latToY(adjMidLat);
+
+              const fontSize = 7.6;
+              const lineH = fontSize * 1.45;
+              const boxPadX = 5;
+              const boxPadY = 4;
+              const boxW = 62;
+              const boxH = lineH * 3 + boxPadY * 2;
+              const boxX = px - boxW / 2;
+              const boxY = py - boxH / 2;
 
               return (
                 <g className="pointer-events-none">
@@ -256,26 +266,26 @@ function GuatemalaMap() {
                     y={boxY}
                     width={boxW}
                     height={boxH}
-                    rx={2}
-                    ry={2}
+                    rx={2.5}
+                    ry={2.5}
                     fill="white"
-                    fillOpacity={0.85}
+                    fillOpacity={0.9}
                     stroke="#b45309"
-                    strokeWidth={0.8}
+                    strokeWidth={0.9}
                   />
                   {/* Differendum note — centered inside box */}
                   <text
-                    x={bx}
-                    y={boxY + 5}
+                    x={px}
+                    y={boxY + boxPadY + fontSize}
                     textAnchor="middle"
-                    fontSize="3.8"
+                    fontSize={fontSize}
                     fill="#78350f"
                     className="select-none"
                     fontStyle="italic"
                   >
-                    <tspan x={bx} dy="0">Diferendo territorial,</tspan>
-                    <tspan x={bx} dy="5">insular y marítimo</tspan>
-                    <tspan x={bx} dy="5">pendiente de resolver</tspan>
+                    <tspan x={px} dy="0">Diferendo territorial,</tspan>
+                    <tspan x={px} dy={lineH}>insular y marítimo</tspan>
+                    <tspan x={px} dy={lineH}>pendiente de resolver</tspan>
                   </text>
                 </g>
               );
