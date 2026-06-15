@@ -128,16 +128,6 @@ const KatunHome = () => {
       });
   }, []);
 
-  const documentPreviewCards = [
-    ...featuredDocs.map((doc) => ({
-      id: doc.id,
-      title: doc.title,
-      href: doc.pdf_url || (doc as any).word_url || `/documentos/${doc.id}`,
-      external: !!(doc.pdf_url || (doc as any).word_url),
-      isDummy: false,
-    })),
-  ];
-
   return (
   <div>
     <HeroSlider />
@@ -357,52 +347,7 @@ const KatunHome = () => {
           <img src={Linea} alt="" className="linea mt-8" />
         </div>
 
-        <div className="mb-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {documentPreviewCards.map((doc, i) => {
-            const titleParts = doc.title.split(' ');
-            const cardContent = (
-              <>
-                <div className="flex min-h-[360px] items-center justify-center rounded-[1.25rem_10rem_1.25rem_10rem] bg-[#BEEBFA] px-10 py-12 text-center shadow-[0_16px_40px_rgba(79,196,255,0.14)] transition-transform duration-300 group-hover:-translate-y-1">
-                  <h3 className="max-w-[14ch] text-3xl font-normal leading-[1.05] text-[#262262] sm:text-[2.15rem]">
-                    <span className="font-bold">{titleParts.slice(0, 2).join(' ')}</span>{' '}
-                    {titleParts.slice(2).join(' ')}
-                  </h3>
-                </div>
-                <div className="mt-6 flex justify-center">
-                  <span className="inline-flex items-center rounded-full bg-[#4FC4FF] px-7 py-3 text-xl font-bold uppercase tracking-wide text-white shadow-[0_10px_24px_rgba(79,196,255,0.28)]">
-                    Descarga
-                  </span>
-                </div>
-              </>
-            );
-
-            return (
-              <AnimatedSection key={doc.id} delay={i * 80}>
-                {doc.external && !doc.isDummy ? (
-                  <a
-                    href={doc.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="group block"
-                  >
-                    {cardContent}
-                  </a>
-                ) : doc.isDummy ? (
-                  <div className="group block">
-                    {cardContent}
-                  </div>
-                ) : (
-                  <Link to={doc.href} className="group block">
-                    {cardContent}
-                  </Link>
-                )}
-              </AnimatedSection>
-            );
-          })}
-        </div>
-
-        {false && (featuredDocs.length === 0 ? (
+        {featuredDocs.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
             <FileText className="h-12 w-12 mx-auto mb-3 opacity-40" />
             <p className="text-sm">No hay documentos disponibles aún.</p>
@@ -417,11 +362,12 @@ const KatunHome = () => {
                 <AnimatedSection key={doc.id} delay={i * 80}>
                   <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-soft hover:shadow-md transition-shadow flex flex-col h-full">
                     {/* Thumbnail */}
-                    <div className="relative h-44 overflow-hidden bg-slate-100">
+                    <div className="relative h-48 overflow-hidden bg-slate-100">
                       <img
                         src={thumb}
                         alt={doc.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={e => { (e.currentTarget as HTMLImageElement).src = FALLBACK_THUMBS.otro; }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                       <span className={`absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full ${typeInfo.bg} ${typeInfo.text}`}>
@@ -455,9 +401,9 @@ const KatunHome = () => {
                             PDF
                           </a>
                         )}
-                        {(doc as any).word_url && (
+                        {doc.word_url && (
                           <a
-                            href={(doc as any).word_url}
+                            href={doc.word_url}
                             target="_blank"
                             rel="noopener noreferrer"
                             download
@@ -469,7 +415,7 @@ const KatunHome = () => {
                         )}
                         {!hasDownload && (
                           <Link
-                            to={`/documentos/${doc.id}`}
+                            to={`/documento/${doc.id}`}
                             className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
@@ -483,7 +429,7 @@ const KatunHome = () => {
               );
             })}
           </div>
-        ))}
+        )}
 
         <div className="text-center">
           <Link
