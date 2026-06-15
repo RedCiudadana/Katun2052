@@ -44,10 +44,24 @@ const W = 500;
 const H = 460;
 
 // Guatemala bounding box (WGS84) with padding
+// Extended eastward to include Belize
 const MIN_LON = -92.246256;
-const MAX_LON = -88.220937;
+const MAX_LON = -87.5;
 const MIN_LAT = 13.731404;
 const MAX_LAT = 17.816020;
+
+// Simplified Belize boundary coordinates (WGS84) — clockwise outer ring
+// Source: approximate official border / adjacency line with Guatemala
+const BELIZE_COORDS: [number, number][] = [
+  [-89.224, 17.816], // NW corner (meeting point with Mexico/Petén)
+  [-88.867, 17.816], // NE corner
+  [-88.220, 16.445], // E coast north
+  [-88.105, 15.885], // SE coast
+  [-88.220, 15.610], // S tip
+  [-89.152, 15.888], // SW (Sarstún / Golfo Dulce area, border with Guatemala)
+  [-89.224, 16.404], // W border midpoint (adjacency line)
+  [-89.224, 17.816], // close
+];
 
 function lonToX(lon: number): number {
   return ((lon - MIN_LON) / (MAX_LON - MIN_LON)) * W;
@@ -194,17 +208,95 @@ function GuatemalaMap() {
                 </g>
               );
             })}
+
+            {/* ── Belize — differendum territorial ── */}
+            {(() => {
+              const belizePath = BELIZE_COORDS.map(([lon, lat], i) =>
+                `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
+              ).join(' ') + ' Z';
+
+              // Adjacency line (western border with Guatemala): same coords, just the W segment
+              const adjLine = [
+                BELIZE_COORDS[7], // NW
+                BELIZE_COORDS[6], // W midpoint
+                BELIZE_COORDS[5], // SW
+              ].map(([lon, lat], i) =>
+                `${i === 0 ? 'M' : 'L'}${lonToX(lon).toFixed(1)},${latToY(lat).toFixed(1)}`
+              ).join(' ');
+
+              // Centroid of Belize polygon for label placement
+              const bx = BELIZE_COORDS.reduce((s, [lon]) => s + lonToX(lon), 0) / BELIZE_COORDS.length;
+              const by = BELIZE_COORDS.reduce((s, [, lat]) => s + latToY(lat), 0) / BELIZE_COORDS.length;
+
+              return (
+                <g className="pointer-events-none">
+                  {/* Filled area */}
+                  <path
+                    d={belizePath}
+                    fill="#fef9c3"
+                    fillOpacity={0.55}
+                    stroke="#d97706"
+                    strokeWidth={0.6}
+                    strokeLinejoin="round"
+                  />
+                  {/* Dashed adjacency / differendum line over the western border */}
+                  <path
+                    d={adjLine}
+                    fill="none"
+                    stroke="#b45309"
+                    strokeWidth={1.4}
+                    strokeDasharray="4 2.5"
+                    strokeLinecap="round"
+                  />
+                  {/* Country label */}
+                  <text
+                    x={bx}
+                    y={by - 8}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fontSize="6.5"
+                    fontWeight="700"
+                    fill="#92400e"
+                    className="select-none"
+                  >
+                    Belice
+                  </text>
+                  {/* Differendum note — two lines */}
+                  <text
+                    x={bx}
+                    y={by + 2}
+                    textAnchor="middle"
+                    fontSize="4.2"
+                    fill="#78350f"
+                    className="select-none"
+                    fontStyle="italic"
+                  >
+                    <tspan x={bx} dy="0">Diferendo territorial,</tspan>
+                    <tspan x={bx} dy="5.5">insular y marítimo</tspan>
+                    <tspan x={bx} dy="5.5">pendiente de resolver</tspan>
+                  </text>
+                </g>
+              );
+            })()}
           </svg>
 
           {/* Legend */}
-          <div className="flex items-center gap-3 mt-4 text-xs text-slate-500">
-            <span>Menos participación</span>
-            <div className="flex gap-1">
-              {['#e2e8f0', '#bfdbfe', '#60a5fa', '#2563eb', '#1e40af'].map(c => (
-                <div key={c} className="w-6 h-3 rounded" style={{ background: c }} />
-              ))}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-xs text-slate-500">
+            <div className="flex items-center gap-2">
+              <span>Menos participación</span>
+              <div className="flex gap-1">
+                {['#e2e8f0', '#bfdbfe', '#60a5fa', '#2563eb', '#1e40af'].map(c => (
+                  <div key={c} className="w-6 h-3 rounded" style={{ background: c }} />
+                ))}
+              </div>
+              <span>Más participación</span>
             </div>
-            <span>Más participación</span>
+            <div className="flex items-center gap-2">
+              <svg width="28" height="10" className="shrink-0">
+                <line x1="0" y1="5" x2="28" y2="5" stroke="#b45309" strokeWidth="1.8" strokeDasharray="5 3" strokeLinecap="round" />
+              </svg>
+              <span className="text-amber-800 italic">Línea de adyacencia — diferendo territorial pendiente de resolver</span>
+            </div>
           </div>
         </div>
 
