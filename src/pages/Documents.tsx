@@ -37,6 +37,19 @@ const getDimColor = (code: string) => {
   return map[code] ?? 'bg-slate-100 text-slate-700';
 };
 
+const DOCUMENT_TYPES = [
+  'plan',
+  'diagnóstico',
+  'informe',
+  'evaluación',
+  'investigación',
+  'política pública',
+  'estrategia',
+  'marco normativo',
+  'sistematización de experiencias',
+  'otro',
+];
+
 const Documents = () => {
   const [dimensions, setDimensions]         = useState<Dimension[]>([]);
   const [documents, setDocuments]           = useState<Document[]>([]);
@@ -62,8 +75,6 @@ const Documents = () => {
     };
     load();
   }, []);
-
-  const documentTypes = Array.from(new Set(documents.map(d => d.document_type)));
 
   const filtered = documents.filter(doc => {
     if (selectedDimension !== 'all' && doc.dimension_id !== selectedDimension) return false;
@@ -97,10 +108,6 @@ const Documents = () => {
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-3">
               Documentos Oficiales
             </h1>
-            <p className="text-lg text-brand-100 max-w-2xl">
-              Documentos validados por SEGEPLAN organizados por dimensión del
-              Plan Nacional de Desarrollo K'atun 2032.
-            </p>
           </AnimatedSection>
         </div>
       </section>
@@ -137,7 +144,7 @@ const Documents = () => {
                   className="form-input"
                 >
                   <option value="all">Todos los tipos</option>
-                  {documentTypes.map(t => (
+                  {DOCUMENT_TYPES.map(t => (
                     <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
                   ))}
                 </select>
