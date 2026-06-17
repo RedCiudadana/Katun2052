@@ -36,8 +36,8 @@ No se requiere base de datos local. Toda la persistencia se gestiona a través d
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/RedCiudadana/ForoMINFIN.git
-cd ForoMINFIN
+git clone https://github.com/RedCiudadana/Katun2052.git
+cd Katun2052
 
 # 2. Instalar dependencias
 npm install
