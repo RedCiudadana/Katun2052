@@ -44,7 +44,7 @@ const Survey = () => {
               </span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight max-w-3xl">
-              Encuesta ciudadana para la actualización del Plan Nacional de Desarrollo K'atun
+              Consulta Ciudadana
             </h1>
             <p className="text-xl font-semibold text-teal-300 mb-3">
               Participa en la actualización del Plan Nacional de Desarrollo K'atun
