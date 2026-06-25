@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Heart, TrendingUp, Leaf, Map, Shield, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download, Loader2 } from 'lucide-react';
+import { ArrowLeft, Heart, TrendingUp, Leaf, Map, Shield, BookOpen, ChevronLeft, ChevronRight, Maximize2, Minimize2, Download, Loader2, FileText } from 'lucide-react';
 import { dimensionService, Dimension } from '../services/dimensionService';
 import * as pdfjsLib from 'pdfjs-dist';
 
